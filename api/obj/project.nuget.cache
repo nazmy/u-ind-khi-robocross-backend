@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "fTMxOcLGYLDQxNs/7YEc7dUO+X+a2Zc+KnzvddRbjifbEozIlQd0437bI6fmExekIY0WXlmZG+CbAyrtuKijYQ==",
+  "success": true,
+  "projectFilePath": "/Users/nazmyachmad/Workspace/unity-japan-as/robo-cross-2023/ind-khi-robocross-backend/api/api.csproj",
+  "expectedPackageFiles": [
+    "/Users/nazmyachmad/.nuget/packages/microsoft.aspnetcore.openapi/7.0.7/microsoft.aspnetcore.openapi.7.0.7.nupkg.sha512",
+    "/Users/nazmyachmad/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "/Users/nazmyachmad/.nuget/packages/microsoft.openapi/1.4.3/microsoft.openapi.1.4.3.nupkg.sha512",
+    "/Users/nazmyachmad/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "/Users/nazmyachmad/.nuget/packages/swashbuckle.aspnetcore.swagger/6.5.0/swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "/Users/nazmyachmad/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.5.0/swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "/Users/nazmyachmad/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.5.0/swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
