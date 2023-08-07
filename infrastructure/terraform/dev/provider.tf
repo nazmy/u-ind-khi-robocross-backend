@@ -8,7 +8,7 @@ terraform {
     hostname     = "app.terraform.io"
     organization = "unity-technologies"
     workspaces {
-      name = "ind-khi-robocross-backend-dev" 
+      name = "ind-khi-robocross-backend-dev"
     }
   }
   required_providers {
