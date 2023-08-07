@@ -1,0 +1,12 @@
+.idea/
+*.iml
+
+.vscode
+.vs
+local.properties
+
+
+.DS_Store
+*.meta
+.terraform
+terraform.tfvars
