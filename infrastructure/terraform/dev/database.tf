@@ -45,3 +45,16 @@ resource "azurerm_private_endpoint" "cosmodb_private_endpoint" {
     is_manual_connection           = false
   }
 }
+
+resource "azurerm_cosmosdb_mongo_database" "khirobocross" {
+  name                = "${var.resource_prefix}-khiroboross-mongo"
+  resource_group_name = azurerm_resource_group.backend_rg.name
+  account_name        = azurerm_cosmosdb_account.cosmodb_account.name
+
+  throughput = var.mongodb_autoscale_min_throughput
+
+  autoscale_settings {
+    max_throughput = var.mongodb_autoscale_max_throughput
+  }
+
+}
