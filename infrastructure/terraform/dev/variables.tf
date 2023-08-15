@@ -28,3 +28,16 @@ variable "mongodb_enable_public_access" {
   description = "is public access on cosmo mongo DB enabled"
   default     = "true"
 }
+
+variable "mongodb_autoscale_min_throughput" {
+  description = "mongodb autoscale minimum throughput, minimum value is 400, must be set in increment of 100"
+  default     = 400
+
+}
+
+variable "mongodb_autoscale_max_throughput" {
+  description = "mongodb autoscale maximum throughput, between 1000 and 1,000,000"
+  default     = 1000
+
+}
+
