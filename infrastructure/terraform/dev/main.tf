@@ -28,12 +28,12 @@ resource "azurerm_linux_web_app" "khirobocross" {
   service_plan_id     = azurerm_service_plan.khirobocross.id
 
 
-  https_only            = true
-  site_config { 
+  https_only = true
+  site_config {
     minimum_tls_version = "1.2"
     application_stack {
       dotnet_version = local.dotnet_version
-    } 
+    }
   }
 }
 
