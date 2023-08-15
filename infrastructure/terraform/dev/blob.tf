@@ -1,6 +1,6 @@
 # storage for client misc (cloud bash etc)
 resource "azurerm_storage_account" "misc_storage" {
-  name                = replace("${var.resource_prefix}-mis-storage", "-", "")
+  name                = replace("${var.resource_prefix}-misc-storage", "-", "")
   resource_group_name = azurerm_resource_group.backend_rg.name
 
   location                 = azurerm_resource_group.backend_rg.location
