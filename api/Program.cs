@@ -1,11 +1,28 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿
+using Domain.Models;
+using khi_robocross_api.Services;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<RobocrossDatabaseSettings>(
+    builder.Configuration.GetSection(nameof(RobocrossDatabaseSettings)));
 
+builder.Services.AddSingleton<IRobocrossDatabaseSettings>(sp =>
+sp.GetRequiredService<IOptions<RobocrossDatabaseSettings>>().Value);
+
+builder.Services.AddSingleton<IMongoClient>(s =>
+new MongoClient(builder.Configuration.GetValue<string>("RobocrossDatabaseSettings:ConnectionString")));
+
+builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+//// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 
