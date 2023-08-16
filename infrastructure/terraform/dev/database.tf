@@ -21,6 +21,8 @@ resource "azurerm_cosmosdb_account" "cosmodb_account" {
     id = azurerm_subnet.database.id
   }
 
+  ip_range_filter = join(",", concat(local.cosmosdb_ip_range_azure, local.ip_whitelist))
+
   consistency_policy {
     consistency_level       = "Session"
     max_interval_in_seconds = 5

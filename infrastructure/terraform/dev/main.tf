@@ -27,6 +27,7 @@ resource "azurerm_linux_web_app" "khirobocross" {
   location            = azurerm_service_plan.khirobocross.location
   service_plan_id     = azurerm_service_plan.khirobocross.id
 
+  client_certificate_enabled = true
 
   https_only = true
   site_config {
