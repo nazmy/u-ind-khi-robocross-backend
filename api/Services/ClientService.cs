@@ -22,5 +22,10 @@ namespace khi_robocross_api.Services
 		public async Task<Client?> GetAsync(string id) =>
 			await _clients.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-	}
+		public async Task RemoveAsync(string id) =>
+			await _clients.DeleteOneAsync(x => x.Id == id);
+
+		public async Task UpdateAsync(string id, Client updatedClient) =>
+			await _clients.ReplaceOneAsync(x => x.Id == id, updatedClient);
+    }
 }
