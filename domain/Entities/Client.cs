@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 
-namespace Domain.Models
+namespace Domain.Entities
 {
 	public class Client
 	{
@@ -16,8 +16,7 @@ namespace Domain.Models
 
         public string EmailAddress { get; set; } = null!;
 
-        public string PhoneNumber { get; set; } = null!;
-
+        public string PhoneNumber { get; set; } = null;
     }
 }
 
