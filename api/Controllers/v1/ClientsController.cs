@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using khi_robocross_api.Services;
-using Domain.Models;
+using Domain.Entities;
+using Domain.Dto;
+using AutoMapper;
 
 namespace khi_robocross_api.Controllers
 {
@@ -9,65 +11,100 @@ namespace khi_robocross_api.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
 	{
-		private readonly IClientService clientService;
-		public ClientsController(IClientService clientService)
+		private readonly IClientRepository _clientRepository;
+        private readonly IClientService _clientService;
+        private readonly IMapper _mapper;
+
+		public ClientsController(IClientRepository clientRepository,
+            IClientService clientService,
+            IMapper mapper)
 		{
-			this.clientService = clientService;
+			this._clientRepository = clientRepository;
+            this._clientService = clientService;
+            this._mapper = mapper;
 		}
 
         [HttpGet]
-        public async Task<List<Client>> Get() =>
-            await clientService.GetAsync();
-
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> Get()
+        {
+            var clientList = await _clientService.GetAllClients();
+            return Ok(clientList);
+        }
+           
 
         [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<Client>> Get(string id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<ClientOutputDto>> Get(string id)
         {
-            var client = await clientService.GetAsync(id);
-
-            if (client == null)
+            try
             {
-                return NotFound($"Client with Id = {id} not found");
-            }
+                var client = await _clientService.GetClientById(id);
+                if (client == null)
+                {
+                    return NotFound($"Client with Id = {id} not found");
+                }
 
-            return client;
+                return Ok(client);
+            }
+            catch (ArgumentException aex)
+            {
+                return BadRequest("Invalid Client ID");
+            }
         }
 
         [HttpPost]
-		public async Task<IActionResult> Post([FromBody] Client client)
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> Post([FromBody] CreateClientInputDto newClient)
 		{
-			await clientService.CreateAsync(client);
+            if (newClient == null)
+                return BadRequest(ModelState);
+
+            var client = _mapper.Map<Client>(newClient);
+            await _clientService.AddClient(client);
 			return CreatedAtAction(nameof(Get), new { id = client.Id }, client);
 		}
 
         [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Update(string id,Client updatedClient)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Update(string id, UpdateClientInputDto updatedClient)
         {
-            var client = await clientService.GetAsync(id);
-
-            if (client is null)
+            try
             {
-                return NotFound($"Client with Id = {id} not found");
+
+                if (updatedClient == null)
+                    return BadRequest(ModelState);
+
+                await _clientService.UpdateClient(id, updatedClient);
+
+                return NoContent();
             }
-
-            updatedClient.Id = client.Id;
-
-            await clientService.UpdateAsync(id, updatedClient);
-
-            return NoContent();
+            catch(ArgumentException aex)
+            {
+                return BadRequest(aex.Message);
+            }
+            catch (KeyNotFoundException kex)
+            {
+                return NotFound(kex.Message);
+            }
         }
 
         [HttpDelete("{id:length(24)}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(string id)
         {
-            var client = await clientService.GetAsync(id);
+            var client = await _clientRepository.GetAsync(id);
 
             if (client is null)
             {
                 return NotFound($"Client with Id = {id} not found");
             }
 
-            clientService.RemoveAsync(id);
+            await _clientRepository.RemoveAsync(id);
             return Ok($"Client with Id = {id} deleted");
         }
 	}

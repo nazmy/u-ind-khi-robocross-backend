@@ -1,16 +1,16 @@
 ﻿using System;
-using Domain.Models;
-using MongoDB.Driver;
+using Domain.Dto;
+using Domain.Entities;
 
 namespace khi_robocross_api.Services
 {
 	public interface IClientService
 	{
-		Task<List<Client>> GetAsync();
-		Task<Client> GetAsync(String id);
-		Task CreateAsync(Client client);
-		Task UpdateAsync(string id, Client updatedClient);
-		Task RemoveAsync(string id);
+		 ValueTask<IEnumerable<ClientOutputDto>> GetAllClients();
+		 ValueTask<ClientOutputDto> GetClientById(String id);
+		 Task AddClient(Client client);
+         Task UpdateClient(string id, UpdateClientInputDto updatedClient);
+         Task RemoveClient(string id);
 	}
 }
 

@@ -1,4 +1,4 @@
-﻿namespace Domain.Models
+﻿namespace Domain.Helper
 {
 	public class RobocrossDatabaseSettings : IRobocrossDatabaseSettings
 	{
