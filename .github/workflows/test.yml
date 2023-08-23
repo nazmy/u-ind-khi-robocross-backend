@@ -1,0 +1,32 @@
+name: Test
+
+env:
+  DOTNET_VERSION: '7.0.x'
+  DOTNET_PROJECT_PATH: 'api'
+
+on: workflow_call
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Set up dependency caching for faster builds
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Run unit tests
+        run: dotnet test --no-restore ${{ env.DOTNET_PROJECT_PATH }}

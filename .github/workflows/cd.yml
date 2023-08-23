@@ -1,0 +1,12 @@
+name: Continuous Delivery
+
+on:
+  release:
+    types: [published]
+
+  workflow_dispatch:
+    
+jobs:
+  build_and_deploy:
+    uses: ./.github/workflows/build_and_deploy.yml
+    secrets: inherit
