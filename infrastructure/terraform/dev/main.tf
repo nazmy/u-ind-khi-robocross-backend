@@ -37,9 +37,3 @@ resource "azurerm_linux_web_app" "khirobocross" {
     }
   }
 }
-
-resource "azurerm_app_service_source_control" "backend_scm" {
-  app_id   = azurerm_linux_web_app.khirobocross.id
-  repo_url = "https://github.com/Azure-Samples/dotnetcore-docs-hello-world"
-  branch   = "master"
-}
