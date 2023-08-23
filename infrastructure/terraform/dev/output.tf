@@ -21,3 +21,11 @@ output "cosmosdb_mongo_throughput" {
 output "cosmosdb_mongo_auto_scale" {
   value = azurerm_cosmosdb_mongo_database.khirobocross.autoscale_settings
 }
+
+output "storage_container_robot_configurator_name"{
+  value = azurerm_storage_container.robot_configurator.name
+}
+
+output "storage_container_robot_monitoring_name"{
+  value = azurerm_storage_container.robot_monitoring.name
+}
