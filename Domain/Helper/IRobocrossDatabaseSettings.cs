@@ -7,6 +7,8 @@
         public string DatabaseName { get; set; }
         
         public string ClientsCollectionName { get; set; }
+
+        public string CompoundsCollectionName { get; set; }
     }
 }
 

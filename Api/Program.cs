@@ -19,6 +19,9 @@ new MongoClient(builder.Configuration.GetValue<string>("RobocrossDatabaseSetting
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService,ClientService>();
 
+builder.Services.AddScoped<ICompoundRepository, CompoundRepository>();
+builder.Services.AddScoped<ICompoundService, CompoundService>();
+
 builder.Services.AddControllers().AddJsonOptions(
         options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 

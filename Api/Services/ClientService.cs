@@ -21,6 +21,8 @@ namespace khi_robocross_api.Services
             if (inputClient == null)
                 throw new ArgumentException("Client input is invalid");
 
+            inputClient.CreateChangesTime(inputClient);
+            
             //validation goes here
             await _clientRepository.CreateAsync(inputClient);
         }
@@ -61,13 +63,17 @@ namespace khi_robocross_api.Services
 
             if (updatedClient == null)
                 throw new ArgumentException("Client Input is invalid");
-
+            
             var client = await _clientRepository.GetAsync(id);
 
             if (client == null)
                 throw new KeyNotFoundException($"Client with Id = {id} not found");
 
-            await _clientRepository.UpdateAsync(id, _mapper.Map<Client>(updatedClient));
+            client = _mapper.Map<Client>(updatedClient);
+
+            client.UpdateChangesTime(client);
+            
+            await _clientRepository.UpdateAsync(id, client);
         }
     }
 }

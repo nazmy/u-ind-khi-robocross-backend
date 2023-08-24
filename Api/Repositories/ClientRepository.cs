@@ -30,5 +30,7 @@ namespace khi_robocross_api.Services
 
 		public async Task UpdateAsync(string id, Client updatedClient) =>
 			await _clients.ReplaceOneAsync(x => x.Id == id, updatedClient);
+
+		
     }
 }

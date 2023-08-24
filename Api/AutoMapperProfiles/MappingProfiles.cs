@@ -12,6 +12,10 @@ namespace khi_robocross_api.AutoMapperProfiles
 			CreateMap<Client, ClientOutputDto>().ReverseMap();
 			CreateMap<Client, CreateClientInputDto>().ReverseMap();
 			CreateMap<Client, UpdateClientInputDto>().ReverseMap();
+
+			CreateMap<Compound, CompoundOutputDto>().ReverseMap();
+			CreateMap<Compound, CreateCompoundInputDto>().ReverseMap();
+			CreateMap<Compound, UpdateCompoundInputDto>().ReverseMap();
 		}
 	}
 }

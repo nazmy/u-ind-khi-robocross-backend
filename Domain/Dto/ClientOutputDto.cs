@@ -1,7 +1,9 @@
 ﻿using System;
+using domain.Dto;
+
 namespace Domain.Dto
 {
-	public class ClientOutputDto
+	public class ClientOutputDto : BaseDto
 	{
         public string Id { get; set; }
 

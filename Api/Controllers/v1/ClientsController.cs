@@ -11,16 +11,13 @@ namespace khi_robocross_api.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
 	{
-		private readonly IClientRepository _clientRepository;
-        private readonly IClientService _clientService;
+		private readonly IClientService _clientService;
         private readonly IMapper _mapper;
 
-		public ClientsController(IClientRepository clientRepository,
-            IClientService clientService,
+		public ClientsController(IClientService clientService,
             IMapper mapper)
 		{
-			this._clientRepository = clientRepository;
-            this._clientService = clientService;
+			this._clientService = clientService;
             this._mapper = mapper;
 		}
 
@@ -64,6 +61,7 @@ namespace khi_robocross_api.Controllers
 
             var client = _mapper.Map<Client>(newClient);
             await _clientService.AddClient(client);
+
 			return CreatedAtAction(nameof(Get), new { id = client.Id }, client);
 		}
 
@@ -74,7 +72,6 @@ namespace khi_robocross_api.Controllers
         {
             try
             {
-
                 if (updatedClient == null)
                     return BadRequest(ModelState);
 
@@ -97,14 +94,14 @@ namespace khi_robocross_api.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(string id)
         {
-            var client = await _clientRepository.GetAsync(id);
+            var client = await _clientService.GetClientById(id);
 
             if (client is null)
             {
                 return NotFound($"Client with Id = {id} not found");
             }
 
-            await _clientRepository.RemoveAsync(id);
+            await _clientService.RemoveClient(id);
             return Ok($"Client with Id = {id} deleted");
         }
 	}
