@@ -3,8 +3,9 @@ name: Build and Deploy
 env:
   AZURE_WEBAPP_NAME: khirobocross-web-app  
   AZURE_WEBAPP_PACKAGE_PATH: '.'
+  DOTNET_INSTALL_DIR: "./.dotnet"
   DOTNET_VERSION: '7.0.x'
-  DOTNET_PROJECT_PATH: 'Api'
+  DOTNET_PROJECT_PATH: 'Api/Api.csproj'
 
 on: workflow_call
 

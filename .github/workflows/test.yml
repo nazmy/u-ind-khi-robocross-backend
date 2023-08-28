@@ -1,8 +1,9 @@
 name: Test
 
 env:
+  DOTNET_INSTALL_DIR: "./.dotnet"
   DOTNET_VERSION: '7.0.x'
-  DOTNET_PROJECT_PATH: 'api'
+  DOTNET_PROJECT_PATH: 'Api/Api.csproj'
 
 on: workflow_call
 
