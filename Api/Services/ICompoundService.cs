@@ -8,7 +8,8 @@ namespace khi_robocross_api.Services
 	{
 		 ValueTask<IEnumerable<CompoundOutputDto>> GetAllCompounds();
 		 ValueTask<CompoundOutputDto> GetCompoundById(String id);
-		 Task AddCompound(Compound compound);
+         ValueTask<IEnumerable<CompoundOutputDto>> GetCompoundByClientId(String clientId);
+         Task AddCompound(Compound compound);
          Task UpdateCompound(string id, UpdateCompoundInputDto updateCompoundInput);
          Task RemoveCompound(string id);
 	}

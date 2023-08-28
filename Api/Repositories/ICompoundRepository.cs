@@ -12,6 +12,7 @@ namespace khi_robocross_api.Services
 		Task CreateAsync(Compound compound);
 		Task UpdateAsync(string id, Compound updatedCompound);
 		Task RemoveAsync(string id);
-	}
+        Task<IEnumerable<Compound>> GetAsyncByClientId(string clientId);
+    }
 }
 

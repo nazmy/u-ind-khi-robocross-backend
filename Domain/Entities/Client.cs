@@ -14,19 +14,25 @@ namespace Domain.Entities
         [BsonElement("name")]
         public string Name { get; set; } = null!;
 
-        [BsonElement("EmailAddress")]
+        [BsonElement("emailAddress")]
         public string EmailAddress { get; set; } = null!;
 
+        [BsonElement("phoneNumber")]
         public string PhoneNumber { get; set; } = null!;
 
+        [BsonElement("isDeleted")]
         public bool IsDeleted { get; set; } = false;
 
+        [BsonElement("createdBy")]
         public string CreatedBy { get; set; } = null!;
 
+        [BsonElement("createdAt")]
         public DateTimeOffset CreatedAt { get; set; }
 
+        [BsonElement("lastUpdatedBy")]
         public string LastUpdatedBy { get; set; } = null!;
 
+        [BsonElement("lastUpdatedAt")]
         public DateTimeOffset LastUpdatedAt { get; set; }
 
         public void CreateChangesTime(Client client)

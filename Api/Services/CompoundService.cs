@@ -36,6 +36,12 @@ namespace khi_robocross_api.Services
             return null;
         }
 
+        public async ValueTask<IEnumerable<CompoundOutputDto>> GetCompoundByClientId(string clientId)
+        {
+            var compoundTask = await _compoundRepository.GetAsyncByClientId(clientId);
+            throw new NotImplementedException();
+        }
+
         public async ValueTask<CompoundOutputDto> GetCompoundById(string id)
         {
             if (id == null)

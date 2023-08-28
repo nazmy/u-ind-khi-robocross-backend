@@ -12,6 +12,7 @@ namespace khi_robocross_api.Controllers
     public class ClientsController : ControllerBase
 	{
 		private readonly IClientService _clientService;
+        private readonly ICompoundService _compoundService;
         private readonly IMapper _mapper;
 
 		public ClientsController(IClientService clientService,
@@ -28,7 +29,6 @@ namespace khi_robocross_api.Controllers
             var clientList = await _clientService.GetAllClients();
             return Ok(clientList);
         }
-           
 
         [HttpGet("{id:length(24)}")]
         [ProducesResponseType(200)]
@@ -104,6 +104,16 @@ namespace khi_robocross_api.Controllers
             await _clientService.RemoveClient(id);
             return Ok($"Client with Id = {id} deleted");
         }
-	}
+
+        //Client's compound
+
+        [HttpGet("{id:int}/compounds")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> GetClientCompounds(string id)
+        {
+            var compoundList = await _compoundService.GetCompoundByClientId(id);
+            return Ok(compoundList);
+        }
+    }
 }
 

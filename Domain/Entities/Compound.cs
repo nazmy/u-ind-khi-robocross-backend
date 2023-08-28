@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver.GeoJsonObjectModel;
@@ -14,23 +15,35 @@ namespace Domain.Entities
         [BsonElement("name")]
         public string Name { get; set; } = null!;
 
+        [BsonElement("picName")]
         public string PicName { get; set; } = null!;
 
+        [BsonElement("picPhoneNumber")]
         public string PicPhoneNumber { get; set; } = null!;
 
+        [BsonElement("address")]
         public string Address { get; set; } = null!;
 
-        public GeoJsonPoint<GeoJson2DCoordinates> Coordinates { get; set; }
+        [BsonElement("coordinates")]
+        public GeoJsonPoint<GeoJson2DGeographicCoordinates> Coordinates { get; set; }
 
+        [BsonElement("isDeleted")]
         public bool IsDeleted { get; set; } = false;
 
+        [BsonElement("createdBy")]
         public string CreatedBy { get; set; } = null!;
 
+        [BsonElement("createdAt")]
         public DateTimeOffset CreatedAt { get; set; }
 
+        [BsonElement("lastUpdatedBy")]
         public string LastUpdatedBy { get; set; } = null!;
 
+        [BsonElement("lastUpdatedAt")]
         public DateTimeOffset LastUpdatedAt { get; set; }
+
+        [BsonElement("client")]
+        public Client Client { get; set; }
 
         public void CreateChangesTime(Compound compound)
         {
