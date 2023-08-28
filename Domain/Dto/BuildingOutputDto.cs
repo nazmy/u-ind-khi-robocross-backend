@@ -1,10 +1,9 @@
 ﻿using System;
-using domain.Dto;
 using MongoDB.Driver.GeoJsonObjectModel;
 
-namespace Domain.Dto
+namespace domain.Dto
 {
-	public class CompoundOutputDto : BaseDto
+	public class BuildingOutputDto : BaseDto
 	{
         public string Id { get; set; }
 
@@ -16,8 +15,7 @@ namespace Domain.Dto
 
         public GeoJsonPoint<GeoJson2DCoordinates> Coordinates { get; set; }
 
-        public string ClientId { get; set; }
+        public string CompoundId { get; set; }
     }
 }
-
 
