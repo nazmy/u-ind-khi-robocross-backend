@@ -8,7 +8,7 @@ on: workflow_call
 
 jobs:
   test:
-    runs-on: [ self-hosted, Linux, X64, local-linux ]
+    runs-on: [ self-hosted, Linux, X64 ]
     steps:
       - uses: actions/checkout@v3
 
