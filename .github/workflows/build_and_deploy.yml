@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: [ self-hosted, Linux, X64, local-linux ]
+    runs-on: [ self-hosted, Linux, X64 ]
     steps:
       - uses: actions/checkout@v3
 
