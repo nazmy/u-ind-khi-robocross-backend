@@ -33,7 +33,6 @@ jobs:
 
       - name: Install dependencies
         run: dotnet restore
-        working-directory: Api
 
       - name: Build
         run: dotnet build --no-restore -c Release ${{ env.DOTNET_PROJECT_PATH }}
