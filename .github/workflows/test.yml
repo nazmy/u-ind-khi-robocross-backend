@@ -28,6 +28,7 @@ jobs:
 
       - name: Install dependencies
         run: dotnet restore
+        working-directory: Api
 
       - name: Run unit tests
         run: dotnet test --no-restore ${{ env.DOTNET_PROJECT_PATH }}
