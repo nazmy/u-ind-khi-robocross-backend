@@ -66,6 +66,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.AZURE_WEBAPP_NAME }}
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
