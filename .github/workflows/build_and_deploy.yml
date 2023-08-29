@@ -2,7 +2,7 @@ name: Build and Deploy
 
 env:
   AZURE_WEBAPP_NAME: khirobocross-web-app  
-  AZURE_WEBAPP_PACKAGE_PATH: '.' ## temp path used for published project (for upload as Artefact or publishing to Azure)
+  AZURE_WEBAPP_PACKAGE_PATH: './myapp' ## temp path used for published project (for upload as Artefact or publishing to Azure)
   DOTNET_INSTALL_DIR: "./.dotnet"
   DOTNET_VERSION: '7.0.x'
   DOTNET_PROJECT_PATH: 'Api/api.csproj'
@@ -39,6 +39,12 @@ jobs:
 
       - name: Publish
         run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} ${{ env.DOTNET_PROJECT_PATH }}
+
+      - name: Listing Files Root
+        run: ls -al .
+      
+      - name: Listing Files Web App Directory
+        run: ls -al ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
