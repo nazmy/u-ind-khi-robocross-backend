@@ -5,7 +5,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
   DOTNET_INSTALL_DIR: "./.dotnet"
   DOTNET_VERSION: '7.0.x'
-  DOTNET_PROJECT_PATH: 'Api/Api.csproj'
+  DOTNET_PROJECT_PATH: 'Api/api.csproj'
 
 on: workflow_call
 
@@ -32,8 +32,7 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Install dependencies
-        run: dotnet restore
-        working-directory: Api/
+        run: dotnet restore ${{ env.DOTNET_PROJECT_PATH }}
 
       - name: Build
         run: dotnet build --no-restore -c Release ${{ env.DOTNET_PROJECT_PATH }}
