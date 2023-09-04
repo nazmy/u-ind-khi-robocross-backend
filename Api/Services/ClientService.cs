@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain.Dto;
 using Domain.Entities;
+using MongoDB.Driver;
 
 namespace khi_robocross_api.Services
 {
@@ -21,27 +22,38 @@ namespace khi_robocross_api.Services
             if (inputClient == null)
                 throw new ArgumentException("Client input is invalid");
 
+            inputClient.CreateChangesTime(inputClient);
+            
             //validation goes here
             await _clientRepository.CreateAsync(inputClient);
         }
 
-        public async ValueTask<IEnumerable<ClientOutputDto>> GetAllClients()
+        public async ValueTask<IEnumerable<ClientResponse>> GetAllClients()
         {
             var clientTask = await _clientRepository.GetAsync();
             if (clientTask != null)
-                return _mapper.Map<IEnumerable<ClientOutputDto>>(clientTask.ToList());
+                return _mapper.Map<IEnumerable<ClientResponse>>(clientTask.ToList());
 
             return null;
         }
 
-        public async ValueTask<ClientOutputDto> GetClientById(string id)
+        public async ValueTask<ClientResponse> GetClientById(string id)
         {
             if (id == null)
                 throw new ArgumentException("Client Id is Invalid");
 
             var clientTask = await _clientRepository.GetAsync(id);
             if (clientTask != null)
-                return _mapper.Map<ClientOutputDto>(clientTask);
+                return _mapper.Map<ClientResponse>(clientTask);
+
+            return null;
+        }
+
+        public async ValueTask<IEnumerable<ClientResponse>> Query(string search)
+        {
+            var clientTask = await _clientRepository.SearchAsync(search);
+            if (clientTask != null)
+                return _mapper.Map<IEnumerable<ClientResponse>>(clientTask.ToList());
 
             return null;
         }
@@ -61,13 +73,17 @@ namespace khi_robocross_api.Services
 
             if (updatedClient == null)
                 throw new ArgumentException("Client Input is invalid");
-
+            
             var client = await _clientRepository.GetAsync(id);
 
             if (client == null)
                 throw new KeyNotFoundException($"Client with Id = {id} not found");
 
-            await _clientRepository.UpdateAsync(id, _mapper.Map<Client>(updatedClient));
+            client = _mapper.Map<Client>(updatedClient);
+
+            client.UpdateChangesTime(client);
+            
+            await _clientRepository.UpdateAsync(id, client);
         }
     }
 }

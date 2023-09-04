@@ -9,9 +9,13 @@ namespace khi_robocross_api.AutoMapperProfiles
 	{
 		public MappingProfiles()
 		{
-			CreateMap<Client, ClientOutputDto>().ReverseMap();
+			CreateMap<Client, ClientResponse>().ReverseMap();
 			CreateMap<Client, CreateClientInputDto>().ReverseMap();
 			CreateMap<Client, UpdateClientInputDto>().ReverseMap();
+
+			CreateMap<Compound, CompoundResponse>().ReverseMap();
+			CreateMap<Compound, CreateCompoundInputDto>().ReverseMap();
+			CreateMap<Compound, UpdateCompoundInputDto>().ReverseMap();
 		}
 	}
 }
