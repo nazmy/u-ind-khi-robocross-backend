@@ -2,8 +2,10 @@
 using AutoMapper;
 using Domain.Dto;
 using Domain.Entities;
+using GeoJSON.Net.Geometry;
 using khi_robocross_api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace khi_robocross_api.Controllers.v1
 {
@@ -32,7 +34,7 @@ namespace khi_robocross_api.Controllers.v1
         [HttpGet("{id:length(24)}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<CompoundOutputDto>> Get(string id)
+        public async Task<ActionResult<CompoundResponse>> Get(string id)
         {
             try
             {
@@ -55,6 +57,8 @@ namespace khi_robocross_api.Controllers.v1
         [ProducesResponseType(400)]
         public async Task<IActionResult> Post([FromBody] CreateCompoundInputDto newCompound)
         {
+            //var newCompound = JsonConvert.DeserializeObject<Point>(inputJson);
+            
             if (newCompound == null)
                 return BadRequest(ModelState);
 

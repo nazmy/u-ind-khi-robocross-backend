@@ -25,7 +25,7 @@ namespace Domain.Entities
         public string Address { get; set; } = null!;
 
         [BsonElement("coordinates")]
-        public GeoJsonPoint<GeoJson2DGeographicCoordinates> Coordinates { get; set; }
+        public GeoJsonPoint<GeoJson3DCoordinates> Coordinates { get; set; }
 
         [BsonElement("isDeleted")]
         public bool IsDeleted { get; set; } = false;

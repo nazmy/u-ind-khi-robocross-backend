@@ -1,5 +1,5 @@
 ﻿using System;
-using MongoDB.Driver.GeoJsonObjectModel;
+using GeoJSON.Net.Geometry;
 
 namespace Domain.Dto
 {
@@ -13,7 +13,7 @@ namespace Domain.Dto
 
         public string PicPhoneNumber { get; set; }
 
-        public GeoJsonPoint<GeoJson2DGeographicCoordinates> Coordinates { get; set; }
+        public Point Coordinates { get; set; }
     }
 }
 

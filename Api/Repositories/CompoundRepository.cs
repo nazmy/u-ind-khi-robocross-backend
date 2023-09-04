@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Helper;
 using MongoDB.Driver;
 using Domain.Dto;
+using MongoDB.Bson;
 
 namespace khi_robocross_api.Services
 {
@@ -25,7 +26,17 @@ namespace khi_robocross_api.Services
 		public async Task<Compound?> GetAsync(string id) =>
 			await _compound.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-        public async Task<IEnumerable<Compound>> GetAsyncByClientId(string clientId) =>
+		public async Task<IEnumerable<Compound>> SearchAsync(string search)
+		{
+			var filter = Builders<Compound>.Filter.Empty;
+			if (!string.IsNullOrEmpty((search)))
+			{
+				filter = Builders<Compound>.Filter.Regex("Name", new BsonRegularExpression(search, "i"));
+			}
+			return await _compound.Find(filter).ToListAsync();
+		}
+
+		public async Task<IEnumerable<Compound>> GetAsyncByClientId(string clientId) =>
             await _compound.Find(x => x.Client.Id == clientId).ToListAsync();
 
         public async Task RemoveAsync(string id) =>

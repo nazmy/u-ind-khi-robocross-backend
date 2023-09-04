@@ -27,29 +27,30 @@ namespace khi_robocross_api.Services
             await _compoundRepository.CreateAsync(inputCompound);
         }
 
-        public async ValueTask<IEnumerable<CompoundOutputDto>> GetAllCompounds()
+        public async ValueTask<IEnumerable<CompoundResponse>> GetAllCompounds()
         {
             var compoundTask = await _compoundRepository.GetAsync();
+            
             if (compoundTask != null)
-                return _mapper.Map<IEnumerable<CompoundOutputDto>>(compoundTask.ToList());
+                return _mapper.Map<IEnumerable<CompoundResponse>>(compoundTask.ToList());
 
             return null;
         }
 
-        public async ValueTask<IEnumerable<CompoundOutputDto>> GetCompoundByClientId(string clientId)
+        public async ValueTask<IEnumerable<CompoundResponse>> GetCompoundByClientId(string clientId)
         {
             var compoundTask = await _compoundRepository.GetAsyncByClientId(clientId);
             throw new NotImplementedException();
         }
 
-        public async ValueTask<CompoundOutputDto> GetCompoundById(string id)
+        public async ValueTask<CompoundResponse> GetCompoundById(string id)
         {
             if (id == null)
                 throw new ArgumentException("Compound Id is Invalid");
 
             var compoundTask = await _compoundRepository.GetAsync(id);
             if (compoundTask != null)
-                return _mapper.Map<CompoundOutputDto>(compoundTask);
+                return _mapper.Map<CompoundResponse>(compoundTask);
 
             return null;
         }

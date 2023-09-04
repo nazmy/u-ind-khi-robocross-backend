@@ -1,0 +1,10 @@
+﻿{
+  "Name": "Mazda Compound 1",
+  "PicName": "Mazda Compound 1 PIC",
+  "PicPhoneNumber": "+918763232",
+  "Coordinates": {
+    "type": "Point",
+    "coordinates": [125.6, 10.1, 456]
+  },
+  "ClientId": "64e847ceca12b37f6cd13660"
+}

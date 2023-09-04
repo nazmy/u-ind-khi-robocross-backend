@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddConsole();
+builder.Logging.ClearProviders();
 
 // Add services to the container.
 builder.Services.Configure<RobocrossDatabaseSettings>(
