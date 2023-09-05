@@ -1,9 +1,10 @@
 ﻿using System;
+using GeoJSON.Net.Geometry;
 using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace domain.Dto
 {
-	public class CreateBuildingInputDto : BaseDto
+	public class CreateBuildingInputDto
 	{
 		public string Name { get; set; }
 
@@ -11,7 +12,7 @@ namespace domain.Dto
 
 		public string PicPhoneNumber { get; set; }
 
-        public GeoJsonPoint<GeoJson2DGeographicCoordinates> Coordinates { get; set; }
+        public Point? Coordinates { get; set; }
 
         public string CompoundId { get; set; }
     }
