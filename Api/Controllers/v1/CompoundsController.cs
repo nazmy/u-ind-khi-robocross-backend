@@ -5,6 +5,7 @@ using Domain.Entities;
 using GeoJSON.Net.Geometry;
 using khi_robocross_api.Services;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.GeoJsonObjectModel;
 using Newtonsoft.Json;
 
 namespace khi_robocross_api.Controllers.v1
@@ -14,12 +15,15 @@ namespace khi_robocross_api.Controllers.v1
     public class CompoundsController : ControllerBase
 	{
         private readonly ICompoundService _compoundService;
+        private readonly IBuildingService _buildingService;
         private readonly IMapper _mapper;
 
         public CompoundsController(ICompoundService compoundService,
+            IBuildingService buildingService,
             IMapper mapper)
         {
             this._compoundService = compoundService;
+            this._buildingService = buildingService;
             this._mapper = mapper;
         }
 
@@ -43,7 +47,7 @@ namespace khi_robocross_api.Controllers.v1
                 {
                     return NotFound($"Compound with Id = {id} not found");
                 }
-
+                
                 return Ok(compound);
             }
             catch (ArgumentException aex)
@@ -57,7 +61,6 @@ namespace khi_robocross_api.Controllers.v1
         [ProducesResponseType(400)]
         public async Task<IActionResult> Post([FromBody] CreateCompoundInputDto newCompound)
         {
-            //var newCompound = JsonConvert.DeserializeObject<Point>(inputJson);
             
             if (newCompound == null)
                 return BadRequest(ModelState);
@@ -106,6 +109,15 @@ namespace khi_robocross_api.Controllers.v1
 
             await _compoundService.RemoveCompound(id);
             return Ok($"Compound with Id = {id} deleted");
+        }
+        
+        //Building's compound
+        [HttpGet("{id}/buildings")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> GetCompoundBuildings(string id)
+        {
+            var buildingList = await _buildingService.GetBuildingByCompoundId(id);
+            return Ok(buildingList);
         }
     }
 }

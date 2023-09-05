@@ -18,9 +18,11 @@ namespace khi_robocross_api.Controllers
         private readonly ILogger<ClientsController> _logger;
 
 		public ClientsController(IClientService clientService,
+            ICompoundService compoundService,
             IMapper mapper)
 		{
 			this._clientService = clientService;
+            this._compoundService = compoundService;
             this._mapper = mapper;
             this._logger = new LoggerFactory().CreateLogger<ClientsController>();
         }
@@ -144,7 +146,7 @@ namespace khi_robocross_api.Controllers
 
         //Client's compound
 
-        [HttpGet("{id:int}/compounds")]
+        [HttpGet("{id}/compounds")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetClientCompounds(string id)
         {

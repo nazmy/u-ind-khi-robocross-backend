@@ -18,11 +18,15 @@ sp.GetRequiredService<IOptions<RobocrossDatabaseSettings>>().Value);
 builder.Services.AddSingleton<IMongoClient>(s =>
 new MongoClient(builder.Configuration.GetValue<string>("RobocrossDatabaseSettings:ConnectionString")));
 
+builder.Services.AddControllers().AddNewtonsoftJson();
+
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService,ClientService>();
+builder.Services.AddScoped<IBuildingService,BuildingService>();
 
 builder.Services.AddScoped<ICompoundRepository, CompoundRepository>();
 builder.Services.AddScoped<ICompoundService, CompoundService>();
+builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(
         options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
