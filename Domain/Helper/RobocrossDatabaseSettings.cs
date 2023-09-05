@@ -9,6 +9,8 @@
         public string ClientsCollectionName { get; set; } = null!;
 
         public string CompoundsCollectionName { get; set; } = null!;
+        
+        public string BuildingsCollectionName { get; set; } = null!;
     }
 }
 
