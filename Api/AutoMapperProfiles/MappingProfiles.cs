@@ -1,7 +1,12 @@
 ﻿using System;
 using AutoMapper;
+using domain.Dto;
 using Domain.Dto;
 using Domain.Entities;
+using GeoJSON.Net;
+using GeoJSON.Net.Geometry;
+using MongoDB.Bson;
+using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace khi_robocross_api.AutoMapperProfiles
 {
@@ -12,10 +17,45 @@ namespace khi_robocross_api.AutoMapperProfiles
 			CreateMap<Client, ClientResponse>().ReverseMap();
 			CreateMap<Client, CreateClientInputDto>().ReverseMap();
 			CreateMap<Client, UpdateClientInputDto>().ReverseMap();
+			CreateMap<Point, GeoJsonPoint<GeoJson3DCoordinates>>().ReverseMap();
+			
+			CreateMap<Building, BuildingResponse>()
+				.ForMember(destinationMember => destinationMember.Coordinates,
+					sourceMember => sourceMember.MapFrom( (compound, response) => 
+						response.Coordinates = new Point(
+							new Position(compound.Coordinates.Coordinates.X,compound.Coordinates.Coordinates.Y,compound.Coordinates.Coordinates.Z)) ))
+				.ReverseMap();
+			
+			CreateMap<CreateBuildingInputDto, Building>()
+				.ForMember(destinationMember => destinationMember.Coordinates,
+					sourceMember => sourceMember.MapFrom((dto, compound) => 
+						compound.Coordinates = new GeoJsonPoint<GeoJson3DCoordinates>(new GeoJson3DCoordinates(dto.Coordinates.Coordinates.Latitude,dto.Coordinates.Coordinates.Longitude,dto.Coordinates.Coordinates.Altitude.GetValueOrDefault()))))
+				.ReverseMap();
+			
+			CreateMap<UpdateBuildingInputDto, Building>()
+				.ForMember(destinationMember => destinationMember.Coordinates,
+					sourceMember => sourceMember.MapFrom((dto, compound) => 
+						compound.Coordinates = new GeoJsonPoint<GeoJson3DCoordinates>(new GeoJson3DCoordinates(dto.Coordinates.Coordinates.Latitude,dto.Coordinates.Coordinates.Longitude,dto.Coordinates.Coordinates.Altitude.GetValueOrDefault()))))
+				.ReverseMap();
 
-			CreateMap<Compound, CompoundResponse>().ReverseMap();
-			CreateMap<Compound, CreateCompoundInputDto>().ReverseMap();
-			CreateMap<Compound, UpdateCompoundInputDto>().ReverseMap();
+			CreateMap<Compound, CompoundResponse>()
+				.ForMember(destinationMember => destinationMember.Coordinates,
+					sourceMember => sourceMember.MapFrom( (compound, response) => 
+						response.Coordinates = new Point(
+							new Position(compound.Coordinates.Coordinates.X,compound.Coordinates.Coordinates.Y,compound.Coordinates.Coordinates.Z)) ))
+				.ReverseMap();
+			
+			CreateMap<CreateCompoundInputDto, Compound>()
+				.ForMember(destinationMember => destinationMember.Coordinates,
+					sourceMember => sourceMember.MapFrom((dto, compound) => 
+						compound.Coordinates = new GeoJsonPoint<GeoJson3DCoordinates>(new GeoJson3DCoordinates(dto.Coordinates.Coordinates.Latitude,dto.Coordinates.Coordinates.Longitude,dto.Coordinates.Coordinates.Altitude.GetValueOrDefault()))))
+				 .ReverseMap();
+			
+			CreateMap<UpdateCompoundInputDto, Compound>()
+				.ForMember(destinationMember => destinationMember.Coordinates,
+					sourceMember => sourceMember.MapFrom((dto, compound) => 
+						compound.Coordinates = new GeoJsonPoint<GeoJson3DCoordinates>(new GeoJson3DCoordinates(dto.Coordinates.Coordinates.Latitude,dto.Coordinates.Coordinates.Longitude,dto.Coordinates.Coordinates.Altitude.GetValueOrDefault()))))
+				.ReverseMap();
 		}
 	}
 }
