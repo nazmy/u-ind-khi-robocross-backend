@@ -40,7 +40,10 @@ namespace khi_robocross_api.Services
         public async ValueTask<IEnumerable<CompoundResponse>> GetCompoundByClientId(string clientId)
         {
             var compoundTask = await _compoundRepository.GetAsyncByClientId(clientId);
-            throw new NotImplementedException();
+            if (compoundTask != null)
+                return _mapper.Map<IEnumerable<CompoundResponse>>(compoundTask.ToList());
+            
+            return null;
         }
 
         public async ValueTask<CompoundResponse> GetCompoundById(string id)
@@ -49,6 +52,7 @@ namespace khi_robocross_api.Services
                 throw new ArgumentException("Compound Id is Invalid");
 
             var compoundTask = await _compoundRepository.GetAsync(id);
+            
             if (compoundTask != null)
                 return _mapper.Map<CompoundResponse>(compoundTask);
 

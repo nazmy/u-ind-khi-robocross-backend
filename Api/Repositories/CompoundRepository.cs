@@ -37,7 +37,7 @@ namespace khi_robocross_api.Services
 		}
 
 		public async Task<IEnumerable<Compound>> GetAsyncByClientId(string clientId) =>
-            await _compound.Find(x => x.Client.Id == clientId).ToListAsync();
+            await _compound.Find(x => x.clientId == clientId).ToListAsync();
 
         public async Task RemoveAsync(string id) =>
 			await _compound.DeleteOneAsync(x => x.Id == id);

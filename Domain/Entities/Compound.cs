@@ -42,8 +42,8 @@ namespace Domain.Entities
         [BsonElement("lastUpdatedAt")]
         public DateTimeOffset LastUpdatedAt { get; set; }
 
-        [BsonElement("client")]
-        public Client Client { get; set; }
+        [BsonElement("clientId")]
+        public string clientId { get; set; }
 
         public void CreateChangesTime(Compound compound)
         {
