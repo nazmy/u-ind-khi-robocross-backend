@@ -1,4 +1,5 @@
 ﻿using System;
+using Domain.Helper;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -19,6 +20,9 @@ namespace Domain.Entities
 
         [BsonElement("phoneNumber")]
         public string PhoneNumber { get; set; } = null!;
+        
+        [BsonElement("clientType")]
+        public ClientTypeEnum ClientType { get; set; } = 0;
 
         [BsonElement("isDeleted")]
         public bool IsDeleted { get; set; } = false;

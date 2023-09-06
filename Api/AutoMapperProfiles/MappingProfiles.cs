@@ -3,6 +3,7 @@ using AutoMapper;
 using domain.Dto;
 using Domain.Dto;
 using Domain.Entities;
+using Domain.Helper;
 using GeoJSON.Net;
 using GeoJSON.Net.Geometry;
 using MongoDB.Bson;

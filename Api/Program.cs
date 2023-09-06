@@ -1,4 +1,5 @@
 ﻿
+using System.Text.Json.Serialization;
 using Domain.Helper;
 using khi_robocross_api.Services;
 using Microsoft.Extensions.Options;
@@ -19,6 +20,8 @@ builder.Services.AddSingleton<IMongoClient>(s =>
 new MongoClient(builder.Configuration.GetValue<string>("RobocrossDatabaseSettings:ConnectionString")));
 
 builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService,ClientService>();

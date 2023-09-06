@@ -1,4 +1,6 @@
 ﻿
+using Domain.Helper;
+
 namespace Domain.Dto
 {
 	public class UpdateClientInputDto
@@ -10,6 +12,8 @@ namespace Domain.Dto
         public string EmailAddress { get; set; }
 
         public string PhoneNumber { get; set; }
+        
+        public ClientTypeEnum ClientType { get; set; }
     }
 }
 
