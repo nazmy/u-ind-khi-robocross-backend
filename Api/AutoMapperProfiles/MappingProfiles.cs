@@ -57,6 +57,10 @@ namespace khi_robocross_api.AutoMapperProfiles
 					sourceMember => sourceMember.MapFrom((dto, compound) => 
 						compound.Coordinates = new GeoJsonPoint<GeoJson3DCoordinates>(new GeoJson3DCoordinates(dto.Coordinates.Coordinates.Latitude,dto.Coordinates.Coordinates.Longitude,dto.Coordinates.Coordinates.Altitude.GetValueOrDefault()))))
 				.ReverseMap();
+			
+			CreateMap<Line, LineResponse>().ReverseMap();
+			CreateMap<Line, CreateLineInputDto>().ReverseMap();
+			CreateMap<Line, UpdateLineInputDto>().ReverseMap();
 		}
 	}
 }

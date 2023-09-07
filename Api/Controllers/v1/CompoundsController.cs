@@ -111,7 +111,7 @@ namespace khi_robocross_api.Controllers.v1
             return Ok($"Compound with Id = {id} deleted");
         }
         
-        //Building's compound
+        //Get Building by Compound Id
         [HttpGet("{id}/buildings")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetCompoundBuildings(string id)

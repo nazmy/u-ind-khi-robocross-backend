@@ -15,12 +15,15 @@ namespace khi_robocross_api.Controllers.v1
     public class BuildingsController : ControllerBase
 	{
         private readonly IBuildingService _buildingService;
+        private readonly ILineService _lineService;
         private readonly IMapper _mapper;
 
         public BuildingsController(IBuildingService buildingService,
+            ILineService lineService,
             IMapper mapper)
         {
             this._buildingService = buildingService;
+            this._lineService = lineService;
             this._mapper = mapper;
         }
 
@@ -105,6 +108,15 @@ namespace khi_robocross_api.Controllers.v1
 
             await _buildingService.RemoveBuilding(id);
             return Ok($"Building with Id = {id} deleted");
+        }
+        
+        //Get Lines of Business
+        [HttpGet("{id}/lines")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> GetBuildingLines(string id)
+        {
+            var lineList = await _lineService.GetLineByBuildingId(id);
+            return Ok(lineList);
         }
     }
 }
