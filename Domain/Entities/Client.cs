@@ -37,12 +37,11 @@ namespace Domain.Entities
         public string LastUpdatedBy { get; set; } = null!;
 
         [BsonElement("lastUpdatedAt")]
-        public DateTimeOffset LastUpdatedAt { get; set; }
+        public DateTimeOffset? LastUpdatedAt { get; set; }
 
         public void CreateChangesTime(Client client)
         {
             client.CreatedAt = DateTimeOffset.UtcNow;
-            client.LastUpdatedAt = DateTimeOffset.UtcNow;
             client.CreatedBy = "Creator";
         }
 

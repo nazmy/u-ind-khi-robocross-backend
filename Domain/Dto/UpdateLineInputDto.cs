@@ -16,9 +16,7 @@ namespace Domain.Dto
         public string Description { get; set; }
         
         public string ScannedSceneGLBUrl{ get; set; }
-        
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public LineStatusEnum Status { get; set; }
+        public int Status { get; set; }
 
         public string IntegratorId { get; set; }
 

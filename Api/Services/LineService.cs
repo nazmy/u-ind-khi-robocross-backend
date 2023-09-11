@@ -3,6 +3,7 @@ using AutoMapper;
 using domain.Dto;
 using Domain.Dto;
 using Domain.Entities;
+using MongoDB.Bson;
 
 namespace khi_robocross_api.Services
 {
@@ -17,15 +18,31 @@ namespace khi_robocross_api.Services
             _mapper = mapper;
         }
 
-        public async Task AddLine(Line lineBuilding)
+        public async Task AddLine(Line line)
         {
-            if (lineBuilding == null)
+            if (line == null)
                 throw new ArgumentException("Line input is invalid");
 
-            lineBuilding.CreateChangesTime(lineBuilding);
+            List<Unit> unitList = line.Units;
+            foreach (Unit unit in unitList)
+            {
+                unit.Id = ObjectId.GenerateNewId().ToString();
+                List<SceneObject> sceneObjectList = unit.SceneObjects;
+                foreach (SceneObject sceneObject in sceneObjectList)
+                {
+                    sceneObject.Id = ObjectId.GenerateNewId().ToString();
+                    List<Robot> robotList = sceneObject.robots;
+                    foreach (Robot robot in robotList)
+                    {
+                        robot.Id = ObjectId.GenerateNewId().ToString();
+                    }
+                }
+            }
+            
+            line.CreateChangesTime(line);
             
             //validation goes here
-            await _lineRepository.CreateAsync(lineBuilding);
+            await _lineRepository.CreateAsync(line);
         }
 
         public async ValueTask<IEnumerable<LineResponse>> GetAllLines()

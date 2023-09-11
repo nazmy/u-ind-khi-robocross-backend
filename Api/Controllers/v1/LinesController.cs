@@ -1,12 +1,8 @@
-﻿using System;
-using AutoMapper;
-using domain.Dto;
+﻿using AutoMapper;
 using Domain.Dto;
 using Domain.Entities;
-using GeoJSON.Net.Geometry;
 using khi_robocross_api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace khi_robocross_api.Controllers.v1
 {

@@ -28,6 +28,9 @@ namespace Domain.Entities
         [BsonElement("status")]
         public LineStatusEnum Status { get; set; } = null!;
 
+        [BsonElement("units")] 
+        public List<Unit> Units { get; set; } = new List<Unit>();
+
         [BsonElement("integratorId")]
         public string IntegratorId { get; set; } = null!;
         
@@ -47,12 +50,11 @@ namespace Domain.Entities
         public string LastUpdatedBy { get; set; } = null!;
 
         [BsonElement("lastUpdatedAt")]
-        public DateTimeOffset LastUpdatedAt { get; set; }
+        public DateTimeOffset? LastUpdatedAt { get; set; }
         
         public void CreateChangesTime(Line line)
         {
             line.CreatedAt = DateTimeOffset.UtcNow;
-            line.LastUpdatedAt = DateTimeOffset.UtcNow;
             line.CreatedBy = "Creator";
         }
 

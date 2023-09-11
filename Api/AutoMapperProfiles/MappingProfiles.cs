@@ -59,8 +59,26 @@ namespace khi_robocross_api.AutoMapperProfiles
 				.ReverseMap();
 			
 			CreateMap<Line, LineResponse>().ReverseMap();
-			CreateMap<Line, CreateLineInputDto>().ReverseMap();
-			CreateMap<Line, UpdateLineInputDto>().ReverseMap();
+			CreateMap<CreateLineInputDto, Line>()
+				.ForMember(destinationMember => destinationMember.Status,
+					sourceMember => sourceMember.MapFrom((dto, line) => line.Status =  LineStatusEnum.GetLineStatusEnum((dto.Status)))) 
+				.ReverseMap();
+			CreateMap<UpdateLineInputDto, Line>()
+				.ForMember(destinationMember => destinationMember.Status,
+					sourceMember => sourceMember.MapFrom((dto, line) => line.Status =  LineStatusEnum.GetLineStatusEnum((dto.Status)))) 
+				.ReverseMap();
+			
+			CreateMap<Unit, UnitResponse>().ReverseMap();
+			CreateMap<Unit, CreateUnitInput>().ReverseMap();
+			CreateMap<Unit, UpdateUnitInputDto>().ReverseMap();
+			
+			CreateMap<SceneObject, SceneObjectResponse>().ReverseMap();
+			CreateMap<SceneObject, CreateSceneObjectInput>().ReverseMap();
+			CreateMap<SceneObject, UpdateSceneObjectInput>().ReverseMap();
+			
+			CreateMap<Robot, RobotResponse>().ReverseMap();
+			CreateMap<Robot, CreateRobotInput>().ReverseMap();
+			CreateMap<Robot, UpdateRobotInput>().ReverseMap();
 		}
 	}
 }

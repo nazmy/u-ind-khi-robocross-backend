@@ -10,6 +10,38 @@ public class LineStatusEnum
         Status = status;
         Title = title;
     }
+
+    public static LineStatusEnum GetLineStatusEnum(int status)
+    {
+        switch (status)
+        {
+            case  0:
+                return LineStatusEnum.Initial();
+            case  1:
+                return LineStatusEnum.Draft();
+            case  2:
+                return LineStatusEnum.Submitted();
+            case  3:
+                return LineStatusEnum.Assigned();
+            case  4:
+                return LineStatusEnum.InProgress();
+            case  5:
+                return LineStatusEnum.NewProposal();
+            case  6:
+                return LineStatusEnum.SubmittingFeedback();
+            case  7:
+                return LineStatusEnum.FeedbackSubmitted();
+            case  8:
+                return LineStatusEnum.ProposalEditing();
+            case  9:
+                return LineStatusEnum.UpdatedProposal();
+            case  10:
+                return LineStatusEnum.ProposalApprove();
+            default:
+                return LineStatusEnum.Initial();
+        }
+    }
+    
     public string Status { get; private set; }
     
     public string Title { get; private set; }

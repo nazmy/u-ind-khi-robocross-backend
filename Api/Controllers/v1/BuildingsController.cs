@@ -63,7 +63,7 @@ namespace khi_robocross_api.Controllers.v1
         {
             if (newBuilding == null)
                 return BadRequest(ModelState);
-
+            
             var building = _mapper.Map<Building>(newBuilding);
             await _buildingService.AddBuilding(building);
 
