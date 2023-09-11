@@ -27,7 +27,8 @@ resource "azurerm_linux_web_app" "khirobocross" {
   location            = azurerm_service_plan.khirobocross.location
   service_plan_id     = azurerm_service_plan.khirobocross.id
 
-  client_certificate_enabled = true
+  client_certificate_enabled = false
+  client_certificate_mode    = "OptionalInteractiveUser"
 
   virtual_network_subnet_id = azurerm_subnet.private.id
 
@@ -35,6 +36,7 @@ resource "azurerm_linux_web_app" "khirobocross" {
 
   app_settings = {
     "AZURE_MONGDB_DATABASENAME"      = var.azure_mongodb_databasename
+    "ASPNETCORE_ENVIRONMENT"         = var.aspnetcore_environment
     "DOTNET_ENVIRONMENT"             = var.aspnetcore_environment
     "APPINSIGHTS_INSTRUMENTATIONKEY" = var.appservice_appinsight_instrumentation_key
   }
