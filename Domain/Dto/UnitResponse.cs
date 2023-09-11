@@ -1,6 +1,6 @@
 namespace domain.Dto;
 
-public class UnitResponse : BaseDto
+public class UnitResponse
 {
     public string Id { get; set; }
     
@@ -8,5 +8,5 @@ public class UnitResponse : BaseDto
     
     public string[] Pics { get; set; }
     
-    public List<SceneObjectResponse> SceneObject { get; set;}
+    public List<SceneObjectResponse> SceneObjects { get; set;}
 }

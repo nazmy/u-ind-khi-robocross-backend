@@ -1,8 +1,10 @@
 namespace domain.Dto;
 
-public class SceneObjectResponse : BaseDto
+public class SceneObjectResponse
 {
-    public string LibaryUrl { get; set; }
+    public string? Id { get; set; }
+    
+    public string LibraryUrl { get; set; }
     
     public List<RobotResponse> Robots { get; set; }
 }

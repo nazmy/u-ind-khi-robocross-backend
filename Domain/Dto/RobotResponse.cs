@@ -1,7 +1,9 @@
 namespace domain.Dto;
 
-public class RobotResponse : BaseDto
+public class RobotResponse
 {
+    public string? Id { get; set; }
+    
     public string Manufacturer { get; set; }
 
     public string ModelNumber { get; set; }
