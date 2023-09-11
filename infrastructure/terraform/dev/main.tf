@@ -29,9 +29,25 @@ resource "azurerm_linux_web_app" "khirobocross" {
 
   client_certificate_enabled = true
 
+  virtual_network_subnet_id = azurerm_subnet.private.id
+
   https_only = true
+
+  app_settings = {
+    "AZURE_MONGDB_DATABASENAME"      = var.azure_mongodb_databasename
+    "DOTNET_ENVIRONMENT"             = var.aspnetcore_environment
+    "APPINSIGHTS_INSTRUMENTATIONKEY" = var.appservice_appinsight_instrumentation_key
+  }
+
+  connection_string {
+    name  = "COSMOS_DB_CONNECTION_STRING"
+    value = var.cosmo_db_connection_string
+    type  = "Custom"
+  }
+
   site_config {
-    minimum_tls_version = "1.2"
+    minimum_tls_version    = "1.2"
+    vnet_route_all_enabled = true
     application_stack {
       dotnet_version = local.dotnet_version
     }

@@ -6,7 +6,7 @@ resource "azurerm_cosmosdb_account" "cosmodb_account" {
   offer_type                        = "Standard"
   kind                              = "MongoDB"
   enable_automatic_failover         = var.mongodb_enable_automatic_failover
-  is_virtual_network_filter_enabled = var.is_mongo_db_virtual_network_filter_enabled
+  is_virtual_network_filter_enabled = var.mongo_db_virtual_network_filter_enabled
   public_network_access_enabled     = var.mongodb_enable_public_access
 
   geo_location {
