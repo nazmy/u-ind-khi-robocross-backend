@@ -19,7 +19,7 @@ variable "mongodb_enable_automatic_failover" {
   default     = "false"
 }
 
-variable "is_mongo_db_virtual_network_filter_enabled" {
+variable "mongo_db_virtual_network_filter_enabled" {
   description = "is virtual network filter enabled on mongoDB to allow access from subnets"
   default     = "true"
 }
@@ -34,3 +34,25 @@ variable "mongodb_autoscale_max_throughput" {
   default     = 1000
 }
 
+################################
+### Application Variables
+################################
+
+variable "aspnetcore_environment" {
+  description = "ASP .Net Application Environment"
+  default     = "Development"
+}
+
+
+variable "azure_mongodb_databasename" {
+  description = "database name of azure cosmo mongo database"
+  default     = "Khirobocross"
+}
+
+variable "cosmo_db_connection_string" {
+  description = "Azure cosmo DB connection string"
+}
+
+variable "appservice_appinsight_instrumentation_key" {
+  description = "App service app insight instrumentation key"
+}

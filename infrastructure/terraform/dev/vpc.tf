@@ -29,6 +29,8 @@ resource "azurerm_subnet" "database" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.3.0/24"]
   service_endpoints    = ["Microsoft.AzureCosmosDB"]
+
+
 }
 
 resource "azurerm_subnet" "private" {
@@ -37,5 +39,13 @@ resource "azurerm_subnet" "private" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.4.0/24"]
   service_endpoints    = ["Microsoft.Web", "Microsoft.AzureCosmosDB"]
+
+  delegation {
+    name = "app-service"
+    service_delegation {
+      name    = "Microsoft.Web/serverFarms"
+      actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+    }
+  }
 }
 
