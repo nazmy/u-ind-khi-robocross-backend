@@ -14,6 +14,18 @@ namespace domain.Dto
         public string LastUpdatedBy { get; set; }
 
         public DateTimeOffset LastUpdatedAt { get; set; } = DateTimeOffset.UtcNow;
+        
+        public void CreateChangesTime()
+        {
+	        this.CreatedAt = DateTimeOffset.UtcNow;
+	        this.CreatedBy = "Creator";
+        }
+
+        public void UpdateChangesTime()
+        {
+	        this.LastUpdatedAt = DateTimeOffset.UtcNow;
+	        this.LastUpdatedBy = "Updater";
+        }
     }
 }
 

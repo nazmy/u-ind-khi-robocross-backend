@@ -11,6 +11,8 @@
         public string CompoundsCollectionName { get; set; } = null!;
         
         public string BuildingsCollectionName { get; set; } = null!;
+        
+        public string LinesCollectionName { get; set; } = null!;
     }
 }
 

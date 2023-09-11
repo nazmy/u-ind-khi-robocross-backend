@@ -57,6 +57,28 @@ namespace khi_robocross_api.AutoMapperProfiles
 					sourceMember => sourceMember.MapFrom((dto, compound) => 
 						compound.Coordinates = new GeoJsonPoint<GeoJson3DCoordinates>(new GeoJson3DCoordinates(dto.Coordinates.Coordinates.Latitude,dto.Coordinates.Coordinates.Longitude,dto.Coordinates.Coordinates.Altitude.GetValueOrDefault()))))
 				.ReverseMap();
+			
+			CreateMap<Line, LineResponse>().ReverseMap();
+			CreateMap<CreateLineInputDto, Line>()
+				.ForMember(destinationMember => destinationMember.Status,
+					sourceMember => sourceMember.MapFrom((dto, line) => line.Status =  LineStatusEnum.GetLineStatusEnum((dto.Status)))) 
+				.ReverseMap();
+			CreateMap<UpdateLineInputDto, Line>()
+				.ForMember(destinationMember => destinationMember.Status,
+					sourceMember => sourceMember.MapFrom((dto, line) => line.Status =  LineStatusEnum.GetLineStatusEnum((dto.Status)))) 
+				.ReverseMap();
+			
+			CreateMap<Unit, UnitResponse>().ReverseMap();
+			CreateMap<Unit, CreateUnitInput>().ReverseMap();
+			CreateMap<Unit, UpdateUnitInputDto>().ReverseMap();
+			
+			CreateMap<SceneObject, SceneObjectResponse>().ReverseMap();
+			CreateMap<SceneObject, CreateSceneObjectInput>().ReverseMap();
+			CreateMap<SceneObject, UpdateSceneObjectInput>().ReverseMap();
+			
+			CreateMap<Robot, RobotResponse>().ReverseMap();
+			CreateMap<Robot, CreateRobotInput>().ReverseMap();
+			CreateMap<Robot, UpdateRobotInput>().ReverseMap();
 		}
 	}
 }

@@ -40,7 +40,7 @@ namespace Domain.Entities
         public string LastUpdatedBy { get; set; } = null!;
 
         [BsonElement("lastUpdatedAt")]
-        public DateTimeOffset LastUpdatedAt { get; set; }
+        public DateTimeOffset? LastUpdatedAt { get; set; }
 
         [BsonElement("compoundId")]
         public string compoundId { get; set; }
@@ -48,7 +48,6 @@ namespace Domain.Entities
         public void CreateChangesTime(Building building)
         {
             building.CreatedAt = DateTimeOffset.UtcNow;
-            building.LastUpdatedAt = DateTimeOffset.UtcNow;
             building.CreatedBy = "Creator";
         }
 
