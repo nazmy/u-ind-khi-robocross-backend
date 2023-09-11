@@ -3,7 +3,7 @@
 ################################
 variable "resource_prefix" {
   description = "Resource name prefix"
-  default     = "khirobocross"
+  default     = "Khirobocross"
 }
 
 variable "resource_location" {
