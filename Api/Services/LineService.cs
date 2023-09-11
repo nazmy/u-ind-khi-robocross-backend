@@ -107,6 +107,24 @@ namespace khi_robocross_api.Services
                 throw new KeyNotFoundException($"Line with Id = {id} not found");
 
             line = _mapper.Map<Line>(updatedLine);
+            
+            foreach (Unit unitItem in line.Units)
+            {
+                if (String.IsNullOrEmpty(unitItem.Id))
+                    unitItem.Id = ObjectId.GenerateNewId().ToString();
+
+                foreach (SceneObject sceneObjectItem in unitItem.SceneObjects)
+                {
+                    if (String.IsNullOrEmpty(sceneObjectItem.Id))
+                        sceneObjectItem.Id = ObjectId.GenerateNewId().ToString();
+
+                    foreach (Robot robotItem in sceneObjectItem.robots)
+                    {
+                        if (String.IsNullOrEmpty(robotItem.Id))
+                            robotItem.Id = ObjectId.GenerateNewId().ToString();
+                    }
+                }
+            }
             line.UpdateChangesTime(line);
             
             await _lineRepository.UpdateAsync(id, line);
