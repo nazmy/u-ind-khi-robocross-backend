@@ -21,7 +21,7 @@ namespace Domain.Dto
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public LineStatusEnum Status { get; set; }
         
-        public List<CreateUnitInput> Units { get; set; }
+        public List<UnitResponse> Units { get; set; }
 
         public string IntegratorId { get; set; }
 
