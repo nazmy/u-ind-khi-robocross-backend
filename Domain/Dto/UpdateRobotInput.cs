@@ -2,6 +2,8 @@ namespace domain.Dto;
 
 public class UpdateRobotInput
 {
+    public string? Id { get; set; }
+    
     public string Manufacturer { get; set; }
 
     public string ModelNumber { get; set; }

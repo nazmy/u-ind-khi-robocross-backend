@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using domain.Dto;
 using Domain.Helper;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -17,6 +18,8 @@ namespace Domain.Dto
         
         public string ScannedSceneGLBUrl{ get; set; }
         public int Status { get; set; }
+        
+        public List<UpdateUnitInputDto> Units { get; set; }
 
         public string IntegratorId { get; set; }
 
