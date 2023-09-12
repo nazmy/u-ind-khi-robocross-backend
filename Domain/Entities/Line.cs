@@ -26,7 +26,7 @@ namespace Domain.Entities
         public string ScannedSceneGLBUrl { get; set; } = null!;
 
         [BsonElement("status")]
-        public LineStatusEnum Status { get; set; } = null!;
+        public LineStatusEnum Status { get; set; }
 
         [BsonElement("units")] 
         public List<Unit> Units { get; set; } = new List<Unit>();

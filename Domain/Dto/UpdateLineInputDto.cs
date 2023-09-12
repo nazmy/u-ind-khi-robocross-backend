@@ -17,7 +17,8 @@ namespace Domain.Dto
         public string Description { get; set; }
         
         public string ScannedSceneGLBUrl{ get; set; }
-        public int Status { get; set; }
+        
+        public LineStatusEnum Status { get; set; }
         
         public List<UpdateUnitInputDto> Units { get; set; }
 
