@@ -1,6 +1,6 @@
 # storage for client misc (cloud bash etc)
 resource "azurerm_storage_account" "misc_storage" {
-  name                = replace("${var.resource_prefix}-misc-storage", "-", "")
+  name                = replace("${var.resource_prefix}miscstorage", "-", "")
   resource_group_name = azurerm_resource_group.backend_rg.name
 
   location                 = azurerm_resource_group.backend_rg.location
@@ -17,7 +17,7 @@ resource "azurerm_storage_container" "cloud_shell" {
 
 #storage for client app assets
 resource "azurerm_storage_account" "app_storage" {
-  name                = replace("${var.resource_prefix}-app-storage", "-", "")
+  name                = replace("${var.resource_prefix}appstorage", "-", "")
   resource_group_name = azurerm_resource_group.frontend_rg.name
 
   location                 = azurerm_resource_group.frontend_rg.location
@@ -39,7 +39,7 @@ resource "azurerm_storage_container" "robot_monitoring" {
 
 
 resource "azurerm_storage_account" "robot_library_storage" {
-  name                = replace("${var.resource_prefix}-robot", "-", "")
+  name                = replace("${var.resource_prefix}robot", "-", "")
   resource_group_name = azurerm_resource_group.frontend_rg.name
 
   location                 = azurerm_resource_group.frontend_rg.location

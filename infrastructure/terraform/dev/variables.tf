@@ -56,3 +56,12 @@ variable "cosmo_db_connection_string" {
 variable "appservice_appinsight_instrumentation_key" {
   description = "App service app insight instrumentation key"
 }
+
+################################
+### Environment
+################################
+
+variable "khirobocross_env" { 
+  description = "KHI Robocross environment"
+  default     = "dev"
+}
