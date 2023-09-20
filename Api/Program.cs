@@ -1,6 +1,7 @@
 ﻿
 using System.Text.Json.Serialization;
 using Domain.Helper;
+using khi_robocross_api.Health;
 using khi_robocross_api.Services;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -8,6 +9,7 @@ using MongoDB.Driver;
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
 builder.Logging.ClearProviders();
+builder.Services.AddHealthChecks().AddCheck<MongoHealthCheck>("DBConnectionCheck");
 
 // Add services to the container.
 builder.Services.Configure<RobocrossDatabaseSettings>(
@@ -55,6 +57,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/healtz");
 
 app.Run();
 
