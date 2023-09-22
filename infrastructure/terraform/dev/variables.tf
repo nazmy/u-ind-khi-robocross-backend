@@ -53,6 +53,14 @@ variable "cosmo_db_connection_string" {
   description = "Azure cosmo DB connection string"
 }
 
+variable "khirobocross_storage_connection_string" {
+  description = "Azure KHI Robocross Storage connection string"
+}
+
+variable "khirobocross_storage_key" {
+  description = "Azure KHI Robocross Storage Key"
+}
+
 variable "appservice_appinsight_instrumentation_key" {
   description = "App service app insight instrumentation key"
 }

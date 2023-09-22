@@ -47,6 +47,19 @@ resource "azurerm_linux_web_app" "khirobocross" {
     type  = "Custom"
   }
 
+  connection_string {
+    name  = "KHIROBOCROSS_STORAGE_CONNECTION_STRING"
+    value = var.khirobocross_storage_connection_string
+    type  = "Custom"
+  }
+
+  connection_string {
+    name  = "KHIROBOCROSS_STORAGE_KEY"
+    value = var.khirobocross_storage_key
+    type  = "Custom"
+  }
+
+
   site_config {
     minimum_tls_version    = "1.2"
     vnet_route_all_enabled = true
