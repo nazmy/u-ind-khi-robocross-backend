@@ -17,8 +17,6 @@
     <None Remove="Dto\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Helper\" />
     <Folder Include="Entities\" />
-    <Folder Include="Dto\" />
   </ItemGroup>
 </Project>
