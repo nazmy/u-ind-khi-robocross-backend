@@ -1,8 +1,10 @@
-﻿
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using Azure.Storage;
+using Azure.Storage.Blobs;
 using Domain.Helper;
 using khi_robocross_api.Health;
 using khi_robocross_api.Services;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -19,21 +21,42 @@ builder.Services.AddSingleton<IRobocrossDatabaseSettings>(sp =>
 sp.GetRequiredService<IOptions<RobocrossDatabaseSettings>>().Value);
 
 builder.Services.AddSingleton<IMongoClient>(s =>
-new MongoClient(builder.Configuration.GetValue<string>("RobocrossDatabaseSettings:ConnectionString")));
+    new MongoClient(builder.Configuration.GetValue<string>("RobocrossDatabaseSettings:ConnectionString")));
+
+builder.Services.Configure<RobocrossBlobStorageSettings>(
+    builder.Configuration.GetSection(nameof(RobocrossBlobStorageSettings)));
+
+builder.Services.AddSingleton<IRobocrossBlobStorageSettings>(sp =>
+    sp.GetRequiredService<IOptions<RobocrossBlobStorageSettings>>().Value);
+
+builder.Services.AddAzureClients(clientBuiler =>
+{
+    var accountName = builder.Configuration.GetValue<string>("RobocrossBlobStorageSettings:AcountName");
+    var accountKey = builder.Configuration.GetValue<string>("RobocrossBlobStorageSettings:Key");
+    StorageSharedKeyCredential sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
+    var blobUri = String.Concat("https://").Concat(accountName).Concat("blob.core.windows.net").ToString();
+    clientBuiler.AddBlobServiceClient(blobUri);
+});
+
+
+builder.Services.AddSingleton<BlobServiceClient>(s => 
+    new BlobServiceClient(builder.Configuration.GetValue<string>("RobocrossBlobStorageSettings:ConnectionString")));
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService,ClientService>();
 builder.Services.AddScoped<IBuildingService,BuildingService>();
 builder.Services.AddScoped<ILineService,LineService>();
+builder.Services.AddScoped<IAssetManagerService, AssetManagerService>();
 
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ICompoundRepository, CompoundRepository>();
 builder.Services.AddScoped<ICompoundService, CompoundService>();
 builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
 builder.Services.AddScoped<ILineRepository, LineRepository>();
+
 
 builder.Services.AddControllers().AddJsonOptions(
         options => options.JsonSerializerOptions.PropertyNamingPolicy = null);

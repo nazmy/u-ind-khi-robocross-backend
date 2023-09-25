@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Domain.Dto;
 using GeoJSON.Net;
 
@@ -18,7 +17,7 @@ internal class SerializeTest : TestBase
     {
         var json = GetExpectedJson();
 
-        CreateCompoundInputDto compound = JsonConvert.DeserializeObject<CreateCompoundInputDto>(json);
+        CreateCompoundInput compound = JsonConvert.DeserializeObject<CreateCompoundInput>(json);
 
         Assert.IsNotNull(compound);
         Assert.IsNotNull(compound.ClientId);
