@@ -5,7 +5,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Domain.Dto
 {
-	public class CreateClientInputDto
+	public class CreateClientInput
 	{
 		public string Name { get; set; }
 

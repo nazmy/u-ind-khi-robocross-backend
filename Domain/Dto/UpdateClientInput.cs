@@ -3,7 +3,7 @@ using Domain.Helper;
 
 namespace Domain.Dto
 {
-	public class UpdateClientInputDto
+	public class UpdateClientInput
 	{
         public string Id { get; set; }
 

@@ -93,7 +93,7 @@ namespace khi_robocross_api.Services
             await _lineRepository.RemoveAsync(id);
         }
 
-        public async Task UpdateLine(string id, UpdateLineInputDto updatedLine)
+        public async Task UpdateLine(string id, UpdateLineInput updatedLine)
         {
             if (id == null)
                 throw new ArgumentException("Line Id is invalid");

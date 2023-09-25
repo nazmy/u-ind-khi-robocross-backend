@@ -1,6 +1,6 @@
 namespace domain.Dto;
 
-public class UpdateUnitInputDto
+public class UpdateUnitInput
 {
     public string? Id { get; set; }
     

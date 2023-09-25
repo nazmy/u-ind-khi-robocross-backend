@@ -52,7 +52,7 @@ namespace khi_robocross_api.Controllers.v1
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Post([FromBody] CreateLineInputDto newLine)
+        public async Task<IActionResult> Post([FromBody] CreateLineInput newLine)
         {
             if (newLine == null)
                 return BadRequest(ModelState);
@@ -66,7 +66,7 @@ namespace khi_robocross_api.Controllers.v1
         [HttpPut("{id:length(24)}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Update(string id, UpdateLineInputDto updatedLine)
+        public async Task<IActionResult> Update(string id, UpdateLineInput updatedLine)
         {
             try
             {

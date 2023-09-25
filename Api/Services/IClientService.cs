@@ -9,7 +9,7 @@ namespace khi_robocross_api.Services
 		 ValueTask<IEnumerable<ClientResponse>> GetAllClients();
 		 ValueTask<ClientResponse> GetClientById(String id);
 		 Task AddClient(Client client);
-         Task UpdateClient(string id, UpdateClientInputDto updatedClient);
+         Task UpdateClient(string id, UpdateClientInput updatedClient);
          Task RemoveClient(string id);
          ValueTask<IEnumerable<ClientResponse>> Query(string search);
 	}

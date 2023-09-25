@@ -3,7 +3,7 @@ using GeoJSON.Net.Geometry;
 
 namespace Domain.Dto
 {
-	public class UpdateBuildingInputDto
+	public class UpdateBuildingInput
 	{
         public string Id { get; set; }
 
@@ -14,7 +14,6 @@ namespace Domain.Dto
         public string PicPhoneNumber { get; set; }
         
         public string Address { get; set; }
-
         public Point Coordinates { get; set; }
     }
 }

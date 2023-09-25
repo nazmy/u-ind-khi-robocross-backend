@@ -67,7 +67,7 @@ namespace khi_robocross_api.Services
             await _compoundRepository.RemoveAsync(id);
         }
 
-        public async Task UpdateCompound(string id, UpdateCompoundInputDto updatedCompound)
+        public async Task UpdateCompound(string id, UpdateCompoundInput updatedCompound)
         {
             if (id == null)
                 throw new ArgumentException("Compound Id is invalid");
