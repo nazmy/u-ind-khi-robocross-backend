@@ -67,7 +67,7 @@ namespace khi_robocross_api.Services
             await _buildingRepository.RemoveAsync(id);
         }
 
-        public async Task UpdateBuilding(string id, UpdateBuildingInputDto updatedBuilding)
+        public async Task UpdateBuilding(string id, UpdateBuildingInput updatedBuilding)
         {
             if (id == null)
                 throw new ArgumentException("Building Id is invalid");

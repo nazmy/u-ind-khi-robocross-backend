@@ -11,7 +11,7 @@ namespace khi_robocross_api.Services
 		 ValueTask<BuildingResponse> GetBuildingById(String id);
          ValueTask<IEnumerable<BuildingResponse>> GetBuildingByCompoundId(String compoundId);
          Task AddBuilding(Building building);
-         Task UpdateBuilding(string id, UpdateBuildingInputDto updatedBuilding);
+         Task UpdateBuilding(string id, UpdateBuildingInput updatedBuilding);
          Task RemoveBuilding(string id);
 	}
 }

@@ -90,7 +90,7 @@ namespace khi_robocross_api.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Post([FromBody] CreateClientInputDto newClient)
+        public async Task<IActionResult> Post([FromBody] CreateClientInput newClient)
 		{
             if (newClient == null)
             {
@@ -107,7 +107,7 @@ namespace khi_robocross_api.Controllers
         [HttpPut("{id:length(24)}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Update(string id, UpdateClientInputDto updatedClient)
+        public async Task<IActionResult> Update(string id, UpdateClientInput updatedClient)
         {
             try
             {

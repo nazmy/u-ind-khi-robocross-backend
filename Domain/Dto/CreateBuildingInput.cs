@@ -4,14 +4,16 @@ using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace domain.Dto
 {
-	public class CreateBuildingInputDto
+	public class CreateBuildingInput
 	{
 		public string Name { get; set; }
 
 		public string PicName { get; set; }
 
 		public string PicPhoneNumber { get; set; }
-
+		
+		public String Address  { get; set; }
+		
         public Point? Coordinates { get; set; }
 
         public string CompoundId { get; set; }

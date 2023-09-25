@@ -12,7 +12,7 @@ namespace khi_robocross_api.Services
          ValueTask<IEnumerable<LineResponse>> GetLineByBuildingId(String buildingId);
          ValueTask<IEnumerable<LineResponse>> GetLineByIntegratorId(String integratorId);
          Task AddLine(Line line);
-         Task UpdateLine(string id, UpdateLineInputDto updatedLine);
+         Task UpdateLine(string id, UpdateLineInput updatedLine);
          Task RemoveLine(string id);
 	}
 }

@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Domain.Dto
 {
-	public class UpdateLineInputDto
+	public class UpdateLineInput
 	{
 		public string Id { get; set; }
 		
@@ -20,7 +20,7 @@ namespace Domain.Dto
         
         public LineStatusEnum Status { get; set; }
         
-        public List<UpdateUnitInputDto> Units { get; set; }
+        public List<UpdateUnitInput> Units { get; set; }
 
         public string IntegratorId { get; set; }
 

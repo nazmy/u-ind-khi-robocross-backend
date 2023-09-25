@@ -66,7 +66,7 @@ namespace khi_robocross_api.Services
             await _clientRepository.RemoveAsync(id);
         }
 
-        public async Task UpdateClient(string id, UpdateClientInputDto updatedClient)
+        public async Task UpdateClient(string id, UpdateClientInput updatedClient)
         {
             if (id == null)
                 throw new ArgumentException("ClientId is invalid");

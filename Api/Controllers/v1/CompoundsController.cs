@@ -59,7 +59,7 @@ namespace khi_robocross_api.Controllers.v1
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Post([FromBody] CreateCompoundInputDto newCompound)
+        public async Task<IActionResult> Post([FromBody] CreateCompoundInput newCompound)
         {
             
             if (newCompound == null)
@@ -74,7 +74,7 @@ namespace khi_robocross_api.Controllers.v1
         [HttpPut("{id:length(24)}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Update(string id, UpdateCompoundInputDto updatedCompound)
+        public async Task<IActionResult> Update(string id, UpdateCompoundInput updatedCompound)
         {
             try
             {
