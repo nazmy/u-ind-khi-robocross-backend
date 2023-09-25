@@ -39,20 +39,12 @@ resource "azurerm_storage_container" "robot_monitoring" {
 
 
 resource "azurerm_storage_account" "robot_library_storage" {
-  name                = replace("${var.resource_prefix}robot", "-", "")
+  name                = replace("${var.resource_prefix}assets", "-", "")
   resource_group_name = azurerm_resource_group.frontend_rg.name
 
   location                 = azurerm_resource_group.frontend_rg.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 }
-
-
-resource "azurerm_storage_container" "robot_library" {
-  name                  = "robot-library"
-  storage_account_name  = azurerm_storage_account.robot_library_storage.name
-  container_access_type = "container"
-}
-
 
 
