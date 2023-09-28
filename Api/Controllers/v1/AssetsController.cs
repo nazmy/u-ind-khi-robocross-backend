@@ -72,7 +72,7 @@ public class AssetsController : ControllerBase
     {
         try
         {
-            FileStream fs = new FileStream(Path.Combine("DownloadedAssets",fileName), FileMode.OpenOrCreate);
+            FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
             await _assetManagerService.DownloadFile(collectionName, fileName,fs);
             
             if (fs.CanRead)
