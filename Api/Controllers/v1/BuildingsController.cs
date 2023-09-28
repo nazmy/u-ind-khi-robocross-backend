@@ -81,7 +81,6 @@ namespace khi_robocross_api.Controllers.v1
                     return BadRequest(ModelState);
 
                 await _buildingService.UpdateBuilding(id, updatedBuilding);
-
                 return NoContent();
             }
             catch (ArgumentException aex)

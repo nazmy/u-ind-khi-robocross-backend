@@ -38,7 +38,7 @@ namespace khi_robocross_api.Services
                     }
                 }
             }
-            
+
             line.CreateChangesTime(line);
             
             //validation goes here
