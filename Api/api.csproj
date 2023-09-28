@@ -31,7 +31,6 @@
     <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DownloadedAssets\" />
     <Folder Include="Repositories\" />
     <Folder Include="AutoMapperProfiles\" />
   </ItemGroup>
