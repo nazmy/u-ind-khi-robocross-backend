@@ -1,11 +1,9 @@
-﻿using System;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Helper;
-using MongoDB.Driver;
-using Domain.Dto;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
-namespace khi_robocross_api.Services
+namespace domain.Repositories
 {
 	public class ClientRepository : IClientRepository
 	{

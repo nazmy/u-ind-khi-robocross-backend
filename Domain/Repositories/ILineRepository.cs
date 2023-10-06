@@ -1,9 +1,6 @@
-﻿using System;
-using Domain.Entities;
-using MongoDB.Driver;
-using Domain.Dto;
+﻿using Domain.Entities;
 
-namespace khi_robocross_api.Services
+namespace domain.Repositories
 {
 	public interface ILineRepository
 	{
