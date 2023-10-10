@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain.Dto;
 using Domain.Entities;
+using domain.Repositories;
 
 namespace khi_robocross_api.Services
 {

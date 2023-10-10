@@ -1,10 +1,9 @@
-﻿using System;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Helper;
-using MongoDB.Driver;
-using Domain.Dto;
-using khi_robocross_api.Services;
 using MongoDB.Bson;
+using MongoDB.Driver;
+
+namespace domain.Repositories;
 
 public class BuildingRepository : IBuildingRepository
 {
@@ -45,6 +44,3 @@ public class BuildingRepository : IBuildingRepository
 		await _building.ReplaceOneAsync(x => x.Id == id, updatedBuilding);
 }
 
-namespace khi_robocross_api.Services
-{
-}

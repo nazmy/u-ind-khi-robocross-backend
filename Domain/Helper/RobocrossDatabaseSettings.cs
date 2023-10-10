@@ -13,6 +13,10 @@
         public string BuildingsCollectionName { get; set; } = null!;
         
         public string LinesCollectionName { get; set; } = null!;
+        
+        public string RolesCollectionName { get; set; } = null!;
+        
+        public string UsersCollectionName { get; set; } = null!;
     }
 }
 

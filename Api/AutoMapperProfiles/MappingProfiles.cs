@@ -4,6 +4,7 @@ using domain.Dto;
 using Domain.Dto;
 using Domain.Entities;
 using Domain.Helper;
+using domain.Repositories;
 using GeoJSON.Net;
 using GeoJSON.Net.Geometry;
 using MongoDB.Bson;
@@ -73,6 +74,20 @@ namespace khi_robocross_api.AutoMapperProfiles
 			CreateMap<Robot, RobotResponse>().ReverseMap();
 			CreateMap<Robot, CreateRobotInput>().ReverseMap();
 			CreateMap<Robot, UpdateRobotInput>().ReverseMap();
+
+			CreateMap<AppRole, RoleResponse>();
+
+			CreateMap<AppUser, UserResponse>().ForMember(
+				destinationMember => destinationMember.RoleId,
+				sourceMember => sourceMember.MapFrom((user, response) =>  response.RoleId = user.Roles.First().ToString()))
+				.ForMember(
+					destinationMember => destinationMember.CreatedAt,
+					sourceMember => sourceMember.MapFrom((user, response) => response.CreatedAt = user.CreatedOn))
+				.ForMember(
+					destinationMember => destinationMember.LastUpdatedAt,
+					sourceMember => sourceMember.MapFrom((user, response) => response.CreatedAt = DateTimeOffset.Parse(user.ConcurrencyStamp)));
+			CreateMap<AppUser, CreateUserInput>().ReverseMap();
+			CreateMap<AppUser, UpdateUserInput>().ReverseMap();
 		}
 	}
 }

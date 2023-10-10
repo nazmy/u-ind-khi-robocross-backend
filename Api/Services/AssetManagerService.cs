@@ -166,7 +166,7 @@ public class AssetManagerService : IAssetManagerService
         }
     }
 
-    public async Task UpdateFile(UpdateAssetInput updateAssetInput)
+    public async Task UpdateFile(UpdateAssetInput updateAssetInput, string collectionName)
     {
         try
         {
@@ -183,7 +183,7 @@ public class AssetManagerService : IAssetManagerService
             }
 
             BlobContainerClient containerClient =
-                _blobServiceClient.GetBlobContainerClient(updateAssetInput.CollectionName);
+                _blobServiceClient.GetBlobContainerClient(collectionName);
             BlobClient blobClient = containerClient.GetBlobClient(updateAssetInput.Name);
             await blobClient.SetMetadataAsync(updateAssetInput.Metadata);
         }

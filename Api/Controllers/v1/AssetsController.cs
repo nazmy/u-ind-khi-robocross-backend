@@ -18,7 +18,7 @@ public class AssetsController : ControllerBase
         _logger = new LoggerFactory().CreateLogger<AssetsController>();
     }
 
-    [HttpGet]
+    [HttpGet("Collection/{collectionName}")]
     [ProducesResponseType(200)]
     public async Task<IActionResult> Get(string collectionName)
     {
@@ -34,7 +34,7 @@ public class AssetsController : ControllerBase
         }
     }
 
-    [HttpPost] 
+    [HttpPost("Collection/{collectionName}")] 
     [ProducesResponseType(201)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> Post([FromForm] IFormFile file, string collectionName)
@@ -65,7 +65,7 @@ public class AssetsController : ControllerBase
         }
     }
 
-    [HttpGet("Download")]
+    [HttpGet("Collection/{collectionName}/Download")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> Download(string collectionName, string fileName)
@@ -110,14 +110,14 @@ public class AssetsController : ControllerBase
 
     }
     
-    [HttpPut()]
+    [HttpPut("Collection/{collectionName}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> Update(UpdateAssetInput updateAssetInput)
+    public async Task<IActionResult> UpdateMetada(UpdateAssetInput updateAssetInput, string collectionName)
     {
         try
         {
-            await _assetManagerService.UpdateFile(updateAssetInput);
+            await _assetManagerService.UpdateFile(updateAssetInput,collectionName);
             return NoContent();
         }
         catch (ArgumentException aex)
@@ -130,7 +130,7 @@ public class AssetsController : ControllerBase
             _logger.LogError($"Error on V1 Update Asset API :{rex.StackTrace}");
             if (rex.Status == 404)
             {
-                var errorString = $"The blob {updateAssetInput.Name} in {updateAssetInput.CollectionName} doesn't exist";
+                var errorString = $"The blob {updateAssetInput.Name} in {collectionName} doesn't exist";
                 _logger.LogError(errorString);
                 return NotFound(errorString);
             }
