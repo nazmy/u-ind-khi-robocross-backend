@@ -22,7 +22,7 @@ public class User
     
     [BsonElement("lockoutEnabled")]
     public bool lockoutEnabled { get; set; } = false;
-    
+   
     [BsonElement("accessFailedCount")]
     public int AccessFailedCount { get; set; } = 0;
     

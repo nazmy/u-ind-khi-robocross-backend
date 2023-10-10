@@ -9,11 +9,11 @@ namespace domain.Dto
 
         public string CreatedBy { get; set; }
 
-        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset CreatedAt { get; set; }
 
         public string LastUpdatedBy { get; set; }
 
-        public DateTimeOffset LastUpdatedAt { get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset LastUpdatedAt { get; set; }
         
         public void CreateChangesTime()
         {

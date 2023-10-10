@@ -172,6 +172,56 @@ namespace khi_robocross_api.Controllers.v1
                 return NotFound(kex.Message);
             }
         }
+        
+        [HttpPost("{id:length(24)}/Enabled")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Enabled(string id)
+        {
+            AppUser appUser = await _userManager.FindByIdAsync(id);
+            
+            if (appUser is null)
+            {
+                return NotFound($"User with Id = {id} not found");
+            }
+
+            IdentityResult result =
+                await _userManager.SetLockoutEndDateAsync(appUser, null);
+            
+            if (result.Succeeded)
+            {
+                return Ok($"User with Id = {id} is unlocked");
+            }
+            else
+            {
+                return Problem($"Error in unlocking User with Id = {id}");
+            }
+        }
+        
+        [HttpPost("{id:length(24)}/Disabled")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Disabled(string id)
+        {
+            AppUser appUser = await _userManager.FindByIdAsync(id);
+            
+            if (appUser is null)
+            {
+                return NotFound($"User with Id = {id} not found");
+            }
+
+            IdentityResult result =
+                await _userManager.SetLockoutEndDateAsync(appUser, DateTimeOffset.Now.AddYears(1));
+            
+            if (result.Succeeded)
+            {
+                return Ok($"User with Id = {id} is locked");
+            }
+            else
+            {
+                return Problem($"Error in locked User with Id = {id}");
+            }
+        }
 
         [HttpDelete("{id:length(24)}")]
         [ProducesResponseType(200)]

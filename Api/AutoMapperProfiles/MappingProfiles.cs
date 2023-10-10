@@ -79,7 +79,13 @@ namespace khi_robocross_api.AutoMapperProfiles
 
 			CreateMap<AppUser, UserResponse>().ForMember(
 				destinationMember => destinationMember.RoleId,
-				sourceMember => sourceMember.MapFrom((user, response) =>  response.RoleId = user.Roles.First().ToString() ));
+				sourceMember => sourceMember.MapFrom((user, response) =>  response.RoleId = user.Roles.First().ToString()))
+				.ForMember(
+					destinationMember => destinationMember.CreatedAt,
+					sourceMember => sourceMember.MapFrom((user, response) => response.CreatedAt = user.CreatedOn))
+				.ForMember(
+					destinationMember => destinationMember.LastUpdatedAt,
+					sourceMember => sourceMember.MapFrom((user, response) => response.CreatedAt = DateTimeOffset.Parse(user.ConcurrencyStamp)));
 			CreateMap<AppUser, CreateUserInput>().ReverseMap();
 			CreateMap<AppUser, UpdateUserInput>().ReverseMap();
 		}
