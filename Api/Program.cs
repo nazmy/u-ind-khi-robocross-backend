@@ -7,9 +7,6 @@ using khi_robocross_api.Services;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using System.Security.Claims;
 using System.Text;
@@ -17,10 +14,13 @@ using Casbin.AspNetCore.Authorization;
 using Casbin.AspNetCore.Authorization.Transformers;
 using Casbin.Persist.Adapter.EFCore;
 using Casbin;
+using domain.Identity.Manager;
 using domain.Repositories;
+using domain.Repositories.Config;
+using domain.Repositories.Manager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,6 +64,29 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
     )
     .AddDefaultTokenProviders();
 
+JwtTokenConfig jwtTokenConfig = builder.Configuration.GetRequiredSection("JwtTokenSettings").Get<JwtTokenConfig>();
+builder.Services.AddSingleton(jwtTokenConfig);
+builder.Services.AddAuthentication(authOptions =>
+{
+    authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = true;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = jwtTokenConfig.Issuer,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtTokenConfig.Secret)),
+        ValidateLifetime = true,
+        ValidateAudience = false,
+        ValidAudience = jwtTokenConfig.Audience,
+        ClockSkew = TimeSpan.FromMinutes(1)
+    };
+});
+
 //Add MongoDB Migration    
 // builder.Services.AddMigration(new MongoMigrationSettings
 //  {
@@ -71,8 +94,6 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
 //      Database = builder.Configuration.GetValue<string>("RobocrossDatabaseSettings:DatabaseName"),
 //      VersionFieldName = "1.0.0"
 //  });
-
-
 
 
 //Add Robocross Azure Blob Storage
@@ -112,28 +133,12 @@ builder.Services.AddScoped<ICompoundService, CompoundService>();
 builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
 builder.Services.AddScoped<ILineRepository, LineRepository>();
 
+builder.Services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            //ValidIssuer = Configuration["Jwt:Issuer"],
-            //ValidAudience = Configuration["Jwt:Issuer"],
-            //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-        };
-    });
 
-//Add Casbin Authorizer, CasbinDB 
-builder.Services.AddDbContext<CasbinDbContext<string>>(optionsAction =>
-    optionsAction.UseSqlite("Data Source=AdapterSample.db"));
-
+//Add Casbin Authorizer, CasbinDB  
 builder.Services.AddCasbinAuthorization(options =>
 {
     options.PreferSubClaimType = ClaimTypes.Name;
@@ -148,7 +153,37 @@ builder.Services.AddCasbinAuthorization(options =>
 
 //// Add Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "JWT Auth Demo", Version = "v1" });
+
+    var securityScheme = new OpenApiSecurityScheme
+    {
+        Name = "JWT Authentication",
+        Description = "Enter JWT Bearer token **_only_**",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer", // must be lower case
+        BearerFormat = "JWT",
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {securityScheme, new string[] { }}
+    });
+});
+
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowAll",
+//         builder => { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
+// });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

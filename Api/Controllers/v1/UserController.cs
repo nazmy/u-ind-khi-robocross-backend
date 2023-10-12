@@ -22,11 +22,9 @@ namespace khi_robocross_api.Controllers.v1
 	{
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
-        private readonly RoleManager<AppRole> _roleManager;
         private IPasswordHasher<AppUser> _passwordHasher;
 
         public UserController(UserManager<AppUser> userManager,
-            RoleManager<AppRole> roleManager,
             IMapper mapper,
             IPasswordHasher<AppUser> passwordHasher)
         {
@@ -129,16 +127,12 @@ namespace khi_robocross_api.Controllers.v1
                     ModelState.AddModelError("","Email cannot be empty");
                 }
                 
-                if (!string.IsNullOrEmpty(updatedUser.Password))
-                {
-                    appUser.PasswordHash = _passwordHasher.HashPassword(appUser, updatedUser.Password);
-                }
-
                 if (ModelState.IsValid)
                 {
                     appUser.Email = updatedUser.EmailAddress;
                     appUser.UserName  = updatedUser.EmailAddress;
                     appUser.Fullname = updatedUser.Fullname;
+                    appUser.LastUpdatedAt = DateTimeOffset.UtcNow;
                     if (!String.IsNullOrEmpty(updatedUser.RoleId))
                     {
                         List<ObjectId> roleId = new List<ObjectId>();
@@ -170,6 +164,39 @@ namespace khi_robocross_api.Controllers.v1
             catch (KeyNotFoundException kex)
             {
                 return NotFound(kex.Message);
+            }
+        }
+        
+        [HttpPost("{id:length(24)}/ChangePassword")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> ChangePassword(string id, UserChangePasswordInput userChangePassword)
+        {
+            if (!userChangePassword.Password.Equals(userChangePassword.ConfirmedPassword))
+            {
+                return BadRequest("Password doesn't match with Confirmed Password");
+            }
+            
+            AppUser appUser = await _userManager.FindByIdAsync(id);
+            
+            if (appUser is null)
+            {
+                return NotFound($"User with Id = {id} not found");
+            }
+            
+            IdentityResult result =
+                await _userManager.ChangePasswordAsync(appUser, userChangePassword.CurrentPassword, userChangePassword.Password);
+            
+            if (result.Succeeded)
+            {
+                return Ok($"User password of UserId = {id} has been updated");
+            }
+            else
+            {
+                foreach (IdentityError error in result.Errors)
+                    ModelState.AddModelError(error.Code, error.Description);
+                
+                return BadRequest(ModelState);
             }
         }
         
