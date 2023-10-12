@@ -18,4 +18,6 @@ public class AppUser : MongoIdentityUser<ObjectId>
     [BsonElement("Fullname")]
     public string? Fullname { get; set; }
 
+    [BsonElement("LastUpdatedAt")]
+    public DateTimeOffset? LastUpdatedAt { get; set; }
 }

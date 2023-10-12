@@ -6,7 +6,7 @@ public class UserResponse : BaseDto
     
     public string Username { get; set; }
 
-    public string Email { get; set; }
+    public string EmailAddress { get; set; }
     
     public string Fullname { get; set; }
     public string RoleId { get; set; }
