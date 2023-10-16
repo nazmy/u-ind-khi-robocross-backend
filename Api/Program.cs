@@ -155,7 +155,7 @@ builder.Services.AddCasbinAuthorization(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "JWT Auth Demo", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "KHI Robocross API", Version = "v1" });
 
     var securityScheme = new OpenApiSecurityScheme
     {
@@ -177,6 +177,8 @@ builder.Services.AddSwaggerGen(c =>
         {securityScheme, new string[] { }}
     });
 });
+
+builder.Services.AddHttpContextAccessor();
 
 // builder.Services.AddCors(options =>
 // {

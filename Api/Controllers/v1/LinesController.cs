@@ -2,12 +2,14 @@
 using Domain.Dto;
 using Domain.Entities;
 using khi_robocross_api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace khi_robocross_api.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class LinesController : ControllerBase
 	{
         private readonly ILineService _lineService;

@@ -8,6 +8,7 @@ using domain.Repositories;
 using domain.Repositories.Extensions;
 using GeoJSON.Net.Geometry;
 using khi_robocross_api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ namespace khi_robocross_api.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
 	{
         private readonly IMapper _mapper;

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using domain.Dto;
 using Domain.Dto;
 using Domain.Entities;
@@ -10,11 +11,13 @@ namespace khi_robocross_api.Services
 	{
         private readonly IBuildingRepository _buildingRepository;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public BuildingService(IBuildingRepository buildingRepository, IMapper mapper)
+		public BuildingService(IBuildingRepository buildingRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
 		{
             _buildingRepository = buildingRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task AddBuilding(Building inputBuilding)
@@ -22,7 +25,7 @@ namespace khi_robocross_api.Services
             if (inputBuilding == null)
                 throw new ArgumentException("Building input is invalid");
 
-            inputBuilding.CreateChangesTime(inputBuilding);
+            inputBuilding.CreateChangesTime(inputBuilding, _httpContextAccessor.HttpContext.User.Identity.Name);
             
             //validation goes here
             await _buildingRepository.CreateAsync(inputBuilding);
@@ -81,7 +84,7 @@ namespace khi_robocross_api.Services
                 throw new KeyNotFoundException($"Building with Id = {id} not found");
 
             building = _mapper.Map<Building>(updatedBuilding);
-            building.UpdateChangesTime(building);
+            building.UpdateChangesTime(building, _httpContextAccessor.HttpContext.User.Identity.Name);
             
             await _buildingRepository.UpdateAsync(id, building);
         }

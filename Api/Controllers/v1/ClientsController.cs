@@ -6,11 +6,13 @@ using Domain.Entities;
 using Domain.Dto;
 using AutoMapper;
 using Casbin.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace khi_robocross_api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class ClientsController : ControllerBase
 	{
 		private readonly IClientService _clientService;
@@ -29,7 +31,6 @@ namespace khi_robocross_api.Controllers
         }
 
         [HttpGet]
-        //[CasbinAuthorize("/clients","GET")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ClientResponse>))]
         public async Task<IActionResult> Get()
         {

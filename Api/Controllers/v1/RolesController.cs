@@ -3,6 +3,7 @@ using AutoMapper;
 using domain.Dto;
 using domain.Repositories;
 using khi_robocross_api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace khi_robocross_api.Controllers.v1;
 
 [Route("api/v1/[controller]")]
 [ApiController]
+[Authorize]
 public class RolesController : ControllerBase
 {
     private readonly RoleManager<AppRole> _roleManager;
@@ -42,37 +44,36 @@ public class RolesController : ControllerBase
         }
     }
     
-    [HttpPost]
-    [ProducesResponseType(201)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(500)]
-    public async Task<IActionResult> Post([FromBody] CreateRoleInput createRoleInput)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        AppRole appRole = new AppRole()
-        {
-            Name = createRoleInput.Name,
-            ConcurrencyStamp = DateTimeOffset.UtcNow.ToString(),
-            Description = createRoleInput.Description
-        };
-
-        IdentityResult result = await _roleManager.CreateAsync(appRole);
-        
-        if (result.Succeeded)
-        {
-            return CreatedAtAction(nameof(Get), new { id = appRole.Id }, appRole);    
-        }
-        else
-        {
-            foreach (IdentityError error in result.Errors)
-                ModelState.AddModelError(error.Code, error.Description); 
-                
-            return BadRequest(ModelState);
-        }
-    }
-    
+    // [HttpPost]
+    // [ProducesResponseType(201)]
+    // [ProducesResponseType(400)]
+    // [ProducesResponseType(500)]
+    // public async Task<IActionResult> Post([FromBody] CreateRoleInput createRoleInput)
+    // {
+    //     if (!ModelState.IsValid)
+    //     {
+    //         return BadRequest(ModelState);
+    //     }
+    //
+    //     AppRole appRole = new AppRole()
+    //     {
+    //         Name = createRoleInput.Name,
+    //         ConcurrencyStamp = DateTimeOffset.UtcNow.ToString(),
+    //         Description = createRoleInput.Description
+    //     };
+    //
+    //     IdentityResult result = await _roleManager.CreateAsync(appRole);
+    //     
+    //     if (result.Succeeded)
+    //     {
+    //         return CreatedAtAction(nameof(Get), new { id = appRole.Id }, appRole);    
+    //     }
+    //     else
+    //     {
+    //         foreach (IdentityError error in result.Errors)
+    //             ModelState.AddModelError(error.Code, error.Description); 
+    //             
+    //         return BadRequest(ModelState);
+    //     }
+    // }
 }

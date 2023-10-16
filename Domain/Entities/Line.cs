@@ -7,7 +7,7 @@ using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Domain.Entities
 {
-	public class Line
+	public class Line : Base
 	{
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -36,33 +36,6 @@ namespace Domain.Entities
         
         [BsonElement("buildingId")]
         public string BuildingId { get; set; } = null!;
-
-        [BsonElement("isDeleted")]
-        public bool IsDeleted { get; set; } = false;
-
-        [BsonElement("createdBy")]
-        public string CreatedBy { get; set; } = null!;
-
-        [BsonElement("createdAt")]
-        public DateTimeOffset CreatedAt { get; set; }
-
-        [BsonElement("lastUpdatedBy")]
-        public string LastUpdatedBy { get; set; } = null!;
-
-        [BsonElement("lastUpdatedAt")]
-        public DateTimeOffset? LastUpdatedAt { get; set; }
-        
-        public void CreateChangesTime(Line line)
-        {
-            line.CreatedAt = DateTimeOffset.UtcNow;
-            line.CreatedBy = "Creator";
-        }
-
-        public void UpdateChangesTime(Line line)
-        {
-            line.LastUpdatedAt = DateTimeOffset.UtcNow;
-            line.LastUpdatedBy = "Updater";
-        }
     }
 }
 
