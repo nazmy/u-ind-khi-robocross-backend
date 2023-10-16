@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace Domain.Entities;
 
 
-public class Role 
+public class Role : Base
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -17,21 +17,6 @@ public class Role
     
     [BsonElement("description")]
     public string Description { get; set; }
-    
-    [BsonElement("isDeleted")]
-    public bool IsDeleted { get; set; } = false;
-
-    [BsonElement("createdBy")]
-    public string CreatedBy { get; set; } = null!;
-
-    [BsonElement("createdAt")]
-    public DateTimeOffset CreatedAt { get; set; }
-
-    [BsonElement("lastUpdatedBy")]
-    public string LastUpdatedBy { get; set; } = null!;
-
-    [BsonElement("lastUpdatedAt")]
-    public DateTimeOffset? LastUpdatedAt { get; set; }
 
     public DocumentVersion Version { get; set; }
 }

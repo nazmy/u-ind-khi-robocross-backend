@@ -5,7 +5,7 @@ using MongoDbGenericRepository.Attributes;
 
 namespace Domain.Entities;
 
-public class User 
+public class User : Base
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -31,31 +31,4 @@ public class User
     
     [BsonElement("clientId")]
     public string? ClientId { get; set; } = null!;
-    
-    [BsonElement("isDeleted")]
-    public bool IsDeleted { get; set; } = false;
-
-    [BsonElement("createdBy")]
-    public string CreatedBy { get; set; } = null!;
-
-    [BsonElement("createdAt")]
-    public DateTimeOffset CreatedAt { get; set; }
-
-    [BsonElement("lastUpdatedBy")]
-    public string LastUpdatedBy { get; set; } = null!;
-
-    [BsonElement("lastUpdatedAt")]
-    public DateTimeOffset? LastUpdatedAt { get; set; }
-    
-    public void CreateChangesTime(User user)
-    {
-        user.CreatedAt = DateTimeOffset.UtcNow;
-        user.CreatedBy = "Creator";
-    }
-
-    public void UpdateChangesTime(User user)
-    {
-        user.LastUpdatedAt = DateTimeOffset.UtcNow;
-        user.LastUpdatedBy = "Updater";
-    }
 }

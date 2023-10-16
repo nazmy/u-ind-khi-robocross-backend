@@ -1,12 +1,14 @@
-﻿
-using System;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Domain.Entities
 {
-	public class Building
+	public class Building : Base
 	{
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -27,35 +29,9 @@ namespace Domain.Entities
         [BsonElement("coordinates")]
         public GeoJsonPoint<GeoJson3DCoordinates> Coordinates { get; set; }
 
-        [BsonElement("isDeleted")]
-        public bool IsDeleted { get; set; } = false;
-
-        [BsonElement("createdBy")]
-        public string CreatedBy { get; set; } = null!;
-
-        [BsonElement("createdAt")]
-        public DateTimeOffset CreatedAt { get; set; }
-
-        [BsonElement("lastUpdatedBy")]
-        public string LastUpdatedBy { get; set; } = null!;
-
-        [BsonElement("lastUpdatedAt")]
-        public DateTimeOffset? LastUpdatedAt { get; set; }
-
         [BsonElement("compoundId")]
         public string compoundId { get; set; }
 
-        public void CreateChangesTime(Building building)
-        {
-            building.CreatedAt = DateTimeOffset.UtcNow;
-            building.CreatedBy = "Creator";
-        }
-
-        public void UpdateChangesTime(Building building)
-        {
-            building.LastUpdatedAt = DateTimeOffset.UtcNow;
-            building.LastUpdatedBy = "Updater";
-        }
     }
 }
 

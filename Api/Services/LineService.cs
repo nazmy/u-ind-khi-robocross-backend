@@ -12,11 +12,13 @@ namespace khi_robocross_api.Services
 	{
         private readonly ILineRepository _lineRepository;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public LineService(ILineRepository lineRepository, IMapper mapper)
+		public LineService(ILineRepository lineRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
 		{
             _lineRepository = lineRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task AddLine(Line line)
@@ -40,7 +42,7 @@ namespace khi_robocross_api.Services
                 }
             }
 
-            line.CreateChangesTime(line);
+            line.CreateChangesTime(line, _httpContextAccessor.HttpContext.User.Identity.Name);
             
             //validation goes here
             await _lineRepository.CreateAsync(line);
@@ -49,29 +51,19 @@ namespace khi_robocross_api.Services
         public async ValueTask<IEnumerable<LineResponse>> GetAllLines()
         {
             var lineTask = await _lineRepository.GetAsync();
-            
-            if (lineTask != null)
-                return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
-
-            return null;
+            return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
 
         public async ValueTask<IEnumerable<LineResponse>> GetLineByBuildingId(string buildingId)
         {
             var lineTask = await _lineRepository.GetAsyncByBuildingId(buildingId);
-            if (lineTask != null)
-                return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
-
-            return null;
+            return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
         
         public async ValueTask<IEnumerable<LineResponse>> GetLineByIntegratorId(string integratorId)
         {
             var lineTask = await _lineRepository.GetAsyncByIntegratorId(integratorId);
-            if (lineTask != null)
-                return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
-
-            return null;
+            return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
 
         public async ValueTask<LineResponse> GetLineById(string id)
@@ -80,10 +72,7 @@ namespace khi_robocross_api.Services
                 throw new ArgumentException("Line Id is Invalid");
 
             var lineTask = await _lineRepository.GetAsync(id);
-            if (lineTask != null)
-                return _mapper.Map<LineResponse>(lineTask);
-
-            return null;
+            return _mapper.Map<LineResponse>(lineTask);
         }
 
         public async Task RemoveLine(string id)
@@ -126,7 +115,7 @@ namespace khi_robocross_api.Services
                     }
                 }
             }
-            line.UpdateChangesTime(line);
+            line.UpdateChangesTime(line, _httpContextAccessor.HttpContext.User.Identity.Name);
             
             await _lineRepository.UpdateAsync(id, line);
         }

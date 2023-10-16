@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Domain.Entities
 {
-	public class Client
+	public class Client : Base
 	{
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -23,33 +23,6 @@ namespace Domain.Entities
         
         [BsonElement("clientType")]
         public ClientTypeEnum ClientType { get; set; } = 0;
-
-        [BsonElement("isDeleted")]
-        public bool IsDeleted { get; set; } = false;
-
-        [BsonElement("createdBy")]
-        public string CreatedBy { get; set; } = null!;
-
-        [BsonElement("createdAt")]
-        public DateTimeOffset CreatedAt { get; set; }
-
-        [BsonElement("lastUpdatedBy")]
-        public string LastUpdatedBy { get; set; } = null!;
-
-        [BsonElement("lastUpdatedAt")]
-        public DateTimeOffset? LastUpdatedAt { get; set; }
-
-        public void CreateChangesTime(Client client)
-        {
-            client.CreatedAt = DateTimeOffset.UtcNow;
-            client.CreatedBy = "Creator";
-        }
-
-        public void UpdateChangesTime(Client client)
-        {
-            client.LastUpdatedAt = DateTimeOffset.UtcNow;
-            client.LastUpdatedBy = "Updater";
-        }
     }
 }
 

@@ -11,11 +11,13 @@ namespace khi_robocross_api.Services
 	{
         private readonly IClientRepository _clientRepository;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public ClientService(IClientRepository clientRepository, IMapper mapper)
+		public ClientService(IClientRepository clientRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
 		{
             _clientRepository = clientRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task AddClient(Client inputClient)
@@ -23,7 +25,7 @@ namespace khi_robocross_api.Services
             if (inputClient == null)
                 throw new ArgumentException("Client input is invalid");
 
-            inputClient.CreateChangesTime(inputClient);
+            inputClient.CreateChangesTime(inputClient,  _httpContextAccessor.HttpContext.User.Identity.Name);
             
             //validation goes here
             await _clientRepository.CreateAsync(inputClient);
@@ -82,7 +84,7 @@ namespace khi_robocross_api.Services
 
             client = _mapper.Map<Client>(updatedClient);
 
-            client.UpdateChangesTime(client);
+            client.UpdateChangesTime(client, _httpContextAccessor.HttpContext.User.Identity.Name);
             
             await _clientRepository.UpdateAsync(id, client);
         }

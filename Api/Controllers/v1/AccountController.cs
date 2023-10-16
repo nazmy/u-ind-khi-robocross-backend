@@ -157,6 +157,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("stop-impersonation")]
+    [Authorize(Roles = "KHI")]
     public async Task<ActionResult> StopImpersonation()
     {
         var userName = User.Identity?.Name;

@@ -10,11 +10,13 @@ namespace khi_robocross_api.Services
 	{
         private readonly ICompoundRepository _compoundRepository;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public CompoundService(ICompoundRepository compoundRepository, IMapper mapper)
+		public CompoundService(ICompoundRepository compoundRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
 		{
             _compoundRepository = compoundRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task AddCompound(Compound inputCompound)
@@ -22,7 +24,7 @@ namespace khi_robocross_api.Services
             if (inputCompound == null)
                 throw new ArgumentException("Compound input is invalid");
 
-            inputCompound.CreateChangesTime(inputCompound);
+            inputCompound.CreateChangesTime(inputCompound, _httpContextAccessor.HttpContext.User.Identity.Name);
             
             //validation goes here
             await _compoundRepository.CreateAsync(inputCompound);
@@ -30,21 +32,14 @@ namespace khi_robocross_api.Services
 
         public async ValueTask<IEnumerable<CompoundResponse>> GetAllCompounds()
         {
-            var compoundTask = await _compoundRepository.GetAsync();
-            
-            if (compoundTask != null)
-                return _mapper.Map<IEnumerable<CompoundResponse>>(compoundTask.ToList());
-
-            return null;
+            var compoundTask = await _compoundRepository.GetAsync(); 
+            return _mapper.Map<IEnumerable<CompoundResponse>>(compoundTask.ToList());
         }
 
         public async ValueTask<IEnumerable<CompoundResponse>> GetCompoundByClientId(string clientId)
         {
             var compoundTask = await _compoundRepository.GetAsyncByClientId(clientId);
-            if (compoundTask != null)
-                return _mapper.Map<IEnumerable<CompoundResponse>>(compoundTask.ToList());
-            
-            return null;
+            return _mapper.Map<IEnumerable<CompoundResponse>>(compoundTask.ToList());
         }
 
         public async ValueTask<CompoundResponse> GetCompoundById(string id)
@@ -53,11 +48,7 @@ namespace khi_robocross_api.Services
                 throw new ArgumentException("Compound Id is Invalid");
 
             var compoundTask = await _compoundRepository.GetAsync(id);
-            
-            if (compoundTask != null)
-                return _mapper.Map<CompoundResponse>(compoundTask);
-
-            return null;
+            return _mapper.Map<CompoundResponse>(compoundTask);
         }
 
         public async Task RemoveCompound(string id)
@@ -82,7 +73,7 @@ namespace khi_robocross_api.Services
                 throw new KeyNotFoundException($"Compound with Id = {id} not found");
 
             compound = _mapper.Map<Compound>(updatedCompound);
-            compound.UpdateChangesTime(compound);
+            compound.UpdateChangesTime(compound, _httpContextAccessor.HttpContext.User.Identity.Name);
             
             await _compoundRepository.UpdateAsync(id, compound);
         }
