@@ -8,7 +8,6 @@ namespace khi_robocross_api.Controllers.v1;
 
 [Route("api/v1/[controller]")]
 [ApiController]
-[Authorize]
 public class AssetsController : ControllerBase
 {
     private readonly IAssetManagerService _assetManagerService;
