@@ -85,7 +85,6 @@ namespace khi_robocross_api.Controllers.v1
 
             AppUser appUser = new AppUser()
             {
-                UserName = newUser.EmailAddress,
                 Email = newUser.EmailAddress,
                 SecurityStamp = DateTimeOffset.UtcNow.ToString(),
                 ConcurrencyStamp = DateTimeOffset.UtcNow.ToString(),
