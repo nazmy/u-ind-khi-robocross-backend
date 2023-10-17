@@ -14,9 +14,6 @@ public class User : Base
     [BsonElement("email")]
     public string Email { get; set; } = null!;
     
-    [BsonElement("userName")]
-    public string Username { get; set; } = null!;
-    
     [BsonElement("passwordHash")]
     public string PasswordHash { get; set; } = null!;
     
