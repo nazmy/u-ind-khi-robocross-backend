@@ -126,12 +126,14 @@ builder.Services.AddScoped<IClientService,ClientService>();
 builder.Services.AddScoped<IBuildingService,BuildingService>();
 builder.Services.AddScoped<ILineService,LineService>();
 builder.Services.AddScoped<IAssetManagerService, AssetManagerService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ICompoundRepository, CompoundRepository>();
 builder.Services.AddScoped<ICompoundService, CompoundService>();
 builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
 builder.Services.AddScoped<ILineRepository, LineRepository>();
+builder.Services.AddScoped<IMessageRepository,  MessageRepository>();
 
 builder.Services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
 
