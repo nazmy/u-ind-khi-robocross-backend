@@ -14,9 +14,7 @@
         
         public string LinesCollectionName { get; set; }
         
-        public string RolesCollectionName { get; set; }
-        
-        public string UsersCollectionName { get; set; }
+        public string MessagesCollectionName { get; set; } = null!;
     }
 }
 
