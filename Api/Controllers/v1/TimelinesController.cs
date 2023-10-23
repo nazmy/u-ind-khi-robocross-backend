@@ -22,8 +22,8 @@ namespace khi_robocross_api.Controllers.v1
         public TimelinesController(ITimelineService timelineService,
             IMapper mapper)
         {
-            this._timelineService = timelineService;
-            this._mapper = mapper;
+            _timelineService = timelineService;
+            _mapper = mapper;
         }
 
         [HttpGet]

@@ -113,10 +113,8 @@ namespace khi_robocross_api.Services
             if (message == null)
                 throw new KeyNotFoundException($"Message with Id = {id} not found");
 
-            message = _mapper.Map<Message>(updateMessageInput);
-
+            _mapper.Map<UpdateMessageInput,Message>(updateMessageInput,message);
             message.UpdateChangesTime(message, _httpContextAccessor.HttpContext.User.Identity.Name);
-            
             await _messageRepository.UpdateAsync(id, message);
         }
     }

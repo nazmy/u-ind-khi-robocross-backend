@@ -24,9 +24,9 @@ namespace khi_robocross_api.Controllers.v1
             ILineService lineService,
             IMapper mapper)
         {
-            this._buildingService = buildingService;
-            this._lineService = lineService;
-            this._mapper = mapper;
+            _buildingService = buildingService;
+            _lineService = lineService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -112,7 +112,7 @@ namespace khi_robocross_api.Controllers.v1
         }
         
         //Get Lines of Business
-        [HttpGet("{id}/lines")]
+        [HttpGet("{id}/Lines")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetBuildingLines(string id)
         {

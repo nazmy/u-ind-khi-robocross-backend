@@ -18,8 +18,8 @@ namespace khi_robocross_api.Controllers.v1
         public LinesController(ILineService lineService,
             IMapper mapper)
         {
-            this._lineService = lineService;
-            this._mapper = mapper;
+            _lineService = lineService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -104,6 +104,17 @@ namespace khi_robocross_api.Controllers.v1
             await _lineService.RemoveLine(id);
             return Ok($"Line with Id = {id} deleted");
         }
+        
+        //Get Lines of Business
+        [HttpGet("Building/{id}")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> GetBuildingLines(string id)
+        {
+            var lineList = await _lineService.GetLineByBuildingId(id);
+            return Ok(lineList);
+        }
     }
+    
+   
 }
 

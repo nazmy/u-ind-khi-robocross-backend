@@ -96,7 +96,7 @@ namespace khi_robocross_api.Services
             if (line == null)
                 throw new KeyNotFoundException($"Line with Id = {id} not found");
 
-            line = _mapper.Map<Line>(updatedLine);
+            _mapper.Map<UpdateLineInput, Line>(updatedLine, line);
             
             foreach (Unit unitItem in line.Units)
             {
@@ -116,7 +116,6 @@ namespace khi_robocross_api.Services
                 }
             }
             line.UpdateChangesTime(line, _httpContextAccessor.HttpContext.User.Identity.Name);
-            
             await _lineRepository.UpdateAsync(id, line);
         }
     }

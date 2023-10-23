@@ -72,9 +72,8 @@ namespace khi_robocross_api.Services
             if (compound == null)
                 throw new KeyNotFoundException($"Compound with Id = {id} not found");
 
-            compound = _mapper.Map<Compound>(updatedCompound);
+            _mapper.Map<UpdateCompoundInput,Compound>(updatedCompound,compound);
             compound.UpdateChangesTime(compound, _httpContextAccessor.HttpContext.User.Identity.Name);
-            
             await _compoundRepository.UpdateAsync(id, compound);
         }
     }

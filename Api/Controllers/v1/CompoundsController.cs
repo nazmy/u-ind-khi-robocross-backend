@@ -121,6 +121,15 @@ namespace khi_robocross_api.Controllers.v1
             var buildingList = await _buildingService.GetBuildingByCompoundId(id);
             return Ok(buildingList);
         }
+        
+        //Client's compound
+        [HttpGet("Client/{id}")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> GetClientCompounds(string id)
+        {
+            var compoundList = await _compoundService.GetCompoundByClientId(id);
+            return Ok(compoundList);
+        }
     }
 }
 

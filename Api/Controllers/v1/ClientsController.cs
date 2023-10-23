@@ -74,7 +74,7 @@ namespace khi_robocross_api.Controllers
             }
         }
 
-        [HttpGet("Clients/Search")]
+        [HttpGet("Search")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ClientResponse>))]
         public async Task<ActionResult<ClientResponse>> Search([FromQuery(Name = "Name")] string search)
         {
@@ -148,8 +148,7 @@ namespace khi_robocross_api.Controllers
         }
 
         //Client's compound
-
-        [HttpGet("{id}/compounds")]
+        [HttpGet("{id}/Compounds")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetClientCompounds(string id)
         {

@@ -34,20 +34,13 @@ namespace khi_robocross_api.Services
         public async ValueTask<IEnumerable<BuildingResponse>> GetAllBuildings()
         {
             var buildingTask = await _buildingRepository.GetAsync();
-            
-            if (buildingTask != null)
-                return _mapper.Map<IEnumerable<BuildingResponse>>(buildingTask.ToList());
-
-            return null;
+            return _mapper.Map<IEnumerable<BuildingResponse>>(buildingTask.ToList());
         }
 
         public async ValueTask<IEnumerable<BuildingResponse>> GetBuildingByCompoundId(string compoundId)
         {
             var buildingTask = await _buildingRepository.GetAsyncByCompoundId(compoundId);
-            if (buildingTask != null)
-                return _mapper.Map<IEnumerable<BuildingResponse>>(buildingTask.ToList());
-
-            return null;
+            return _mapper.Map<IEnumerable<BuildingResponse>>(buildingTask.ToList());
         }
 
         public async ValueTask<BuildingResponse> GetBuildingById(string id)
@@ -56,10 +49,7 @@ namespace khi_robocross_api.Services
                 throw new ArgumentException("Building Id is Invalid");
 
             var buildingTask = await _buildingRepository.GetAsync(id);
-            if (buildingTask != null)
-                return _mapper.Map<BuildingResponse>(buildingTask);
-
-            return null;
+            return _mapper.Map<BuildingResponse>(buildingTask);
         }
 
         public async Task RemoveBuilding(string id)
@@ -83,9 +73,8 @@ namespace khi_robocross_api.Services
             if (building == null)
                 throw new KeyNotFoundException($"Building with Id = {id} not found");
 
-            building = _mapper.Map<Building>(updatedBuilding);
+            _mapper.Map<UpdateBuildingInput, Building>(updatedBuilding, building);
             building.UpdateChangesTime(building, _httpContextAccessor.HttpContext.User.Identity.Name);
-            
             await _buildingRepository.UpdateAsync(id, building);
         }
     }

@@ -34,10 +34,7 @@ namespace khi_robocross_api.Services
         public async ValueTask<IEnumerable<ClientResponse>> GetAllClients()
         {
             var clientTask = await _clientRepository.GetAsync();
-            if (clientTask != null)
-                return _mapper.Map<IEnumerable<ClientResponse>>(clientTask.ToList());
-
-            return null;
+            return _mapper.Map<IEnumerable<ClientResponse>>(clientTask.ToList());
         }
 
         public async ValueTask<ClientResponse> GetClientById(string id)
@@ -46,19 +43,13 @@ namespace khi_robocross_api.Services
                 throw new ArgumentException("Client Id is Invalid");
 
             var clientTask = await _clientRepository.GetAsync(id);
-            if (clientTask != null)
-                return _mapper.Map<ClientResponse>(clientTask);
-
-            return null;
+            return _mapper.Map<ClientResponse>(clientTask);
         }
 
         public async ValueTask<IEnumerable<ClientResponse>> Query(string search)
         {
             var clientTask = await _clientRepository.SearchAsync(search);
-            if (clientTask != null)
-                return _mapper.Map<IEnumerable<ClientResponse>>(clientTask.ToList());
-
-            return null;
+            return _mapper.Map<IEnumerable<ClientResponse>>(clientTask.ToList());
         }
 
         public async Task RemoveClient(string id)
@@ -81,11 +72,9 @@ namespace khi_robocross_api.Services
 
             if (client == null)
                 throw new KeyNotFoundException($"Client with Id = {id} not found");
-
-            client = _mapper.Map<Client>(updatedClient);
-
-            client.UpdateChangesTime(client, _httpContextAccessor.HttpContext.User.Identity.Name);
             
+            _mapper.Map<UpdateClientInput, Client>(updatedClient,client);
+            client.UpdateChangesTime(client, _httpContextAccessor.HttpContext.User.Identity.Name);
             await _clientRepository.UpdateAsync(id, client);
         }
     }
