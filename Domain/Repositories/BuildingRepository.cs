@@ -35,7 +35,7 @@ public class BuildingRepository : IBuildingRepository
 	}
 
 	public async Task<IEnumerable<Building>> GetAsyncByCompoundId(string compoundId) =>
-		await _building.Find(x => x.compoundId == compoundId).ToListAsync();
+		await _building.Find(x => x.CompoundId == compoundId).ToListAsync();
 
 	public async Task RemoveAsync(string id) =>
 		await _building.DeleteOneAsync(x => x.Id == id);

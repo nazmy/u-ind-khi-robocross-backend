@@ -30,7 +30,7 @@ namespace Domain.Entities
         public GeoJsonPoint<GeoJson3DCoordinates> Coordinates { get; set; }
 
         [BsonElement("compoundId")]
-        public string compoundId { get; set; }
+        public string CompoundId { get; set; }
 
     }
 }

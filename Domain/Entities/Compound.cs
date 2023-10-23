@@ -28,7 +28,7 @@ namespace Domain.Entities
         public GeoJsonPoint<GeoJson3DCoordinates> Coordinates { get; set; }
 
         [BsonElement("clientId")]
-        public string clientId { get; set; }
+        public string ClientId { get; set; }
         
     }
 }

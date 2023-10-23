@@ -98,10 +98,13 @@ namespace khi_robocross_api.AutoMapperProfiles
 				sourceMember => sourceMember.MapFrom((input, user) => input.EmailAddress = user.Email?.ToString())).ReverseMap();
 			
 			CreateMap<CreateMessageInput, Message>();
-
 			CreateMap<MessageResponse, Message>().ReverseMap();
 			CreateMap<UpdateMessageInput, Message>().ReverseMap();
-			
+
+			CreateMap<CreateTimelineInput, Timeline>();
+			CreateMap<TimelineResponse, Timeline>().ReverseMap();
+			CreateMap<UpdateTimelineInput, Timeline>().ReverseMap();
+
 		}
 	}
 }
