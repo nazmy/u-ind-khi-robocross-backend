@@ -10,6 +10,7 @@ namespace khi_robocross_api.Services
 		 ValueTask<IEnumerable<MessageResponse>> GetAllMessages();
 		 ValueTask<MessageResponse> GetMessageById(String id);
 		 Task AddMessage(Message client);
+		 ValueTask<List<BulkUserMessageResponse>> AddBulkMessage(CreateBulkUserMessageInput createBulkUserMessageInput);
          Task UpdateMessage(string id, UpdateMessageInput updatedMessage);
          Task RemoveMessage(string id);
          ValueTask<IEnumerable<MessageResponse>> Query(string search);

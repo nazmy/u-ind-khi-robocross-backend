@@ -132,6 +132,21 @@ public class MessageController : ControllerBase
         }
     }
     
+    [HttpPost("User-Notification/Batch")]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> Post([FromBody] CreateBulkUserMessageInput newBulkUserMessageInput)
+    {
+        if (newBulkUserMessageInput == null)
+        {
+            _logger.LogWarning("V1 Create Bulk User Message API BadRequest Message Data");
+            return BadRequest(ModelState);
+        }
+            
+        List<BulkUserMessageResponse> insertedCount = await _messageService.AddBulkMessage(newBulkUserMessageInput);
+        return Ok(insertedCount);
+    }
+    
     [HttpPost]
     [ProducesResponseType(201)]
     [ProducesResponseType(400)]

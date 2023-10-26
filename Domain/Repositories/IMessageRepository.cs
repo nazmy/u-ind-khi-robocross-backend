@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Helper;
+using MongoDB.Driver;
 
 namespace domain.Repositories
 {
@@ -9,6 +10,7 @@ namespace domain.Repositories
 		Task<Message> GetAsync(string id);
 		Task<IEnumerable<Message>> SearchAsync(string search);
 		Task CreateAsync(Message message);
+		Task<BulkWriteResult<Message>> CreateManyAsync(List<WriteModel<Message>> messages);
 		Task UpdateAsync(string id, Message updatedMessage);
 		Task RemoveAsync(string id);
 		Task<IEnumerable<Message>> GetAsyncByOwnerId(string ownerId);

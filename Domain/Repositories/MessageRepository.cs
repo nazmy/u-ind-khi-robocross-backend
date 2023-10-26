@@ -18,6 +18,12 @@ public class MessageRepository : IMessageRepository
 	public async Task CreateAsync(Message message) =>
 		await _message.InsertOneAsync(message);
 
+	public async Task<BulkWriteResult<Message>> CreateManyAsync(List<WriteModel<Message>> messages)
+	{
+		var writeResult = await _message.BulkWriteAsync(messages);
+		return writeResult;
+	}
+	
 	public async Task<IEnumerable<Message>> GetAsync() =>
 		await _message.Find(_ => true).ToListAsync();
 

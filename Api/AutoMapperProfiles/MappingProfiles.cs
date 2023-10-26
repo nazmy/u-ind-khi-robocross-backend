@@ -101,6 +101,8 @@ namespace khi_robocross_api.AutoMapperProfiles
 			CreateMap<MessageResponse, Message>().ReverseMap();
 			CreateMap<UpdateMessageInput, Message>().ReverseMap();
 
+			CreateMap<BulkUserMessageResponse, Message>().ReverseMap();
+			CreateMap<WriteModelResponse, Message>().ReverseMap();
 			CreateMap<CreateTimelineInput, Timeline>();
 			CreateMap<TimelineResponse, Timeline>().ReverseMap();
 			CreateMap<UpdateTimelineInput, Timeline>().ReverseMap();

@@ -11,7 +11,7 @@ public class Base
     public string CreatedBy { get; set; } = null!;
 
     [BsonElement("createdAt")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? CreatedAt { get; set; }
 
     [BsonElement("lastUpdatedBy")]
     public string LastUpdatedBy { get; set; } = null!;
