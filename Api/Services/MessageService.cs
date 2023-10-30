@@ -68,9 +68,9 @@ namespace khi_robocross_api.Services
              return userMessageResponses;
         }
 
-        public async ValueTask<IEnumerable<MessageResponse>> GetAllMessages()
+        public async ValueTask<IEnumerable<MessageResponse>> GetAllMessages(DateTimeOffset? lastUpdatedAt)
         {
-            var messageTask = await _messageRepository.GetAsync();
+            var messageTask = await _messageRepository.GetAsync(lastUpdatedAt);
             if (messageTask != null)
                 return _mapper.Map<IEnumerable<MessageResponse>>(messageTask.ToList());
 
@@ -92,39 +92,39 @@ namespace khi_robocross_api.Services
             return _mapper.Map<IEnumerable<MessageResponse>>(messageTask.ToList());
         }
         
-        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByOwnerId(string ownerId)
+        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByOwnerId(string ownerId, DateTimeOffset? lastUpdatedAt)
         {
             if (ownerId == null)
                 throw new ArgumentException("Owner Id is Invalid");
 
-            var messageTask = await _messageRepository.GetAsyncByOwnerId(ownerId);
+            var messageTask = await _messageRepository.GetAsyncByOwnerId(ownerId, lastUpdatedAt);
             return _mapper.Map<IEnumerable<MessageResponse>>(messageTask);
         }
         
-        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByTopicTypeAndTopicId(MessageTopicTypeEnum topicType, string topicId)
+        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByTopicTypeAndTopicId(MessageTopicTypeEnum topicType, string topicId, DateTimeOffset? lastUpdatedAt)
         {
             if (topicId == null)
                 throw new ArgumentException("Topic Id is Invalid");
 
-            var messageTask = await _messageRepository.GetAsyncByTopicTypeAndTopicId(topicType, topicId);
+            var messageTask = await _messageRepository.GetAsyncByTopicTypeAndTopicId(topicType, topicId,lastUpdatedAt);
             return _mapper.Map<IEnumerable<MessageResponse>>(messageTask);
         }
         
-        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByTopicId(string topicId)
+        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByTopicId(string topicId,DateTimeOffset? lastUpdatedAt)
         {
             if (topicId == null)
                 throw new ArgumentException("Topic Id is Invalid");
 
-            var messageTask = await _messageRepository.GetAsyncByTopicId(topicId);
+            var messageTask = await _messageRepository.GetAsyncByTopicId(topicId,lastUpdatedAt);
             return _mapper.Map<IEnumerable<MessageResponse>>(messageTask);
         }
         
-        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByMessageTypeAndTopicId(MessageTypeEnum messageType, string topicId)
+        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByMessageTypeAndTopicId(MessageTypeEnum messageType, string topicId,DateTimeOffset? lastUpdatedAt)
         {
             if (topicId == null)
                 throw new ArgumentException("Topic Id is Invalid");
 
-            var messageTask = await _messageRepository.GetAsyncByMessageTypeAndTopicId(messageType, topicId);
+            var messageTask = await _messageRepository.GetAsyncByMessageTypeAndTopicId(messageType, topicId,lastUpdatedAt);
             return _mapper.Map<IEnumerable<MessageResponse>>(messageTask);
         }
         
@@ -133,7 +133,7 @@ namespace khi_robocross_api.Services
             if (id == null)
                 throw new ArgumentException("Message Id is Invalid");
 
-            await _messageRepository.RemoveAsync(id);
+            await _messageRepository.RemoveAsync(id,_httpContextAccessor.HttpContext.User.Identity.Name);
         }
 
         public async Task UpdateMessage(string id, UpdateMessageInput updateMessageInput)

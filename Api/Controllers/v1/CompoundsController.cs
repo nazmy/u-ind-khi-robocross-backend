@@ -31,9 +31,9 @@ namespace khi_robocross_api.Controllers.v1
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(DateTimeOffset? lastUpdatedAt)
         {
-            var compoundList = await _compoundService.GetAllCompounds();
+            var compoundList = await _compoundService.GetAllCompounds(lastUpdatedAt);
             return Ok(compoundList);
         }
 
@@ -116,18 +116,18 @@ namespace khi_robocross_api.Controllers.v1
         //Get Building by Compound Id
         [HttpGet("{id}/buildings")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetCompoundBuildings(string id)
+        public async Task<IActionResult> GetCompoundBuildings(string id, DateTimeOffset? lastUpdatedAt)
         {
-            var buildingList = await _buildingService.GetBuildingByCompoundId(id);
+            var buildingList = await _buildingService.GetBuildingByCompoundId(id, lastUpdatedAt);
             return Ok(buildingList);
         }
         
         //Client's compound
         [HttpGet("Client/{id}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetClientCompounds(string id)
+        public async Task<IActionResult> GetClientCompounds(string id, DateTimeOffset? lastUpdatedAt)
         {
-            var compoundList = await _compoundService.GetCompoundByClientId(id);
+            var compoundList = await _compoundService.GetCompoundByClientId(id, lastUpdatedAt);
             return Ok(compoundList);
         }
     }

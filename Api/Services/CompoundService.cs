@@ -30,15 +30,15 @@ namespace khi_robocross_api.Services
             await _compoundRepository.CreateAsync(inputCompound);
         }
 
-        public async ValueTask<IEnumerable<CompoundResponse>> GetAllCompounds()
+        public async ValueTask<IEnumerable<CompoundResponse>> GetAllCompounds(DateTimeOffset? lastUpdatedAt)
         {
-            var compoundTask = await _compoundRepository.GetAsync(); 
+            var compoundTask = await _compoundRepository.GetAsync(lastUpdatedAt); 
             return _mapper.Map<IEnumerable<CompoundResponse>>(compoundTask.ToList());
         }
 
-        public async ValueTask<IEnumerable<CompoundResponse>> GetCompoundByClientId(string clientId)
+        public async ValueTask<IEnumerable<CompoundResponse>> GetCompoundByClientId(string clientId, DateTimeOffset? lastUpdatedAt)
         {
-            var compoundTask = await _compoundRepository.GetAsyncByClientId(clientId);
+            var compoundTask = await _compoundRepository.GetAsyncByClientId(clientId, lastUpdatedAt);
             return _mapper.Map<IEnumerable<CompoundResponse>>(compoundTask.ToList());
         }
 
@@ -56,7 +56,7 @@ namespace khi_robocross_api.Services
             if (id == null)
                 throw new ArgumentException("Compound Id is Invalid");
 
-            await _compoundRepository.RemoveAsync(id);
+            await _compoundRepository.RemoveAsync(id,_httpContextAccessor.HttpContext.User.Identity.Name);
         }
 
         public async Task UpdateCompound(string id, UpdateCompoundInput updatedCompound)

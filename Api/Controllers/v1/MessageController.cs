@@ -25,9 +25,9 @@ public class MessageController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(200)]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(DateTimeOffset? lastUpdatedAt)
     {
-        IEnumerable<MessageResponse> messageList = await _messageService.GetAllMessages();
+        IEnumerable<MessageResponse> messageList = await _messageService.GetAllMessages(lastUpdatedAt);
         return Ok(messageList);
     }
     
@@ -70,11 +70,11 @@ public class MessageController : ControllerBase
     
     [HttpGet("Owner/{ownerId}")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<MessageResponse>))]
-    public async Task<ActionResult<MessageResponse>> GetMessageByOwnerId(string ownerId)
+    public async Task<ActionResult<MessageResponse>> GetMessageByOwnerId(string ownerId,DateTimeOffset? lastUpdatedAt)
     {
         try
         {
-            var messageList = await _messageService.GetMessageByOwnerId(ownerId);
+            var messageList = await _messageService.GetMessageByOwnerId(ownerId,lastUpdatedAt);
             return Ok(messageList);
         }
         catch (Exception e)
@@ -86,11 +86,11 @@ public class MessageController : ControllerBase
     
     [HttpGet("Topic/{topicId}")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<MessageResponse>))]
-    public async Task<ActionResult<MessageResponse>> GetMessageByTopicId(string topicId)
+    public async Task<ActionResult<MessageResponse>> GetMessageByTopicId(string topicId, DateTimeOffset? lastUpdatedAt)
     {
         try
         {
-            var messageList = await _messageService.GetMessageByTopicId(topicId);
+            var messageList = await _messageService.GetMessageByTopicId(topicId, lastUpdatedAt);
             return Ok(messageList);
         }
         catch (Exception e)
@@ -102,11 +102,11 @@ public class MessageController : ControllerBase
     
     [HttpGet("TopicType/{topicType}/Topic/{topicId}")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<MessageResponse>))]
-    public async Task<ActionResult<MessageResponse>> GetMessageByTopicTypeAndTopicId(MessageTopicTypeEnum topicType, string topicId)
+    public async Task<ActionResult<MessageResponse>> GetMessageByTopicTypeAndTopicId(MessageTopicTypeEnum topicType, string topicId, DateTimeOffset? lastUpdatedAt)
     {
         try
         {
-            var messageList = await _messageService.GetMessageByTopicTypeAndTopicId(topicType, topicId);
+            var messageList = await _messageService.GetMessageByTopicTypeAndTopicId(topicType, topicId, lastUpdatedAt);
             return Ok(messageList);
         }
         catch (Exception e)
@@ -118,11 +118,11 @@ public class MessageController : ControllerBase
     
     [HttpGet("MessageType/{messageType}/Topic/{topicId}")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<MessageResponse>))]
-    public async Task<ActionResult<MessageResponse>> GetMessageByMessageTypeAndTopicId(MessageTypeEnum messageType, string topicId)
+    public async Task<ActionResult<MessageResponse>> GetMessageByMessageTypeAndTopicId(MessageTypeEnum messageType, string topicId, DateTimeOffset? lastUpdatedAt)
     {
         try
         {
-            var messageList = await _messageService.GetMessageByMessageTypeAndTopicId(messageType, topicId);
+            var messageList = await _messageService.GetMessageByMessageTypeAndTopicId(messageType, topicId, lastUpdatedAt);
             return Ok(messageList);
         }
         catch (Exception e)

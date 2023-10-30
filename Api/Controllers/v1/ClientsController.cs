@@ -32,11 +32,11 @@ namespace khi_robocross_api.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ClientResponse>))]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(DateTimeOffset? lastUpdatedAt)
         {
             try
             {
-                var clientList = await _clientService.GetAllClients();
+                var clientList = await _clientService.GetAllClients(lastUpdatedAt);
                 return Ok(clientList);
             }
             catch (Exception e)
@@ -150,9 +150,9 @@ namespace khi_robocross_api.Controllers
         //Client's compound
         [HttpGet("{id}/Compounds")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetClientCompounds(string id)
+        public async Task<IActionResult> GetClientCompounds(string id, DateTimeOffset? lastUpdatedAt)
         {
-            var compoundList = await _compoundService.GetCompoundByClientId(id);
+            var compoundList = await _compoundService.GetCompoundByClientId(id, lastUpdatedAt);
             return Ok(compoundList);
         }
     }

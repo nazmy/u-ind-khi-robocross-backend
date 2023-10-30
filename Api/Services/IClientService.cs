@@ -6,7 +6,7 @@ namespace khi_robocross_api.Services
 {
 	public interface IClientService
 	{
-		 ValueTask<IEnumerable<ClientResponse>> GetAllClients();
+		 ValueTask<IEnumerable<ClientResponse>> GetAllClients(DateTimeOffset? lastUpdatedAt);
 		 ValueTask<ClientResponse> GetClientById(String id);
 		 Task AddClient(Client client);
          Task UpdateClient(string id, UpdateClientInput updatedClient);

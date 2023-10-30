@@ -28,9 +28,9 @@ namespace khi_robocross_api.Controllers.v1
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(DateTimeOffset? lastUpdatedAt)
         {
-            var timelineList = await _timelineService.GetAllTimelines();
+            var timelineList = await _timelineService.GetAllTimelines(lastUpdatedAt);
             return Ok(timelineList);
         }
 
@@ -111,9 +111,9 @@ namespace khi_robocross_api.Controllers.v1
         //Get Timeline by Unit
         [HttpGet("Unit/{id}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetTimelineLines(string id)
+        public async Task<IActionResult> GetTimelineLines(string id, DateTimeOffset? lastUpdatedAt)
         {
-            var timelineList = await _timelineService.GetTimelineByUnitId(id);
+            var timelineList = await _timelineService.GetTimelineByUnitId(id,lastUpdatedAt);
             return Ok(timelineList);
         }
     }

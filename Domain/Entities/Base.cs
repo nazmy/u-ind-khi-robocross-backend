@@ -1,7 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Domain.Entities;
 
+[Index(nameof(LastUpdatedAt))]
 public class Base
 {
     [BsonElement("isDeleted")]
@@ -16,6 +18,7 @@ public class Base
     [BsonElement("lastUpdatedBy")]
     public string LastUpdatedBy { get; set; } = null!;
 
+    
     [BsonElement("lastUpdatedAt")]
     public DateTimeOffset? LastUpdatedAt { get; set; }
     

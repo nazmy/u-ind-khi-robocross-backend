@@ -31,9 +31,9 @@ namespace khi_robocross_api.Services
             await _clientRepository.CreateAsync(inputClient);
         }
 
-        public async ValueTask<IEnumerable<ClientResponse>> GetAllClients()
+        public async ValueTask<IEnumerable<ClientResponse>> GetAllClients(DateTimeOffset? lastUpdatedAt)
         {
-            var clientTask = await _clientRepository.GetAsync();
+            var clientTask = await _clientRepository.GetAsync(lastUpdatedAt);
             return _mapper.Map<IEnumerable<ClientResponse>>(clientTask.ToList());
         }
 
@@ -57,7 +57,7 @@ namespace khi_robocross_api.Services
             if (id == null)
                 throw new ArgumentException("Client Id is Invalid");
 
-            await _clientRepository.RemoveAsync(id);
+            await _clientRepository.RemoveAsync(id,_httpContextAccessor.HttpContext.User.Identity.Name);
         }
 
         public async Task UpdateClient(string id, UpdateClientInput updatedClient)

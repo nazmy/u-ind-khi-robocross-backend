@@ -17,6 +17,8 @@
         public string TimelinesCollectionName { get; set; } = null!;
         
         public string MessagesCollectionName { get; set; } = null!;
+        
+        public string UsersCollectionName { get; set; } = null!;
     }
 }
 

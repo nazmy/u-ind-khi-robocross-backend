@@ -31,9 +31,9 @@ namespace khi_robocross_api.Controllers.v1
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(DateTimeOffset? lastUpdatedAt)
         {
-            var buildingList = await _buildingService.GetAllBuildings();
+            var buildingList = await _buildingService.GetAllBuildings(lastUpdatedAt);
             return Ok(buildingList);
         }
 
@@ -114,9 +114,9 @@ namespace khi_robocross_api.Controllers.v1
         //Get Lines of Business
         [HttpGet("{id}/Lines")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetBuildingLines(string id)
+        public async Task<IActionResult> GetBuildingLines(string id, DateTimeOffset? lastUpdatedAt)
         {
-            var lineList = await _lineService.GetLineByBuildingId(id);
+            var lineList = await _lineService.GetLineByBuildingId(id,lastUpdatedAt);
             return Ok(lineList);
         }
     }

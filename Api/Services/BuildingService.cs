@@ -31,15 +31,15 @@ namespace khi_robocross_api.Services
             await _buildingRepository.CreateAsync(inputBuilding);
         }
 
-        public async ValueTask<IEnumerable<BuildingResponse>> GetAllBuildings()
+        public async ValueTask<IEnumerable<BuildingResponse>> GetAllBuildings(DateTimeOffset? lastUpdatedAt)
         {
-            var buildingTask = await _buildingRepository.GetAsync();
+            var buildingTask = await _buildingRepository.GetAsync(lastUpdatedAt);
             return _mapper.Map<IEnumerable<BuildingResponse>>(buildingTask.ToList());
         }
 
-        public async ValueTask<IEnumerable<BuildingResponse>> GetBuildingByCompoundId(string compoundId)
+        public async ValueTask<IEnumerable<BuildingResponse>> GetBuildingByCompoundId(string compoundId, DateTimeOffset? lastUpdatedAt)
         {
-            var buildingTask = await _buildingRepository.GetAsyncByCompoundId(compoundId);
+            var buildingTask = await _buildingRepository.GetAsyncByCompoundId(compoundId, lastUpdatedAt);
             return _mapper.Map<IEnumerable<BuildingResponse>>(buildingTask.ToList());
         }
 
@@ -57,7 +57,7 @@ namespace khi_robocross_api.Services
             if (id == null)
                 throw new ArgumentException("Building Id is Invalid");
 
-            await _buildingRepository.RemoveAsync(id);
+            await _buildingRepository.RemoveAsync(id,_httpContextAccessor.HttpContext.User.Identity.Name);
         }
 
         public async Task UpdateBuilding(string id, UpdateBuildingInput updatedBuilding)

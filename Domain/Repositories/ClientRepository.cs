@@ -13,13 +13,27 @@ namespace domain.Repositories
 		{
 			var database = mongoClient.GetDatabase(settings.DatabaseName);
 			_clients = database.GetCollection<Client>(settings.ClientsCollectionName);
+			
+			var indexKeysDefinition = Builders<Client>
+				.IndexKeys.Descending(x => x.LastUpdatedAt);
+			_clients.Indexes.CreateOneAsync(new CreateIndexModel<Client>(indexKeysDefinition));
 		}
 
 		public async Task CreateAsync(Client client) =>
 			await _clients.InsertOneAsync(client);
 
-		public async Task<IEnumerable<Client>> GetAsync() =>
-			await _clients.Find(_ => true).ToListAsync();
+		public async Task<IEnumerable<Client>> GetAsync(DateTimeOffset? lastUpdatedAt)
+		{
+			if (lastUpdatedAt != null)
+			{
+				var filter = Builders<Client>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+				return await _clients.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+			}
+			else
+			{
+				return await _clients.Find(_ => true).SortByDescending(c => c.LastUpdatedAt).ToListAsync();	
+			}
+		}
 
 		public async Task<Client?> GetAsync(string id) =>
 			await _clients.Find(x => x.Id == id).FirstOrDefaultAsync();
@@ -31,11 +45,14 @@ namespace domain.Repositories
 			{
 				filter = Builders<Client>.Filter.Regex("Name", new BsonRegularExpression(search, "i"));
 			}
-			return await _clients.Find(filter).ToListAsync();
+			return await _clients.Find(filter).SortByDescending(c => c.LastUpdatedAt).ToListAsync();
 		}
 
-		public async Task RemoveAsync(string id) =>
-			await _clients.DeleteOneAsync(x => x.Id == id);
+		public async Task RemoveAsync(string id, string? usernameActor) =>
+			await _clients.UpdateOneAsync(b => b.Id == id,
+				Builders<Client>.Update
+					.Set(b => b.IsDeleted, true)
+					.Set(b => b.LastUpdatedAt,DateTimeOffset.UtcNow));
 
 		public async Task UpdateAsync(string id, Client updatedClient) =>
 			await _clients.ReplaceOneAsync(x => x.Id == id, updatedClient);

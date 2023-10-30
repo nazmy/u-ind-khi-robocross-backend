@@ -31,15 +31,15 @@ namespace khi_robocross_api.Services
             await _timelineRepository.CreateAsync(inputTimeline);
         }
 
-        public async ValueTask<IEnumerable<TimelineResponse>> GetAllTimelines()
+        public async ValueTask<IEnumerable<TimelineResponse>> GetAllTimelines(DateTimeOffset? lastUpdatedAt)
         {
-            var timelineTask = await _timelineRepository.GetAsync();
+            var timelineTask = await _timelineRepository.GetAsync(lastUpdatedAt);
             return _mapper.Map<IEnumerable<TimelineResponse>>(timelineTask.ToList());
         }
 
-        public async ValueTask<IEnumerable<TimelineResponse>> GetTimelineByUnitId(string unitId)
+        public async ValueTask<IEnumerable<TimelineResponse>> GetTimelineByUnitId(string unitId, DateTimeOffset? lastUpdatedAt)
         {
-            var timelineTask = await _timelineRepository.GetAsyncByUnitId(unitId);
+            var timelineTask = await _timelineRepository.GetAsyncByUnitId(unitId,lastUpdatedAt);
             return _mapper.Map<IEnumerable<TimelineResponse>>(timelineTask.ToList());
         }
 
@@ -57,7 +57,7 @@ namespace khi_robocross_api.Services
             if (id == null)
                 throw new ArgumentException("Timeline Id is Invalid");
 
-            await _timelineRepository.RemoveAsync(id);
+            await _timelineRepository.RemoveAsync(id,_httpContextAccessor.HttpContext.User.Identity.Name);
         }
 
         public async Task UpdateTimeline(string id, UpdateTimelineInput updatedTimeline)

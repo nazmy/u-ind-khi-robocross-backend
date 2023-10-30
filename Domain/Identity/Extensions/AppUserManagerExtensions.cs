@@ -6,8 +6,19 @@ namespace domain.Repositories.Extensions;
 
 public static class AppUserManagerExtensions
 {
-    public static List<AppUser>? FindByClientIdAsync(this UserManager<AppUser> userManager, string clientId)
+    public static List<AppUser>? FindByClientIdAsync(this UserManager<AppUser> userManager, string clientId, DateTimeOffset? lastUpdatedAt)
     {
-        return userManager?.Users.Where(user => user.ClientId == clientId).ToList();
+        if (lastUpdatedAt != null)
+        {
+            return userManager?.Users
+                .Where(user => user.ClientId == clientId && user.LastUpdatedAt >= lastUpdatedAt)
+                .ToList();
+        }
+        else
+        {
+            return userManager?.Users
+                .Where(user => user.ClientId == clientId)
+                .ToList();
+        }
     }
 }

@@ -13,6 +13,10 @@ public class MessageRepository : IMessageRepository
 	{
 		var database = mongoClient.GetDatabase(settings.DatabaseName);
 		_message = database.GetCollection<Message>(settings.MessagesCollectionName);
+		
+		var indexKeysDefinition = Builders<Message>
+			.IndexKeys.Descending(x => x.LastUpdatedAt);
+		_message.Indexes.CreateOneAsync(new CreateIndexModel<Message>(indexKeysDefinition));
 	}
 
 	public async Task CreateAsync(Message message) =>
@@ -24,8 +28,18 @@ public class MessageRepository : IMessageRepository
 		return writeResult;
 	}
 	
-	public async Task<IEnumerable<Message>> GetAsync() =>
-		await _message.Find(_ => true).ToListAsync();
+	public async Task<IEnumerable<Message>> GetAsync(DateTimeOffset? lastUpdatedAt)
+	{
+		if (lastUpdatedAt != null)
+		{
+			var filter = Builders<Message>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+			return await _message.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+		}
+		else
+		{
+			return await _message.Find(_ => true).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+		}
+	}
 
 	public async Task<Message?> GetAsync(string id) =>
 		await _message.Find(x => x.Id == id).FirstOrDefaultAsync();
@@ -37,24 +51,75 @@ public class MessageRepository : IMessageRepository
 		{
 			filter =  Builders<Message>.Filter.Regex("Title", new BsonRegularExpression(search, "i"));
 		}
-		return await _message.Find(filter).ToListAsync();
+		return await _message.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 	}
 	
-	public async Task<IEnumerable<Message>> GetAsyncByOwnerId(string ownerId) =>
-		await _message.Find(x => x.OwnerId == ownerId).ToListAsync();
-	
-	public async Task<IEnumerable<Message>> GetAsyncByTopicId(string topicId) =>
-		await _message.Find(x => x.TopicId == topicId).ToListAsync();
+	public async Task<IEnumerable<Message>> GetAsyncByOwnerId(string ownerId, DateTimeOffset? lastUpdatedAt)
+	{
+		if (lastUpdatedAt != null)
+		{
+			var filter = Builders<Message>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+			filter &= Builders<Message>.Filter.Eq(x => x.OwnerId, ownerId);
+			return await _message.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
+		}
+		else
+		{
+			return await _message.Find(x => x.OwnerId == ownerId).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+		}
+	}
 
-	public async Task<IEnumerable<Message>> GetAsyncByTopicTypeAndTopicId(MessageTopicTypeEnum messageTopicTypeEnum, string topicId) =>
-		await _message.Find(x => x.TopicType == messageTopicTypeEnum && x.TopicId == topicId).ToListAsync();
-	
-	public async Task<IEnumerable<Message>> GetAsyncByMessageTypeAndTopicId(MessageTypeEnum messageTypeEnum, string topicId) =>
-		await _message.Find(x => x.MessageType == messageTypeEnum && x.TopicId == topicId).ToListAsync();
+	public async Task<IEnumerable<Message>> GetAsyncByTopicId(string topicId, DateTimeOffset? lastUpdatedAt)
+	{
+		if (lastUpdatedAt != null)
+		{
+			var filter = Builders<Message>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+			filter &= Builders<Message>.Filter.Eq(x => x.TopicId, topicId);
+			return await _message.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
+		}
+		else
+		{
+			return await _message.Find(x => x.TopicId == topicId).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+		}		
+	}
+
+	public async Task<IEnumerable<Message>> GetAsyncByTopicTypeAndTopicId(MessageTopicTypeEnum messageTopicTypeEnum, string topicId, DateTimeOffset? lastUpdatedAt)
+	{
+		if (lastUpdatedAt != null)
+		{
+			var filter = Builders<Message>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+			filter &= Builders<Message>.Filter.Eq(x => x.TopicType, messageTopicTypeEnum);
+			filter &= Builders<Message>.Filter.Eq(x => x.TopicId, topicId);
+			return await _message.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
+		}
+		else
+		{
+			return await _message.Find(x => x.TopicType == messageTopicTypeEnum && x.TopicId == topicId)
+            			.SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+		}
+	}
+
+	public async Task<IEnumerable<Message>> GetAsyncByMessageTypeAndTopicId(MessageTypeEnum messageTypeEnum, string topicId, DateTimeOffset? lastUpdatedAt)
+	{
+		if (lastUpdatedAt != null)
+		{
+			var filter = Builders<Message>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+			filter &= Builders<Message>.Filter.Eq(x => x.MessageType, messageTypeEnum);
+			filter &= Builders<Message>.Filter.Eq(x => x.TopicId, topicId);
+			return await _message.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
+		}
+		else
+		{
+			return await _message.Find(x => x.MessageType == messageTypeEnum && x.TopicId == topicId)
+            			.SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+		}
+	}
 
 
-	public async Task RemoveAsync(string id) =>
-		await _message.DeleteOneAsync(x => x.Id == id);
+	public async Task RemoveAsync(string id, string? usernameActor) =>
+		await _message.UpdateOneAsync(msg => msg.Id == id,
+			Builders<Message>.Update
+				.Set(msg => msg.IsDeleted, true)
+				.Set(msg => msg.LastUpdatedAt,DateTimeOffset.UtcNow));
 
 	public async Task UpdateAsync(string id, Message updatedMessage) =>
 		await _message.ReplaceOneAsync(x => x.Id == id, updatedMessage);

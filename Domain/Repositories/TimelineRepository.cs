@@ -13,13 +13,27 @@ public class TimelineRepository : ITimelineRepository
 	{
 		var database = mongoClient.GetDatabase(settings.DatabaseName);
 		_timeline = database.GetCollection<Timeline>(settings.TimelinesCollectionName);
+		
+		var indexKeysDefinition = Builders<Timeline>
+			.IndexKeys.Descending(x => x.LastUpdatedAt);
+		_timeline.Indexes.CreateOneAsync(new CreateIndexModel<Timeline>(indexKeysDefinition));
 	}
 
 	public async Task CreateAsync(Timeline timeline) =>
 		await _timeline.InsertOneAsync(timeline);
 
-	public async Task<IEnumerable<Timeline>> GetAsync() =>
-		await _timeline.Find(_ => true).ToListAsync();
+	public async Task<IEnumerable<Timeline>> GetAsync(DateTimeOffset? lastUpdatedAt)
+	{
+		if (lastUpdatedAt != null)
+		{
+			var filter = Builders<Timeline>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+			return await _timeline.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+		}
+		else
+		{
+			return await _timeline.Find(_ => true).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+		}
+	}
 
 	public async Task<Timeline?> GetAsync(string id) =>
 		await _timeline.Find(x => x.Id == id).FirstOrDefaultAsync();
@@ -31,14 +45,29 @@ public class TimelineRepository : ITimelineRepository
 		{
 			filter = Builders<Timeline>.Filter.Regex("Name", new BsonRegularExpression(search, "i"));
 		}
-		return await _timeline.Find(filter).ToListAsync();
+		return await _timeline.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 	}
 
-	public async Task<IEnumerable<Timeline>> GetAsyncByUnitId(string unitId) =>
-		await _timeline.Find(x => x.UnitId == unitId).ToListAsync();
+	public async Task<IEnumerable<Timeline>> GetAsyncByUnitId(string unitId,DateTimeOffset? lastUpdatedAt)
+	{
+		if (lastUpdatedAt != null)
+		{
+			var filter = Builders<Timeline>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+			filter &= Builders<Timeline>.Filter.Eq(x => x.UnitId, unitId);
+			return await _timeline.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
+		}
+		else
+		{
+			return await _timeline.Find(x => x.UnitId == unitId)
+            			.SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+		}
+	}
 
-	public async Task RemoveAsync(string id) =>
-		await _timeline.DeleteOneAsync(x => x.Id == id);
+	public async Task RemoveAsync(string id, string? usernameActor) =>
+		await _timeline.UpdateOneAsync(timeline => timeline.Id == id,
+			Builders<Timeline>.Update
+				.Set(timeline => timeline.IsDeleted, true)
+				.Set(timeline => timeline.LastUpdatedAt,DateTimeOffset.UtcNow));
 
 	public async Task UpdateAsync(string id, Timeline updatedTimeline) =>
 		await _timeline.ReplaceOneAsync(x => x.Id == id, updatedTimeline);

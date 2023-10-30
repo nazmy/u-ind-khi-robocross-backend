@@ -14,11 +14,13 @@ using Casbin.AspNetCore.Authorization;
 using Casbin.AspNetCore.Authorization.Transformers;
 using Casbin.Persist.Adapter.EFCore;
 using Casbin;
+using Domain.Entities;
 using domain.Identity.Manager;
 using domain.Repositories;
 using domain.Repositories.Config;
 using domain.Repositories.Manager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
@@ -94,6 +96,7 @@ builder.Services.AddAuthentication(authOptions =>
 //      Database = builder.Configuration.GetValue<string>("RobocrossDatabaseSettings:DatabaseName"),
 //      VersionFieldName = "1.0.0"
 //  });
+
 
 
 //Add Robocross Azure Blob Storage

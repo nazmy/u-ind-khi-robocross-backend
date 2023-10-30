@@ -48,21 +48,21 @@ namespace khi_robocross_api.Services
             await _lineRepository.CreateAsync(line);
         }
 
-        public async ValueTask<IEnumerable<LineResponse>> GetAllLines()
+        public async ValueTask<IEnumerable<LineResponse>> GetAllLines(DateTimeOffset? lastUpdatedAt)
         {
-            var lineTask = await _lineRepository.GetAsync();
+            var lineTask = await _lineRepository.GetAsync(lastUpdatedAt);
             return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
 
-        public async ValueTask<IEnumerable<LineResponse>> GetLineByBuildingId(string buildingId)
+        public async ValueTask<IEnumerable<LineResponse>> GetLineByBuildingId(string buildingId,DateTimeOffset? lastUpdatedAt)
         {
-            var lineTask = await _lineRepository.GetAsyncByBuildingId(buildingId);
+            var lineTask = await _lineRepository.GetAsyncByBuildingId(buildingId,lastUpdatedAt);
             return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
         
-        public async ValueTask<IEnumerable<LineResponse>> GetLineByIntegratorId(string integratorId)
+        public async ValueTask<IEnumerable<LineResponse>> GetLineByIntegratorId(string integratorId,DateTimeOffset? lastUpdatedAt)
         {
-            var lineTask = await _lineRepository.GetAsyncByIntegratorId(integratorId);
+            var lineTask = await _lineRepository.GetAsyncByIntegratorId(integratorId,lastUpdatedAt);
             return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
 
@@ -80,7 +80,7 @@ namespace khi_robocross_api.Services
             if (id == null)
                 throw new ArgumentException("Line Id is Invalid");
 
-            await _lineRepository.RemoveAsync(id);
+            await _lineRepository.RemoveAsync(id,_httpContextAccessor.HttpContext.User.Identity.Name);
         }
 
         public async Task UpdateLine(string id, UpdateLineInput updatedLine)

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
+using MongoDB.Driver.Linq;
 using Newtonsoft.Json;
 
 namespace khi_robocross_api.Controllers.v1
@@ -37,9 +38,22 @@ namespace khi_robocross_api.Controllers.v1
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(DateTimeOffset? lastUpdatedAt)
         {
-            List<AppUser> appUserList = _userManager.Users.ToList();
+            List<AppUser> appUserList;
+            if (lastUpdatedAt != null)
+            {
+                appUserList = _userManager.Users
+                    .Where(user => user.LastUpdatedAt >= lastUpdatedAt)
+                    .ToList();
+            }
+            else
+            {
+               appUserList = _userManager.Users
+                   .OrderByDescending(user =>user.LastUpdatedAt) 
+                   .ToList();
+            }
+            
             var userListResponse = _mapper.Map<List<UserResponse>>(appUserList);
             return Ok(userListResponse);
         }
@@ -277,9 +291,9 @@ namespace khi_robocross_api.Controllers.v1
         //Get User By Client Id
         [HttpGet("Clients/{clientId}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetUserByClientId(string clientId)
+        public async Task<IActionResult> GetUserByClientId(string clientId, DateTimeOffset? lastUpdatedAt)
         {
-            List<AppUser> appUserList = AppUserManagerExtensions.FindByClientIdAsync(_userManager, clientId);
+            List<AppUser> appUserList = AppUserManagerExtensions.FindByClientIdAsync(_userManager, clientId, lastUpdatedAt);
             List<UserResponse> userListResponse = _mapper.Map<List<UserResponse>>(appUserList);
             return Ok(userListResponse);
         }
