@@ -9,7 +9,7 @@ namespace khi_robocross_api.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class LinesController : ControllerBase
 	{
         private readonly ILineService _lineService;
