@@ -28,16 +28,27 @@ public class MessageRepository : IMessageRepository
 		return writeResult;
 	}
 	
-	public async Task<IEnumerable<Message>> GetAsync(DateTimeOffset? lastUpdatedAt)
+	public async Task<IEnumerable<Message>> GetAsync(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 	{
 		if (lastUpdatedAt != null)
 		{
 			var filter = Builders<Message>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+			if (isDeleted == false)
+			{
+				filter &= Builders<Message>.Filter.Eq(x => x.IsDeleted , false);
+			}
 			return await _message.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 		}
 		else
 		{
-			return await _message.Find(_ => true).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+			if (isDeleted == null || isDeleted == true)
+			{
+				return await _message.Find(_ => true).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+			}
+			else
+			{
+				return await _message.Find(x => x.IsDeleted == false).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+			}
 		}
 	}
 
@@ -54,21 +65,30 @@ public class MessageRepository : IMessageRepository
 		return await _message.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 	}
 	
-	public async Task<IEnumerable<Message>> GetAsyncByOwnerId(string ownerId, DateTimeOffset? lastUpdatedAt)
+	public async Task<IEnumerable<Message>> GetAsyncByOwnerId(string ownerId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 	{
 		if (lastUpdatedAt != null)
 		{
 			var filter = Builders<Message>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
 			filter &= Builders<Message>.Filter.Eq(x => x.OwnerId, ownerId);
+			if (isDeleted == false)
+			{
+				filter &= Builders<Message>.Filter.Eq(x => x.IsDeleted , false); 
+			}
 			return await _message.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
 		}
 		else
 		{
+			var filter = Builders<Message>.Filter.Eq(x => x.OwnerId,ownerId);
+			if (isDeleted == null || isDeleted == true)
+			{
+				filter &= Builders<Message>.Filter.Eq(x => x.IsDeleted , false);
+			}
 			return await _message.Find(x => x.OwnerId == ownerId).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 		}
 	}
 
-	public async Task<IEnumerable<Message>> GetAsyncByTopicId(string topicId, DateTimeOffset? lastUpdatedAt)
+	public async Task<IEnumerable<Message>> GetAsyncByTopicId(string topicId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 	{
 		if (lastUpdatedAt != null)
 		{
@@ -78,37 +98,64 @@ public class MessageRepository : IMessageRepository
 		}
 		else
 		{
-			return await _message.Find(x => x.TopicId == topicId).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+			var filter = Builders<Message>.Filter.Eq(x => x.TopicId,topicId);
+			if (isDeleted == null || isDeleted == true)
+			{
+				filter &= Builders<Message>.Filter.Eq(x => x.IsDeleted , false);
+			}
+			return await _message.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 		}		
 	}
 
-	public async Task<IEnumerable<Message>> GetAsyncByTopicTypeAndTopicId(MessageTopicTypeEnum messageTopicTypeEnum, string topicId, DateTimeOffset? lastUpdatedAt)
+	public async Task<IEnumerable<Message>> GetAsyncByTopicTypeAndTopicId(MessageTopicTypeEnum messageTopicTypeEnum, string topicId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 	{
 		if (lastUpdatedAt != null)
 		{
 			var filter = Builders<Message>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
 			filter &= Builders<Message>.Filter.Eq(x => x.TopicType, messageTopicTypeEnum);
 			filter &= Builders<Message>.Filter.Eq(x => x.TopicId, topicId);
+			if (isDeleted == false)
+			{
+				filter &= Builders<Message>.Filter.Eq(x => x.IsDeleted , false); 
+			}
 			return await _message.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
 		}
 		else
 		{
-			return await _message.Find(x => x.TopicType == messageTopicTypeEnum && x.TopicId == topicId)
+			var filter = Builders<Message>.Filter.Eq(x => x.TopicType, messageTopicTypeEnum);
+			filter &= Builders<Message>.Filter.Eq(x => x.TopicId, topicId);
+			
+			if (isDeleted == null || isDeleted == true)
+			{
+				filter &= Builders<Message>.Filter.Eq(x => x.IsDeleted , false);
+			}
+			return await _message.Find(filter)
             			.SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 		}
 	}
 
-	public async Task<IEnumerable<Message>> GetAsyncByMessageTypeAndTopicId(MessageTypeEnum messageTypeEnum, string topicId, DateTimeOffset? lastUpdatedAt)
+	public async Task<IEnumerable<Message>> GetAsyncByMessageTypeAndTopicId(MessageTypeEnum messageTypeEnum, string topicId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 	{
 		if (lastUpdatedAt != null)
 		{
 			var filter = Builders<Message>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
 			filter &= Builders<Message>.Filter.Eq(x => x.MessageType, messageTypeEnum);
 			filter &= Builders<Message>.Filter.Eq(x => x.TopicId, topicId);
+			if (isDeleted == false)
+			{
+				filter &= Builders<Message>.Filter.Eq(x => x.IsDeleted , false); 
+			}
 			return await _message.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
 		}
 		else
 		{
+			var filter = Builders<Message>.Filter.Eq(x => x.MessageType, messageTypeEnum);
+			filter &= Builders<Message>.Filter.Eq(x => x.TopicId, topicId);
+			if (isDeleted == null || isDeleted == true)
+			{
+				filter &= Builders<Message>.Filter.Eq(x => x.IsDeleted , false);
+			}
+			
 			return await _message.Find(x => x.MessageType == messageTypeEnum && x.TopicId == topicId)
             			.SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 		}

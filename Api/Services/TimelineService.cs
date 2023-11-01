@@ -31,15 +31,15 @@ namespace khi_robocross_api.Services
             await _timelineRepository.CreateAsync(inputTimeline);
         }
 
-        public async ValueTask<IEnumerable<TimelineResponse>> GetAllTimelines(DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<TimelineResponse>> GetAllTimelines(DateTimeOffset? lastUpdatedAt,bool? isDeleted)
         {
-            var timelineTask = await _timelineRepository.GetAsync(lastUpdatedAt);
+            var timelineTask = await _timelineRepository.GetAsync(lastUpdatedAt,isDeleted);
             return _mapper.Map<IEnumerable<TimelineResponse>>(timelineTask.ToList());
         }
 
-        public async ValueTask<IEnumerable<TimelineResponse>> GetTimelineByUnitId(string unitId, DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<TimelineResponse>> GetTimelineByUnitId(string unitId, DateTimeOffset? lastUpdatedAt,bool? isDeleted)
         {
-            var timelineTask = await _timelineRepository.GetAsyncByUnitId(unitId,lastUpdatedAt);
+            var timelineTask = await _timelineRepository.GetAsyncByUnitId(unitId,lastUpdatedAt,isDeleted);
             return _mapper.Map<IEnumerable<TimelineResponse>>(timelineTask.ToList());
         }
 

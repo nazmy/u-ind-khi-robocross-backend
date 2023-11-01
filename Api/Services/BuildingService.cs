@@ -31,15 +31,15 @@ namespace khi_robocross_api.Services
             await _buildingRepository.CreateAsync(inputBuilding);
         }
 
-        public async ValueTask<IEnumerable<BuildingResponse>> GetAllBuildings(DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<BuildingResponse>> GetAllBuildings(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var buildingTask = await _buildingRepository.GetAsync(lastUpdatedAt);
+            var buildingTask = await _buildingRepository.GetAsync(lastUpdatedAt,isDeleted);
             return _mapper.Map<IEnumerable<BuildingResponse>>(buildingTask.ToList());
         }
 
-        public async ValueTask<IEnumerable<BuildingResponse>> GetBuildingByCompoundId(string compoundId, DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<BuildingResponse>> GetBuildingByCompoundId(string compoundId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var buildingTask = await _buildingRepository.GetAsyncByCompoundId(compoundId, lastUpdatedAt);
+            var buildingTask = await _buildingRepository.GetAsyncByCompoundId(compoundId, lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<BuildingResponse>>(buildingTask.ToList());
         }
 

@@ -22,16 +22,27 @@ namespace domain.Repositories
 		public async Task CreateAsync(Compound compound) =>
 			await _compound.InsertOneAsync(compound);
 
-		public async Task<IEnumerable<Compound>> GetAsync(DateTimeOffset? lastUpdatedAt)
+		public async Task<IEnumerable<Compound>> GetAsync(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 		{
 			if (lastUpdatedAt != null)
 			{
 				var filter = Builders<Compound>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+				if (isDeleted == false)
+				{
+					filter &= Builders<Compound>.Filter.Eq(x => x.IsDeleted , false);
+				}
 				return await _compound.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 			}
 			else
 			{
-				return await _compound.Find(_ => true).SortByDescending(c => c.LastUpdatedAt).ToListAsync();	
+				if (isDeleted == null || isDeleted == true)
+				{
+					return await _compound.Find(_ => true).SortByDescending(c => c.LastUpdatedAt).ToListAsync();	
+				}
+				else
+				{
+					return await _compound.Find(x => x.IsDeleted == false).SortByDescending(c => c.LastUpdatedAt).ToListAsync();
+				}	
 			}
 		}
 
@@ -48,17 +59,26 @@ namespace domain.Repositories
 			return await _compound.Find(filter).SortByDescending(c => c.LastUpdatedAt).ToListAsync();
 		}
 
-		public async Task<IEnumerable<Compound>> GetAsyncByClientId(string clientId, DateTimeOffset? lastUpdatedAt)
+		public async Task<IEnumerable<Compound>> GetAsyncByClientId(string clientId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 		{
 			if (lastUpdatedAt != null)
 			{
 				var filter = Builders<Compound>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
 				filter &= Builders<Compound>.Filter.Eq(x => x.ClientId, clientId);
+				if (isDeleted == false)
+				{
+					filter &= Builders<Compound>.Filter.Eq(x => x.IsDeleted , false); 
+				}
 				return await _compound.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
 			}
 			else
 			{
-				return await _compound.Find(x => x.ClientId == clientId)
+				var filter = Builders<Compound>.Filter.Eq(x => x.ClientId,clientId);
+				if (isDeleted == null || isDeleted == true)
+				{
+					filter &= Builders<Compound>.Filter.Eq(x => x.IsDeleted , false);
+				}
+				return await _compound.Find(filter)
 					.SortByDescending(c => c.LastUpdatedAt)
                 				.ToListAsync();
 			}

@@ -43,21 +43,21 @@ namespace khi_robocross_api.Services
             await _lineRepository.CreateAsync(line);
         }
 
-        public async ValueTask<IEnumerable<LineResponse>> GetAllLines(DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<LineResponse>> GetAllLines(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var lineTask = await _lineRepository.GetAsync(lastUpdatedAt);
+            var lineTask = await _lineRepository.GetAsync(lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
 
-        public async ValueTask<IEnumerable<LineResponse>> GetLineByBuildingId(string buildingId,DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<LineResponse>> GetLineByBuildingId(string buildingId,DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var lineTask = await _lineRepository.GetAsyncByBuildingId(buildingId,lastUpdatedAt);
+            var lineTask = await _lineRepository.GetAsyncByBuildingId(buildingId,lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
         
-        public async ValueTask<IEnumerable<LineResponse>> GetLineByIntegratorId(string integratorId,DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<LineResponse>> GetLineByIntegratorId(string integratorId,DateTimeOffset? lastUpdatedAt,  bool? isDeleted)
         {
-            var lineTask = await _lineRepository.GetAsyncByIntegratorId(integratorId,lastUpdatedAt);
+            var lineTask = await _lineRepository.GetAsyncByIntegratorId(integratorId,lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
 

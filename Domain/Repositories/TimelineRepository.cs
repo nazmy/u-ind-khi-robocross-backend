@@ -22,16 +22,27 @@ public class TimelineRepository : ITimelineRepository
 	public async Task CreateAsync(Timeline timeline) =>
 		await _timeline.InsertOneAsync(timeline);
 
-	public async Task<IEnumerable<Timeline>> GetAsync(DateTimeOffset? lastUpdatedAt)
+	public async Task<IEnumerable<Timeline>> GetAsync(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 	{
 		if (lastUpdatedAt != null)
 		{
 			var filter = Builders<Timeline>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+			if (isDeleted == false)
+			{
+				filter &= Builders<Timeline>.Filter.Eq(x => x.IsDeleted , false);
+			}
 			return await _timeline.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 		}
 		else
 		{
-			return await _timeline.Find(_ => true).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+			if (isDeleted == null || isDeleted == true)
+			{
+				return await _timeline.Find(_ => true).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+			}
+			else
+			{
+				return await _timeline.Find(x => x.IsDeleted == false).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
+			}
 		}
 	}
 
@@ -48,17 +59,26 @@ public class TimelineRepository : ITimelineRepository
 		return await _timeline.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 	}
 
-	public async Task<IEnumerable<Timeline>> GetAsyncByUnitId(string unitId,DateTimeOffset? lastUpdatedAt)
+	public async Task<IEnumerable<Timeline>> GetAsyncByUnitId(string unitId,DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 	{
 		if (lastUpdatedAt != null)
 		{
 			var filter = Builders<Timeline>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
 			filter &= Builders<Timeline>.Filter.Eq(x => x.UnitId, unitId);
+			if (isDeleted == false)
+			{
+				filter &= Builders<Timeline>.Filter.Eq(x => x.IsDeleted , false); 
+			}
 			return await _timeline.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
 		}
 		else
 		{
-			return await _timeline.Find(x => x.UnitId == unitId)
+			var filter = Builders<Timeline>.Filter.Eq(x => x.UnitId, unitId);
+			if (isDeleted == false)
+			{
+				filter &= Builders<Timeline>.Filter.Eq(x => x.IsDeleted , false); 
+			}
+			return await _timeline.Find(filter)
             			.SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 		}
 	}
