@@ -10,7 +10,7 @@ namespace Domain.Dto
 {
     public class CreateBulkUserMessageInput
     {
-        public string[] OwnerId { get; set; }
+        public string[] OwnerIds { get; set; }
 		
         public string Title { get; set; }
         

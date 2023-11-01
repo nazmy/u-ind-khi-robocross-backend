@@ -41,7 +41,7 @@ namespace khi_robocross_api.Services
                 throw new ArgumentException("Message input is invalid");
 
             List<WriteModel<Message>> messageList = new List<WriteModel<Message>>();
-            foreach (string userId in createBulkUserMessageInput.OwnerId)
+            foreach (string userId in createBulkUserMessageInput.OwnerIds)
             {
                 Message newMessage = new Message();
                 newMessage.MessageType = MessageTypeEnum.Notification;
