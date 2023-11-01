@@ -4,7 +4,7 @@ namespace domain.Repositories
 {
 	public interface IClientRepository
 	{
-		Task<IEnumerable<Client>> GetAsync(DateTimeOffset? lastUpdatedAt);
+		Task<IEnumerable<Client>> GetAsync(DateTimeOffset? lastUpdatedAt, bool? isDeleted);
 		Task<Client> GetAsync(String id);
 		Task<IEnumerable<Client>> SearchAsync(string search);
 		Task CreateAsync(Client client);

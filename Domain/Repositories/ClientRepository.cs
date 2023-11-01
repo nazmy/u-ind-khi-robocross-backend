@@ -22,16 +22,27 @@ namespace domain.Repositories
 		public async Task CreateAsync(Client client) =>
 			await _clients.InsertOneAsync(client);
 
-		public async Task<IEnumerable<Client>> GetAsync(DateTimeOffset? lastUpdatedAt)
+		public async Task<IEnumerable<Client>> GetAsync(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 		{
 			if (lastUpdatedAt != null)
 			{
 				var filter = Builders<Client>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+				if (isDeleted == false)
+				{
+					filter &= Builders<Client>.Filter.Eq(x => x.IsDeleted , false);
+				}
 				return await _clients.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 			}
 			else
 			{
-				return await _clients.Find(_ => true).SortByDescending(c => c.LastUpdatedAt).ToListAsync();	
+				if (isDeleted == null || isDeleted == true)
+				{
+					return await _clients.Find(_ => true).SortByDescending(c => c.LastUpdatedAt).ToListAsync();	
+				}
+				else
+				{
+					return await _clients.Find(x => x.IsDeleted == false).SortByDescending(c => c.LastUpdatedAt).ToListAsync();
+				}	
 			}
 		}
 
@@ -56,7 +67,5 @@ namespace domain.Repositories
 
 		public async Task UpdateAsync(string id, Client updatedClient) =>
 			await _clients.ReplaceOneAsync(x => x.Id == id, updatedClient);
-
-		
     }
 }

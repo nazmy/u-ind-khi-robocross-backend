@@ -30,15 +30,15 @@ namespace khi_robocross_api.Services
             await _compoundRepository.CreateAsync(inputCompound);
         }
 
-        public async ValueTask<IEnumerable<CompoundResponse>> GetAllCompounds(DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<CompoundResponse>> GetAllCompounds(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var compoundTask = await _compoundRepository.GetAsync(lastUpdatedAt); 
+            var compoundTask = await _compoundRepository.GetAsync(lastUpdatedAt, isDeleted); 
             return _mapper.Map<IEnumerable<CompoundResponse>>(compoundTask.ToList());
         }
 
-        public async ValueTask<IEnumerable<CompoundResponse>> GetCompoundByClientId(string clientId, DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<CompoundResponse>> GetCompoundByClientId(string clientId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var compoundTask = await _compoundRepository.GetAsyncByClientId(clientId, lastUpdatedAt);
+            var compoundTask = await _compoundRepository.GetAsyncByClientId(clientId, lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<CompoundResponse>>(compoundTask.ToList());
         }
 

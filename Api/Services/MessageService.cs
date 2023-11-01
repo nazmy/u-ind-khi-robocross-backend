@@ -68,9 +68,9 @@ namespace khi_robocross_api.Services
              return userMessageResponses;
         }
 
-        public async ValueTask<IEnumerable<MessageResponse>> GetAllMessages(DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<MessageResponse>> GetAllMessages(DateTimeOffset? lastUpdatedAt,bool? isDeleted)
         {
-            var messageTask = await _messageRepository.GetAsync(lastUpdatedAt);
+            var messageTask = await _messageRepository.GetAsync(lastUpdatedAt, isDeleted);
             if (messageTask != null)
                 return _mapper.Map<IEnumerable<MessageResponse>>(messageTask.ToList());
 
@@ -92,39 +92,39 @@ namespace khi_robocross_api.Services
             return _mapper.Map<IEnumerable<MessageResponse>>(messageTask.ToList());
         }
         
-        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByOwnerId(string ownerId, DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByOwnerId(string ownerId, DateTimeOffset? lastUpdatedAt,bool? isDeleted)
         {
             if (ownerId == null)
                 throw new ArgumentException("Owner Id is Invalid");
 
-            var messageTask = await _messageRepository.GetAsyncByOwnerId(ownerId, lastUpdatedAt);
+            var messageTask = await _messageRepository.GetAsyncByOwnerId(ownerId, lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<MessageResponse>>(messageTask);
         }
         
-        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByTopicTypeAndTopicId(MessageTopicTypeEnum topicType, string topicId, DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByTopicTypeAndTopicId(MessageTopicTypeEnum topicType, string topicId, DateTimeOffset? lastUpdatedAt,bool? isDeleted)
         {
             if (topicId == null)
                 throw new ArgumentException("Topic Id is Invalid");
 
-            var messageTask = await _messageRepository.GetAsyncByTopicTypeAndTopicId(topicType, topicId,lastUpdatedAt);
+            var messageTask = await _messageRepository.GetAsyncByTopicTypeAndTopicId(topicType, topicId,lastUpdatedAt,isDeleted);
             return _mapper.Map<IEnumerable<MessageResponse>>(messageTask);
         }
         
-        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByTopicId(string topicId,DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByTopicId(string topicId,DateTimeOffset? lastUpdatedAt,bool? isDeleted)
         {
             if (topicId == null)
                 throw new ArgumentException("Topic Id is Invalid");
 
-            var messageTask = await _messageRepository.GetAsyncByTopicId(topicId,lastUpdatedAt);
+            var messageTask = await _messageRepository.GetAsyncByTopicId(topicId,lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<MessageResponse>>(messageTask);
         }
         
-        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByMessageTypeAndTopicId(MessageTypeEnum messageType, string topicId,DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<MessageResponse>> GetMessageByMessageTypeAndTopicId(MessageTypeEnum messageType, string topicId,DateTimeOffset? lastUpdatedAt,bool? isDeleted)
         {
             if (topicId == null)
                 throw new ArgumentException("Topic Id is Invalid");
 
-            var messageTask = await _messageRepository.GetAsyncByMessageTypeAndTopicId(messageType, topicId,lastUpdatedAt);
+            var messageTask = await _messageRepository.GetAsyncByMessageTypeAndTopicId(messageType, topicId,lastUpdatedAt,isDeleted);
             return _mapper.Map<IEnumerable<MessageResponse>>(messageTask);
         }
         

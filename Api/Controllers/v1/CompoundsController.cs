@@ -31,9 +31,9 @@ namespace khi_robocross_api.Controllers.v1
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> Get(DateTimeOffset? lastUpdatedAt)
+        public async Task<IActionResult> Get(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var compoundList = await _compoundService.GetAllCompounds(lastUpdatedAt);
+            var compoundList = await _compoundService.GetAllCompounds(lastUpdatedAt, isDeleted);
             return Ok(compoundList);
         }
 
@@ -116,18 +116,18 @@ namespace khi_robocross_api.Controllers.v1
         //Get Building by Compound Id
         [HttpGet("{id}/buildings")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetCompoundBuildings(string id, DateTimeOffset? lastUpdatedAt)
+        public async Task<IActionResult> GetCompoundBuildings(string compoundId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var buildingList = await _buildingService.GetBuildingByCompoundId(id, lastUpdatedAt);
+            var buildingList = await _buildingService.GetBuildingByCompoundId(compoundId, lastUpdatedAt, isDeleted);
             return Ok(buildingList);
         }
         
         //Client's compound
         [HttpGet("Client/{id}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetClientCompounds(string id, DateTimeOffset? lastUpdatedAt)
+        public async Task<IActionResult> GetClientCompounds(string clientId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var compoundList = await _compoundService.GetCompoundByClientId(id, lastUpdatedAt);
+            var compoundList = await _compoundService.GetCompoundByClientId(clientId, lastUpdatedAt, isDeleted);
             return Ok(compoundList);
         }
     }

@@ -23,16 +23,27 @@ public class BuildingRepository : IBuildingRepository
 	public async Task CreateAsync(Building building) =>
 		await _building.InsertOneAsync(building);
 
-	public async Task<IEnumerable<Building>> GetAsync(DateTimeOffset? lastUpdatedAt)
+	public async Task<IEnumerable<Building>> GetAsync(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 	{
 		if (lastUpdatedAt != null)
 		{
 			var filter = Builders<Building>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+			if (isDeleted == false)
+			{
+				filter &= Builders<Building>.Filter.Eq(x => x.IsDeleted , false);
+			}
 			return await _building.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
 		}
 		else
 		{
-			return await _building.Find(_ => true).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
+			if (isDeleted == null || isDeleted == true)
+			{
+				return await _building.Find(_ => true).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
+			}
+			else
+			{
+				return await _building.Find(x => x.IsDeleted == false).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
+			}
 		}
 	}
 		
@@ -52,17 +63,28 @@ public class BuildingRepository : IBuildingRepository
 		return await _building.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
 	}
 
-	public async Task<IEnumerable<Building>> GetAsyncByCompoundId(string compoundId, DateTimeOffset? lastUpdatedAt)
+	public async Task<IEnumerable<Building>> GetAsyncByCompoundId(string compoundId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 	{
 		if (lastUpdatedAt != null)
 		{
 			var filter = Builders<Building>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
 			filter &= Builders<Building>.Filter.Eq(x => x.CompoundId, compoundId);
-			return await _building.Find(filter) .SortByDescending(b => b.LastUpdatedAt).ToListAsync();
+			if (isDeleted == false)
+			{
+				filter &= Builders<Building>.Filter.Eq(x => x.IsDeleted , false);
+			}
+			return await _building.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
 		}
 		else
 		{
-			return await _building.Find(x => x.CompoundId == compoundId).SortByDescending(b => b.LastUpdatedAt).ToListAsync();	
+			var filter = Builders<Building>.Filter.Eq(x => x.CompoundId, compoundId);
+			if (isDeleted == null || isDeleted == true)
+			{
+				filter &= Builders<Building>.Filter.Eq(x => x.IsDeleted , false);
+			}
+			
+			return await _building.Find(filter).SortByDescending(b => b.LastUpdatedAt)
+				.ToListAsync();
 		}
 	}
 		

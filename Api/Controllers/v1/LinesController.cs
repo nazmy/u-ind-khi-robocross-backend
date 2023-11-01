@@ -24,9 +24,9 @@ namespace khi_robocross_api.Controllers.v1
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> Get(DateTimeOffset? lastUpdatedAt)
+        public async Task<IActionResult> Get(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var lineList = await _lineService.GetAllLines(lastUpdatedAt);
+            var lineList = await _lineService.GetAllLines(lastUpdatedAt, isDeleted);
             return Ok(lineList);
         }
 
@@ -108,18 +108,18 @@ namespace khi_robocross_api.Controllers.v1
         //Get Lines of Business
         [HttpGet("Building/{buildingId}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetBuildingLines(string buildingId,DateTimeOffset? lastUpdatedAt)
+        public async Task<IActionResult> GetBuildingLines(string buildingId,DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var lineList = await _lineService.GetLineByBuildingId(buildingId,lastUpdatedAt);
+            var lineList = await _lineService.GetLineByBuildingId(buildingId,lastUpdatedAt, isDeleted);
             return Ok(lineList);
         }
         
         //Get Lines handled by Integrator
         [HttpGet("Integrator/{integratorId}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetIntegratorLines(string integratorId,DateTimeOffset? lastUpdatedAt)
+        public async Task<IActionResult> GetIntegratorLines(string integratorId,DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var lineList = await _lineService.GetLineByIntegratorId(integratorId,lastUpdatedAt);
+            var lineList = await _lineService.GetLineByIntegratorId(integratorId,lastUpdatedAt, isDeleted);
             return Ok(lineList);
         }
     }

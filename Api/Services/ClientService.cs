@@ -31,9 +31,9 @@ namespace khi_robocross_api.Services
             await _clientRepository.CreateAsync(inputClient);
         }
 
-        public async ValueTask<IEnumerable<ClientResponse>> GetAllClients(DateTimeOffset? lastUpdatedAt)
+        public async ValueTask<IEnumerable<ClientResponse>> GetAllClients(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var clientTask = await _clientRepository.GetAsync(lastUpdatedAt);
+            var clientTask = await _clientRepository.GetAsync(lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<ClientResponse>>(clientTask.ToList());
         }
 

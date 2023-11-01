@@ -22,16 +22,27 @@ namespace domain.Repositories
 		public async Task CreateAsync(Line line) =>
 			await _line.InsertOneAsync(line);
 
-		public async Task<IEnumerable<Line>> GetAsync(DateTimeOffset? lastUpdatedAt)
+		public async Task<IEnumerable<Line>> GetAsync(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 		{
 			if (lastUpdatedAt != null)
 			{
 				var filter = Builders<Line>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+				if (isDeleted == false)
+				{
+					filter &= Builders<Line>.Filter.Eq(x => x.IsDeleted , false);
+				}
 				return await _line.Find(filter).SortByDescending(x => x.LastUpdatedAt).ToListAsync();
 			}
 			else
 			{
-				return await _line.Find(_ => true).SortByDescending(l => l.LastUpdatedAt).ToListAsync();	
+				if (isDeleted == null || isDeleted == true)
+				{
+					return await _line.Find(_ => true).SortByDescending(l => l.LastUpdatedAt).ToListAsync();
+				}
+				else
+				{
+					return await _line.Find(x=> x.IsDeleted == false).SortByDescending(l => l.LastUpdatedAt).ToListAsync();
+				}	
 			}
 		}
 
@@ -48,33 +59,51 @@ namespace domain.Repositories
 			return await _line.Find(filter).SortByDescending(l  => l.LastUpdatedAt).ToListAsync();
 		}
 
-		public async Task<IEnumerable<Line>> GetAsyncByBuildingId(string buildingId, DateTimeOffset? lastUpdatedAt)
+		public async Task<IEnumerable<Line>> GetAsyncByBuildingId(string buildingId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 		{
 			if (lastUpdatedAt != null)
 			{
 				var filter = Builders<Line>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
 				filter &= Builders<Line>.Filter.Eq(x => x.BuildingId, buildingId);
+				if (isDeleted == false)
+				{
+					filter &= Builders<Line>.Filter.Eq(x => x.IsDeleted , false); 
+				}
 				return await _line.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
 			}
 			else
 			{
-				return await _line.Find(x => x.BuildingId == buildingId).SortByDescending(l => l.LastUpdatedAt)
+				var filter = Builders<Line>.Filter.Eq(x => x.BuildingId, buildingId);
+				if (isDeleted == null || isDeleted == true)
+				{
+					filter &= Builders<Line>.Filter.Eq(x => x.IsDeleted , false);
+				}
+				return await _line.Find(filter).SortByDescending(l => l.LastUpdatedAt)
                 				.ToListAsync();
 			}
 			
 		}
 
-		public async Task<IEnumerable<Line>> GetAsyncByIntegratorId(string integratorId, DateTimeOffset? lastUpdatedAt)
+		public async Task<IEnumerable<Line>> GetAsyncByIntegratorId(string integratorId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 		{
 			if (lastUpdatedAt != null)
 			{
 				var filter = Builders<Line>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
 				filter &= Builders<Line>.Filter.Eq(x => x.IntegratorId, integratorId);
+				if (isDeleted == false)
+				{
+					filter &= Builders<Line>.Filter.Eq(x => x.IsDeleted , false); 
+				}
 				return await _line.Find(filter).SortByDescending(b => b.LastUpdatedAt).ToListAsync();
 			}
 			else
 			{
-				return await _line.Find(x => x.IntegratorId == integratorId).SortByDescending(l => l.LastUpdatedAt)
+				var filter = Builders<Line>.Filter.Eq(x => x.IntegratorId, integratorId);
+				if (isDeleted == null || isDeleted == true)
+				{
+					filter &= Builders<Line>.Filter.Eq(x => x.IsDeleted , false);
+				}
+				return await _line.Find(filter).SortByDescending(l => l.LastUpdatedAt)
 					.ToListAsync();
 			}
 		}
