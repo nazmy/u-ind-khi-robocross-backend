@@ -14,6 +14,8 @@ namespace Domain.Dto
         public string PhoneNumber { get; set; }
         
         public ClientTypeEnum ClientType { get; set; }
+        
+        public string[]? Tags { get; set; }
     }
 }
 

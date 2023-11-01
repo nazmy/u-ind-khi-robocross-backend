@@ -34,11 +34,6 @@ namespace khi_robocross_api.Services
                 foreach (SceneObject sceneObject in sceneObjectList)
                 {
                     sceneObject.Id = ObjectId.GenerateNewId().ToString();
-                    List<Robot> robotList = sceneObject.robots;
-                    foreach (Robot robot in robotList)
-                    {
-                        robot.Id = ObjectId.GenerateNewId().ToString();
-                    }
                 }
             }
 
@@ -107,12 +102,6 @@ namespace khi_robocross_api.Services
                 {
                     if (String.IsNullOrEmpty(sceneObjectItem.Id))
                         sceneObjectItem.Id = ObjectId.GenerateNewId().ToString();
-
-                    foreach (Robot robotItem in sceneObjectItem.robots)
-                    {
-                        if (String.IsNullOrEmpty(robotItem.Id))
-                            robotItem.Id = ObjectId.GenerateNewId().ToString();
-                    }
                 }
             }
             line.UpdateChangesTime(line, _httpContextAccessor.HttpContext.User.Identity.Name);

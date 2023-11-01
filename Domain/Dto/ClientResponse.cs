@@ -16,9 +16,9 @@ namespace Domain.Dto
         
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public string ClientType { get; set; }
+        
+        public string[]? Tags { get; set; }
 	}
-
-
 }
 
 

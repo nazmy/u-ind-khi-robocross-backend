@@ -71,10 +71,6 @@ namespace khi_robocross_api.AutoMapperProfiles
 			CreateMap<SceneObject, CreateSceneObjectInput>().ReverseMap();
 			CreateMap<SceneObject, UpdateSceneObjectInput>().ReverseMap();
 			
-			CreateMap<Robot, RobotResponse>().ReverseMap();
-			CreateMap<Robot, CreateRobotInput>().ReverseMap();
-			CreateMap<Robot, UpdateRobotInput>().ReverseMap();
-
 			CreateMap<AppRole, RoleResponse>();
 
 			CreateMap<AppUser, UserResponse>().ForMember(

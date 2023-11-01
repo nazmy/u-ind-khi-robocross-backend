@@ -6,7 +6,7 @@ public class UpdateUnitInput
     
     public string Name { get; set; }
     
-    public string[] Pics { get; set; }
+    public string[] Plcs { get; set; }
     
     public List<UpdateSceneObjectInput> SceneObjects { get; set;}
 }

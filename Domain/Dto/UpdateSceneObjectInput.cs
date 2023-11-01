@@ -1,3 +1,7 @@
+using System.Text.Json.Serialization;
+using Domain.Helper;
+using MongoDB.Bson;
+
 namespace domain.Dto;
 
 public class UpdateSceneObjectInput
@@ -6,5 +10,24 @@ public class UpdateSceneObjectInput
     
     public string LibraryUrl { get; set; }
     
-    public List<UpdateRobotInput> Robots { get; set; }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public SceneObjectTypeEnum SceneObjectType { get; set; }
+    
+    public string? Manufacturer { get; set; }
+
+    public string? ModelNumber { get; set; }
+
+    public string? SerialNumber { get; set; }
+
+    public DateTimeOffset? ManufacturedDate { get; set; }
+    
+    public DateTimeOffset? InstallationDate { get; set; }
+    
+    public int? OperatingStatus { get; set; }
+    
+    public Single? PowerConsumption { get; set; }
+    
+    public string? TransformState { get; set; }
+    
+    public string? ComponentOverride { get; set; }
 }

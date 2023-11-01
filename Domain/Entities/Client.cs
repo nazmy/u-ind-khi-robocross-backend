@@ -23,6 +23,9 @@ namespace Domain.Entities
         
         [BsonElement("clientType")]
         public ClientTypeEnum ClientType { get; set; } = 0;
+        
+        [BsonElement("tags")]
+        public string[]? tags { get; set; } = null!;
     }
 }
 

@@ -6,7 +6,7 @@ public class UnitResponse
     
     public string Name { get; set; }
     
-    public string[] Pics { get; set; }
+    public string[] Plcs { get; set; }
     
     public List<SceneObjectResponse> SceneObjects { get; set;}
 }
