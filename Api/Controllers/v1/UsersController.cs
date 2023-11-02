@@ -21,13 +21,13 @@ namespace khi_robocross_api.Controllers.v1
     [Route("api/v1/[controller]")]
     [ApiController]
     // [Authorize]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
 	{
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private IPasswordHasher<AppUser> _passwordHasher;
 
-        public UserController(UserManager<AppUser> userManager,
+        public UsersController(UserManager<AppUser> userManager,
             IMapper mapper,
             IPasswordHasher<AppUser> passwordHasher)
         {
@@ -50,7 +50,7 @@ namespace khi_robocross_api.Controllers.v1
             else
             {
                appUserList = _userManager.Users
-                   .OrderByDescending(user =>user.LastUpdatedAt) 
+                  // .OrderByDescending(user =>user.LastUpdatedAt) 
                    .ToList();
             }
             
