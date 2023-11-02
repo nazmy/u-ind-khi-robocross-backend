@@ -215,10 +215,10 @@ namespace khi_robocross_api.Controllers.v1
             }
         }
         
-        [HttpPost("{id:length(24)}/Enabled")]
+        [HttpPatch("{id:length(24)}/Status")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Enabled(string id)
+        public async Task<IActionResult> Enabled(string id,[FromBody] string status)
         {
             AppUser appUser = await _userManager.FindByIdAsync(id);
             
@@ -227,44 +227,42 @@ namespace khi_robocross_api.Controllers.v1
                 return NotFound($"User with Id = {id} not found");
             }
 
-            IdentityResult result =
-                await _userManager.SetLockoutEndDateAsync(appUser, null);
+            IdentityResult result;
             
-            if (result.Succeeded)
+            if (String.Equals("ENABLED",status.ToUpper()))
             {
-                return Ok($"User with Id = {id} is unlocked");
+                 result =
+                    await _userManager.SetLockoutEndDateAsync(appUser, null);
+                
+                 if (result.Succeeded)
+                 {
+                     return Ok($"User with Id = {id} is enabled");
+                 }
+                 else
+                 {
+                     return Problem($"Error in enabling User with Id = {id}");
+                 }
+                 
+            }else if (String.Equals("DISABLED",status.ToUpper()))
+            {
+                 result =
+                    await _userManager.SetLockoutEndDateAsync(appUser, DateTimeOffset.Now.AddYears(1));
+                 
+                 if (result.Succeeded)
+                 {
+                     return Ok($"User with Id = {id} is disabled");
+                 }
+                 else
+                 {
+                     return Problem($"Error in disabling User with Id = {id}");
+                 }
             }
             else
             {
-                return Problem($"Error in unlocking User with Id = {id}");
+                return BadRequest($"Wrong Status, Status should be Enabled or Disabled");
             }
         }
         
-        [HttpPost("{id:length(24)}/Disabled")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        public async Task<IActionResult> Disabled(string id)
-        {
-            AppUser appUser = await _userManager.FindByIdAsync(id);
-            
-            if (appUser is null)
-            {
-                return NotFound($"User with Id = {id} not found");
-            }
-
-            IdentityResult result =
-                await _userManager.SetLockoutEndDateAsync(appUser, DateTimeOffset.Now.AddYears(1));
-            
-            if (result.Succeeded)
-            {
-                return Ok($"User with Id = {id} is locked");
-            }
-            else
-            {
-                return Problem($"Error in locked User with Id = {id}");
-            }
-        }
-
         [HttpDelete("{id:length(24)}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
