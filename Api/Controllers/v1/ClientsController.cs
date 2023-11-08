@@ -150,9 +150,9 @@ namespace khi_robocross_api.Controllers
         //Client's compound
         [HttpGet("{id}/Compounds")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetClientCompounds(string clientId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
+        public async Task<IActionResult> GetClientCompounds(string id, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var compoundList = await _compoundService.GetCompoundByClientId(clientId, lastUpdatedAt, isDeleted);
+            var compoundList = await _compoundService.GetCompoundByClientId(id, lastUpdatedAt, isDeleted);
             return Ok(compoundList);
         }
     }
