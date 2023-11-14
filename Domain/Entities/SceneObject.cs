@@ -34,6 +34,9 @@ public class SceneObject
     [BsonElement("installationDate")]
     public DateTimeOffset InstallationDate { get; set; }
     
+    [BsonElement("operatingHours")]
+    public long OperatingHours { get; set; }
+    
     [BsonElement("operatingStatus")]
     public int OperatingStatus { get; set; }
     
