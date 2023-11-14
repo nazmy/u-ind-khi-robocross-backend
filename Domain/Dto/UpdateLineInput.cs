@@ -16,6 +16,8 @@ namespace Domain.Dto
 
         public string Description { get; set; }
         
+        public string ThumbnailUrl{ get; set; }
+        
         public string ScannedSceneGLBUrl{ get; set; }
         
         public LineStatusEnum Status { get; set; }

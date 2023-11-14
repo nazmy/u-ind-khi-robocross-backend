@@ -21,10 +21,13 @@ namespace Domain.Entities
 
         [BsonElement("description")]
         public string Description { get; set; } = null!;
+        
+        [BsonElement("thumbnailUrl")]
+        public string ThumbnailUrl { get; set; } = null!;
 
         [BsonElement("scannedSceneGLBUrl")]
         public string ScannedSceneGLBUrl { get; set; } = null!;
-
+	
         [BsonElement("status")]
         public LineStatusEnum Status { get; set; }
 
