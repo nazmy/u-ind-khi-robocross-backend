@@ -116,14 +116,14 @@ namespace khi_robocross_api.Controllers.v1
         //Get Building by Compound Id
         [HttpGet("{id}/buildings")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetCompoundBuildings(string compoundId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
+        public async Task<IActionResult> GetCompoundBuildings(string id, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var buildingList = await _buildingService.GetBuildingByCompoundId(compoundId, lastUpdatedAt, isDeleted);
+            var buildingList = await _buildingService.GetBuildingByCompoundId(id, lastUpdatedAt, isDeleted);
             return Ok(buildingList);
         }
         
         //Client's compound
-        [HttpGet("Client/{id}")]
+        [HttpGet("Client/{clientId}")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetClientCompounds(string clientId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
