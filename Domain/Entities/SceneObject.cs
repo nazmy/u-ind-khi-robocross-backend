@@ -10,6 +10,9 @@ public class SceneObject
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
     
+    [BsonElement("name")]
+    public string Name { get; set; } = null!;
+    
     [BsonElement("libraryUrl")]
     public string LibraryUrl { get; set; } = null!;
     

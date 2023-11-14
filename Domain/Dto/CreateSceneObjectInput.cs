@@ -7,6 +7,8 @@ namespace domain.Dto;
 
 public class CreateSceneObjectInput
 {
+    public string Name { get; set; }
+    
     public string LibraryUrl { get; set; }
     
     [JsonConverter(typeof(JsonStringEnumConverter))]
