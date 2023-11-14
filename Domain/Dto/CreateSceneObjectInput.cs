@@ -19,6 +19,8 @@ public class CreateSceneObjectInput
     public string? ModelNumber { get; set; }
 
     public string? SerialNumber { get; set; }
+    
+    public long? OperatingHours { get; set; }
 
     public DateTimeOffset? ManufacturedDate { get; set; }
     

@@ -24,6 +24,8 @@ public class SceneObjectResponse
     
     public DateTimeOffset? InstallationDate { get; set; }
     
+    public long? OperatingHours { get; set; }
+    
     public int? OperatingStatus { get; set; }
     
     public Single? PowerConsumption { get; set; }
