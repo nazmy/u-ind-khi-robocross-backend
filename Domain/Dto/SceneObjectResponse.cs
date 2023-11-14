@@ -7,6 +7,8 @@ public class SceneObjectResponse
 {
     public string? Id { get; set; }
     
+    public string Name { get; set; }
+    
     public string LibraryUrl { get; set; }
     
     [JsonConverter(typeof(JsonStringEnumConverter))]
