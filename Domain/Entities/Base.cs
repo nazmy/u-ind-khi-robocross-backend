@@ -25,12 +25,14 @@ public class Base
     public void CreateChangesTime<T>(T entity, string username)
     {
         CreatedAt = DateTimeOffset.UtcNow;
-        CreatedBy = String.IsNullOrEmpty(username) ? "creator" : username;
+        CreatedBy = String.IsNullOrEmpty(username) ? "system" : username;
+        LastUpdatedAt = DateTimeOffset.UtcNow;
+        LastUpdatedBy = String.IsNullOrEmpty(username) ? "system" : username;
     }
 
     public void UpdateChangesTime<T>(T entity, string username)
     {
         LastUpdatedAt = DateTimeOffset.UtcNow;
-        LastUpdatedBy = String.IsNullOrEmpty(username) ? "updater" : username;
+        LastUpdatedBy = String.IsNullOrEmpty(username) ? "system" : username;
     }
 }

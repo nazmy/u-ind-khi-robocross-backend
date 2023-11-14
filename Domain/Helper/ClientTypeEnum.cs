@@ -7,5 +7,7 @@ public enum ClientTypeEnum
         [EnumMember(Value = "Industry")]
         Industry,  
         [EnumMember(Value = "Service")]
-        Service
+        Service,
+        [EnumMember(Value = "SIer")]
+        SIer,
 }
