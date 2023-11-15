@@ -28,6 +28,12 @@ public class SceneObject
     [BsonElement("serialNumber")]
     public string SerialNumber { get; set; } = null!;
     
+    [BsonElement("lastMaintenanceDate")]
+    public DateTimeOffset LastMaintenanceDate { get; set; }
+    
+    [BsonElement("nextMaintenanceDate")]
+    public DateTimeOffset NextMaintenanceDate { get; set; }
+    
     [BsonElement("manufacturedDate")]
     public DateTimeOffset ManufacturedDate { get; set; }
     
