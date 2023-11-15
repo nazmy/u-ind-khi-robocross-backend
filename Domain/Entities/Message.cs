@@ -33,7 +33,7 @@ public class Message : Base
     
     public Vector3[] Normals { get; set; }
     
-    public string CameraState { get; set; }
+    public CameraState? CameraState { get; set; }
     
     public string[] AttachmentUrls { get; set; }
 
