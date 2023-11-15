@@ -20,6 +20,10 @@ public class SceneObjectResponse
 
     public string? SerialNumber { get; set; }
 
+    public DateTimeOffset? LastMaintenanceDate { get; set; }
+    
+    public DateTimeOffset? NextMaintenanceDate { get; set; }
+    
     public DateTimeOffset? ManufacturedDate { get; set; }
     
     public DateTimeOffset? InstallationDate { get; set; }

@@ -20,6 +20,10 @@ public class UpdateSceneObjectInput
     public string? ModelNumber { get; set; }
 
     public string? SerialNumber { get; set; }
+    
+    public DateTimeOffset? LastMaintenanceDate { get; set; }
+    
+    public DateTimeOffset? NextMaintenanceDate { get; set; }
 
     public DateTimeOffset? ManufacturedDate { get; set; }
     
