@@ -20,6 +20,7 @@ using domain.Repositories;
 using domain.Repositories.Config;
 using domain.Repositories.Manager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -43,6 +44,11 @@ sp.GetRequiredService<IOptions<RobocrossDatabaseSettings>>().Value);
 builder.Services.AddSingleton<IMongoClient>(s =>
     new MongoClient(connectionString));
 
+builder.Services.Configure<FormOptions>(options =>
+{
+    // Set the limit to 128 MB
+    options.MultipartBodyLengthLimit = 128 * 1024;
+});
 
 builder.Services.AddIdentity<AppUser, AppRole>(options =>
         {
@@ -186,6 +192,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddHttpContextAccessor();
+
 
 // builder.Services.AddCors(options =>
 // {
