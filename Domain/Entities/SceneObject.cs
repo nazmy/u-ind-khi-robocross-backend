@@ -16,6 +16,9 @@ public class SceneObject
     [BsonElement("libraryUrl")]
     public string LibraryUrl { get; set; } = null!;
     
+    [BsonElement("libraryAssetId")]
+    public string LibraryAssetId { get; set; } = null!;
+    
     [BsonElement("sceneObjectType")]
     public SceneObjectTypeEnum SceneObjectType { get; set; }
 

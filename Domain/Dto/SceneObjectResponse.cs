@@ -12,6 +12,8 @@ public class SceneObjectResponse
     
     public string LibraryUrl { get; set; }
     
+    public string LibraryAssetId { get; set; }
+    
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public string SceneObjectType { get; set; }
     
