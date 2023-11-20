@@ -36,6 +36,9 @@ public class AssetsController : ControllerBase
     }
 
     [HttpPost("Collection/{collectionName}")] 
+    [DisableRequestSizeLimit, 
+     RequestFormLimits(MultipartBodyLengthLimit = 134217728, //128MB
+         ValueLengthLimit = int.MaxValue)]
     [ProducesResponseType(201)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> Post([FromForm] IFormFile file, string collectionName)

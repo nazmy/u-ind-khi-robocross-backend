@@ -47,7 +47,7 @@ builder.Services.AddSingleton<IMongoClient>(s =>
 builder.Services.Configure<FormOptions>(options =>
 {
     // Set the limit to 128 MB
-    options.MultipartBodyLengthLimit = 128 * 1024;
+    options.MultipartBodyLengthLimit = 134217728;
 });
 
 builder.Services.AddIdentity<AppUser, AppRole>(options =>

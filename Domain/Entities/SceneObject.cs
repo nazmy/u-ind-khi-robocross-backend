@@ -50,7 +50,7 @@ public class SceneObject
     public Single PowerConsumption { get; set; }
     
     [BsonElement("transformState")]
-    public string? TransformState { get; set; }
+    public TransformState? TransformState { get; set; }
     
     [BsonElement("componentOverride")]
     public string? ComponentOverride { get; set; }

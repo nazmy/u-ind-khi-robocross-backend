@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Domain.Entities;
 using MongoDB.Bson;
 
 namespace domain.Dto;
@@ -34,7 +35,7 @@ public class SceneObjectResponse
     
     public Single? PowerConsumption { get; set; }
     
-    public string? TransformState { get; set; }
+    public TransformState? TransformState { get; set; }
     
     public string? ComponentOverride { get; set; }
 }

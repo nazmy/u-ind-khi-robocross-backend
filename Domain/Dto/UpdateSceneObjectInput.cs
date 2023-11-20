@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Domain.Entities;
 using Domain.Helper;
 using MongoDB.Bson;
 
@@ -35,7 +36,7 @@ public class UpdateSceneObjectInput
     
     public Single? PowerConsumption { get; set; }
     
-    public string? TransformState { get; set; }
+    public TransformState? TransformState { get; set; }
     
     public string? ComponentOverride { get; set; }
 }
