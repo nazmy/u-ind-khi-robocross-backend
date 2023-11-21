@@ -15,7 +15,7 @@ public interface IAssetManagerService
 
     Task DownloadFile(string collectionName, string fileName, FileStream fileStream);
     
-    Task UpdateFile(UpdateAssetInput updateAssetInput, String collectionName);
+    Task UpdateFile(UpdateAssetInput updateAssetInput, String collectionName, string assetName);
     
     Task<bool> UploadFileToCollection(string collectionName, string filename, FileStream fileStream, IDictionary<string,string> metadata);
     

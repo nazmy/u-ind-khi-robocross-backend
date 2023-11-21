@@ -166,8 +166,12 @@ public class AssetManagerService : IAssetManagerService
         }
     }
 
-    public async Task UpdateFile(UpdateAssetInput updateAssetInput, string collectionName)
+    public async Task UpdateFile(UpdateAssetInput updateAssetInput, string collectionName, string assetName)
     {
+
+        IDictionary<string, string> assetMetadata;
+        assetMetadata = PopulateAssetMetadata(updateAssetInput);
+        
         try
         {
             if (updateAssetInput.Metadata != null)
@@ -179,18 +183,42 @@ public class AssetManagerService : IAssetManagerService
                         throw new ArgumentException(
                             $"Metadata key '{metadataItem.Key}' is invalid. It should only contains alphanumeric characters");
                     }
+                    else
+                    {
+                        assetMetadata.Add(metadataItem.Key,metadataItem.Value);
+                    }
                 }
             }
 
             BlobContainerClient containerClient =
                 _blobServiceClient.GetBlobContainerClient(collectionName);
-            BlobClient blobClient = containerClient.GetBlobClient(updateAssetInput.Name);
-            await blobClient.SetMetadataAsync(updateAssetInput.Metadata);
+            BlobClient blobClient = containerClient.GetBlobClient(assetName);
+            await blobClient.SetMetadataAsync(assetMetadata);
         }
         catch (RequestFailedException rex)
         {
             throw rex;
         }
+    }
+
+    private IDictionary<string, string> PopulateAssetMetadata(UpdateAssetInput updateAssetInput)
+    {
+        IDictionary<string, string> assetMetadata = new Dictionary<string, string>();
+        assetMetadata.Add("Id",updateAssetInput.Id);
+        assetMetadata.Add("GlbModelUrl",updateAssetInput.GlbModelUrl);
+        assetMetadata.Add("PngThumbnailUrl",updateAssetInput.PngThumbnailUrl);
+        assetMetadata.Add("ComponentJson",updateAssetInput.ComponentJson);
+        assetMetadata.Add("Tags",updateAssetInput.Tags);
+        assetMetadata.Add("SlotsCompatibleLibraryIds",updateAssetInput.SlotsCompatibleLibraryIds);
+        assetMetadata.Add("ConstantSlotCount",updateAssetInput.ConstantSlotCount.ToString());
+        
+        assetMetadata.Add("IsDeleted",updateAssetInput.IsDeleted.ToString());
+        assetMetadata.Add("CreatedAt",updateAssetInput.CreatedAt.ToString());
+        assetMetadata.Add("CreatedBy",updateAssetInput.CreatedBy);
+        assetMetadata.Add("UpdatedAt",updateAssetInput.LastUpdatedAt.ToString());
+        assetMetadata.Add("UpdatedBy",updateAssetInput.LastUpdatedBy);
+
+        return assetMetadata;
     }
 
     public async Task DeleteFile(string collectionName, string fileName)

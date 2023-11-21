@@ -48,7 +48,6 @@ public class AssetsController : ControllerBase
         try
         {
             await file.CopyToAsync(fileStream);
-
             var content =
                 await _assetManagerService.UploadFileToCollection(collectionName, file.FileName, fileStream, null);
             return Created("OK", $"Asset {file.FileName} has been uploaded successfully");
@@ -114,14 +113,14 @@ public class AssetsController : ControllerBase
 
     }
     
-    [HttpPut("Collection/{collectionName}")]
+    [HttpPut("Collection/{collectionName}/Asset/{assetName}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> UpdateMetada(UpdateAssetInput updateAssetInput, string collectionName)
+    public async Task<IActionResult> UpdateMetada(UpdateAssetInput updateAssetInput, string collectionName, string assetName)
     {
         try
         {
-            await _assetManagerService.UpdateFile(updateAssetInput,collectionName);
+            await _assetManagerService.UpdateFile(updateAssetInput,collectionName, assetName);
             return NoContent();
         }
         catch (ArgumentException aex)
@@ -134,7 +133,7 @@ public class AssetsController : ControllerBase
             _logger.LogError($"Error on V1 Update Asset API :{rex.StackTrace}");
             if (rex.Status == 404)
             {
-                var errorString = $"The blob {updateAssetInput.Name} in {collectionName} doesn't exist";
+                var errorString = $"The blob {assetName} in {collectionName} doesn't exist";
                 _logger.LogError(errorString);
                 return NotFound(errorString);
             }
