@@ -13,6 +13,8 @@ public class UpdateSceneObjectInput
     
     public string LibraryUrl { get; set; }
     
+    public string LibraryAssetId { get; set; }
+    
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public SceneObjectTypeEnum SceneObjectType { get; set; }
     
