@@ -487,3 +487,5 @@ local.properties
 *.meta
 .terraform
 terraform.tfvars
+
+appsettings.Development.json
