@@ -53,6 +53,16 @@ variable "cosmo_db_connection_string" {
   description = "Azure cosmo DB connection string"
 }
 
+//temp for irex
+variable "azure_irex_mongodb_databasename" {
+  description = "database name of azure cosmo mongo database for Irex"
+  default     = "Khirobocross-irex"
+}
+
+variable "cosmo_irex_db_connection_string" {
+  description = "Azure cosmo DB connection string for Irex"
+}
+
 variable "khirobocross_storage_connection_string" {
   description = "Azure KHI Robocross Storage connection string"
 }
