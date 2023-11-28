@@ -103,6 +103,7 @@ namespace khi_robocross_api.Controllers.v1
                 SecurityStamp = DateTimeOffset.UtcNow.ToString(),
                 ConcurrencyStamp = DateTimeOffset.UtcNow.ToString(),
                 Roles = roleId,
+                UserName = newUser.EmailAddress,
                 Fullname = newUser.Fullname,
                 ClientId = String.IsNullOrEmpty(newUser.ClientId) ? null : newUser.ClientId
             };
