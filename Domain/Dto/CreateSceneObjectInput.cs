@@ -40,4 +40,6 @@ public class CreateSceneObjectInput
     public TransformState? TransformState { get; set; }
     
     public string? ComponentOverride { get; set; }
+    
+    public string[]? ChildrenIds { get; set; }
 }

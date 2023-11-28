@@ -57,4 +57,7 @@ public class SceneObject
     
     [BsonElement("componentOverride")]
     public string? ComponentOverride { get; set; }
+    
+    [BsonElement("childrenIds")]
+    public string[]? ChildrenIds { get; set; }
 }
