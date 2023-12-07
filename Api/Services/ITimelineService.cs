@@ -10,7 +10,7 @@ namespace khi_robocross_api.Services
 		 ValueTask<IEnumerable<TimelineResponse>> GetAllTimelines(DateTimeOffset? lastUpdatedAt,bool? isDeleted);
 		 ValueTask<TimelineResponse> GetTimelineById(String id);
          ValueTask<IEnumerable<TimelineResponse>> GetTimelineByUnitId(String unitId,DateTimeOffset? lastUpdatedAt,bool? isDeleted);
-         Task AddTimeline(Timeline inputTimeline);
+         ValueTask<Timeline> AddTimeline(CreateTimelineInput createTimelineInput);
          Task UpdateTimeline(string id, UpdateTimelineInput updatedTimeline);
          Task RemoveTimeline(string id);
 	}

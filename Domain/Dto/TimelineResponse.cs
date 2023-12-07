@@ -9,8 +9,10 @@ namespace domain.Dto
 
         public string Name { get; set; }
 
-        public string[] Details { get; set; }
-
+        public String[]? TimelineDetailsIds  { get; set; }
+        
+        public TimelineDetailsResponse[]? TimelineDetails  { get; set; }
+        
         public string UnitId { get; set; }
     }
 }

@@ -145,6 +145,7 @@ builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
 builder.Services.AddScoped<ILineRepository, LineRepository>();
 builder.Services.AddScoped<IMessageRepository,  MessageRepository>();
 builder.Services.AddScoped<ITimelineRepository,  TimelineRepository>();
+builder.Services.AddScoped<ITimelineDetailsRepository,  TimelineDetailsRepository>();
 
 builder.Services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
 

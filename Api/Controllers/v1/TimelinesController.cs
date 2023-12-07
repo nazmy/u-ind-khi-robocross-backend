@@ -63,10 +63,9 @@ namespace khi_robocross_api.Controllers.v1
             if (newTimeline == null)
                 return BadRequest(ModelState);
             
-            var timeline = _mapper.Map<Timeline>(newTimeline);
-            await _timelineService.AddTimeline(timeline);
+            var timeline = _timelineService.AddTimeline(newTimeline);
 
-            return CreatedAtAction(nameof(Get), new { id = timeline.Id }, timeline);
+            return CreatedAtAction(nameof(Get), new { id = timeline.Result.Id }, timeline.Result);
         }
 
         [HttpPut("{id:length(24)}")]

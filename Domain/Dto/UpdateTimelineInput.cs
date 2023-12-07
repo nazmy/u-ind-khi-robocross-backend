@@ -1,4 +1,5 @@
 ﻿using System;
+using domain.Dto;
 using GeoJSON.Net.Geometry;
 
 namespace Domain.Dto
@@ -7,9 +8,9 @@ namespace Domain.Dto
 	{
         public string Id { get; set; }
 
-        public string Name { get; set; }
-
-        public string[] Details { get; set; }
+        public String[]? TimelineDetailsIds  { get; set; }
+		
+        public CreateTimelineDetailsInput[]? TimelineDetails  { get; set; }
         
         public string UnitId { get; set; }
     }

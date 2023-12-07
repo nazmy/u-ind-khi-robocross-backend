@@ -101,8 +101,24 @@ namespace khi_robocross_api.AutoMapperProfiles
 			CreateMap<WriteModelResponse, Message>().ReverseMap();
 			CreateMap<CreateTimelineInput, Timeline>();
 			CreateMap<TimelineResponse, Timeline>().ReverseMap();
+			CreateMap<TimelineDetails, TimelineDetailsResponse>().ReverseMap();
 			CreateMap<UpdateTimelineInput, Timeline>().ReverseMap();
+			CreateMap<CreateRobotArmTimelineClipInput, RobotArmTimelineClip>()
+				.ForMember(dest => dest.Type, o => o.MapFrom(src => src.Type))
+				.ForMember(dest => dest.StartTime, o => o.MapFrom(src => src.StartTime))
+				.ForMember(dest => dest.EndTime, o => o.MapFrom(src => src.EndTime))
+				.ForMember(dest => dest.ObjectAction, o => o.MapFrom(src => src.ObjectAction))
+				.ForMember(dest => dest.DestinationObjectId, o => o.MapFrom(src => src.DestinationObjectId))
+				.ForMember(dest => dest.HandlingObjectId, o => o.MapFrom(src => src.HandlingObjectId));
+			
+			CreateMap<CreatetimelineTrack, TimelineTrack>()
+				.ForMember(dest => dest.sceneObjectId, o => o.MapFrom(src => src.sceneObjectId))
+				.ForMember(dest => dest.Clips, o => o.MapFrom(src => src.Clips));
 
+
+			CreateMap<BulkTimelineDetailsResponse, TimelineDetails>().ReverseMap();
+			CreateMap<WriteModelResponse, TimelineDetails>().ReverseMap();
+			
 		}
 	}
 }
