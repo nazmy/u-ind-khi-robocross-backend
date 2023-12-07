@@ -8,7 +8,9 @@ namespace domain.Dto
 	{
 		public string Name { get; set; }
 		
-		public String[] Details  { get; set; }
+		public String[]? TimelineDetailsIds  { get; set; }
+		
+		public CreateTimelineDetailsInput[]? TimelineDetails  { get; set; }
 		
         public string UnitId { get; set; }
     }

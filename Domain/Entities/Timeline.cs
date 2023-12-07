@@ -12,9 +12,11 @@ public class Timeline : Base
     [BsonElement("name")]
     public string Name { get; set; }
     
-    [BsonElement("details")]
-    public string[] Details { get; set; }
-    
     [BsonElement("unitId")]
     public string UnitId { get; set; }
+    
+    [BsonElement("timelineDetailsIds")]
+    public string[] TimelineDetailsIds { get; set; }
+    
+  
 }

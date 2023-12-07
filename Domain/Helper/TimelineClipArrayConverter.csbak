@@ -1,0 +1,134 @@
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+using Domain.Entities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using JsonConverter = Newtonsoft.Json.JsonConverter;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
+
+namespace Domain.Helper;
+
+public class TimelineClipConverter : JsonConverter<ITimelineClip>
+{
+    private static readonly Lazy<IReadOnlyDictionary<string, Type>> LazyTypes = new(() => AppDomain
+        .CurrentDomain.GetAssemblies()
+        .SelectMany(asm => asm.GetTypes())
+        .Where(type => typeof(ITimelineClip).IsAssignableFrom(type))
+        .ToDictionary(type => type.Name, type => type));
+
+    private static readonly Lazy<IReadOnlyDictionary<string, IEnumerable<Action<object, JObject>>>> LazySetters
+        = new(() => LazyTypes.Value.Select(kvp => kvp.Value)
+            .ToDictionary<Type, string, IEnumerable<Action<object, JObject>>>(
+                type => type.Name,
+                type => Enumerable.Empty<Action<object, JObject>>()
+                    .Concat(type
+                        .GetFields(BindingFlags.Instance | BindingFlags.Public)
+                        .Select<FieldInfo, Action<object, JObject>>(fieldInfo => (value, jObject) =>
+                            fieldInfo.SetValue(value,
+                                jObject.GetValue(fieldInfo.Name)?.ToObject(fieldInfo.FieldType))))
+                    .Concat(type
+                        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                        .Select<PropertyInfo, Action<object, JObject>>(propertyInfo => (value, jObject) =>
+                            propertyInfo.SetValue(value,
+                                jObject.GetValue(propertyInfo.Name)?.ToObject(propertyInfo.PropertyType)))
+                    )
+                    .ToList()));
+
+    public override ITimelineClip? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var jsonDocument = JsonDocument.ParseValue(ref reader);
+        throw new NotImplementedException();
+    }
+
+
+    public override void Write(Utf8JsonWriter writer, ITimelineClip value, JsonSerializerOptions options)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void WriteJson(JsonWriter writer, ITimelineClip value, JsonSerializer serializer)
+    {
+        serializer.Serialize(writer, value);
+    }
+
+    public ITimelineClip ReadJson(
+        JsonReader reader, Type objectType, ITimelineClip existingValue, bool hasExistingValue,
+        JsonSerializer serializer)
+    {
+        return CreateTimelineClip(JObject.Load(reader));
+    }
+
+    internal static ITimelineClip CreateTimelineClip(JsonDocument jsonDocument)
+    {
+        var jsonNode = JsonNode.Parse(jsonDocument.ToString());
+    }
+
+    internal static ITimelineClip CreateTimelineClip(JObject jsonObject)
+    {
+        // Determine Concrete Type
+        var clipTypeName = jsonObject.GetValue("Type")?.Value<string>();
+        if (string.IsNullOrEmpty(clipTypeName))
+            return default;
+
+        // Create clip instance
+        LazyTypes.Value.TryGetValue(clipTypeName, out var clipType);
+        if (clipType == default)
+            return default;
+
+        // Get setters
+        LazySetters.Value.TryGetValue(clipTypeName, out var setters);
+        if (setters == default)
+            return default;
+
+        // Set field/property values from json
+        var value = FormatterServices.GetUninitializedObject(clipType);
+        foreach (var setter in setters)
+            setter(value, jsonObject);
+        return (ITimelineClip)value;
+    }
+}
+
+public class TimelineClipArrayConverter : JsonConverter 
+{
+    public override void WriteJson(JsonWriter writer, object[] array, JsonSerializer serializer)
+    {
+        var elementConverter = new TimelineClipConverter();
+        writer.WriteStartArray();
+        if (array is not null)
+            foreach (var value in array)
+                elementConverter.WriteJson(writer, (ITimelineClip) value, serializer);
+        writer.WriteEndArray();
+    }
+
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override bool CanConvert(Type objectType)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void WriteJson(JsonWriter writer, ITimelineClip[] array, JsonSerializer serializer)
+    {
+        var elementConverter = new TimelineClipConverter();
+        writer.WriteStartArray();
+        if (array is not null)
+            foreach (var value in array)
+                elementConverter.WriteJson(writer, value, serializer);
+        writer.WriteEndArray();
+    }
+
+    public override ITimelineClip[] ReadJson(
+        JsonReader reader, Type objectType, ITimelineClip[] existingValue, bool hasExistingValue,
+        JsonSerializer serializer)
+    {
+        return JArray.Load(reader)
+            .Select(jo => TimelineClipConverter.CreateTimelineClip((JObject)jo))
+            .ToArray();
+    }
+}

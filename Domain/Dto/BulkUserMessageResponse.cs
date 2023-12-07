@@ -4,11 +4,6 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Domain.Dto
 {
-    public class WriteModelWrapper<T>
-    {
-        public T Document { get; set; }
-    }
-    
     public class BulkUserMessageResponse
     {
         public string Id { get; set; }
