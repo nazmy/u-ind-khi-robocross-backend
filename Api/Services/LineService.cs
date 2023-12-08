@@ -11,12 +11,17 @@ namespace khi_robocross_api.Services
 	public class LineService : ILineService
 	{
         private readonly ILineRepository _lineRepository;
+        private readonly IBuildingRepository _buildingRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public LineService(ILineRepository lineRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+		public LineService(ILineRepository lineRepository,
+            IBuildingRepository buildingRepository,
+            IMapper mapper, 
+            IHttpContextAccessor httpContextAccessor)
 		{
             _lineRepository = lineRepository;
+            _buildingRepository = buildingRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -26,6 +31,9 @@ namespace khi_robocross_api.Services
             if (line == null)
                 throw new ArgumentException("Line input is invalid");
 
+            var building = await _buildingRepository.GetAsync(line.BuildingId);
+            line.ClientId = building?.ClientId;
+            
             List<Unit> unitList = line.Units;
             foreach (Unit unit in unitList)
             {

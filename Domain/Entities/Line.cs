@@ -39,6 +39,9 @@ namespace Domain.Entities
         
         [BsonElement("buildingId")]
         public string BuildingId { get; set; } = null!;
+        
+        [BsonElement("clientId")]
+        public string ClientId { get; set; } = null!;
     }
 }
 
