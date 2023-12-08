@@ -31,7 +31,9 @@ namespace Domain.Entities
 
         [BsonElement("compoundId")]
         public string CompoundId { get; set; }
-
+        
+        [BsonElement("clientId")]
+        public string ClientId { get; set; }
     }
 }
 
