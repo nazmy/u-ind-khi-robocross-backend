@@ -13,7 +13,7 @@ namespace Domain.Dto
 
         public string PicPhoneNumber { get; set; }
         
-        public string Address { get; set; }
+        public string? Address { get; set; }
         public Point Coordinates { get; set; }
     }
 }
