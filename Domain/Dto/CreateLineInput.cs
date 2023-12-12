@@ -23,7 +23,7 @@ namespace Domain.Dto
         
         public List<CreateUnitInput> Units { get; set; }
         
-        public string IntegratorId { get; set; }
+        public string? IntegratorId { get; set; }
 
         public string BuildingId { get; set; }
     }
