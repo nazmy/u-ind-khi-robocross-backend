@@ -35,7 +35,7 @@ namespace Domain.Entities
         public List<Unit> Units { get; set; } = new List<Unit>();
 
         [BsonElement("integratorId")]
-        public string IntegratorId { get; set; } = null!;
+        public string? IntegratorId { get; set; } = null!;
         
         [BsonElement("buildingId")]
         public string BuildingId { get; set; } = null!;
