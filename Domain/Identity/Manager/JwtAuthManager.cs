@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -17,6 +17,7 @@ public class JwtAuthManager : IJwtAuthManager
         private readonly ConcurrentDictionary<string, RefreshToken> _usersRefreshTokens;  // can store in a database or a distributed cache
         private readonly JwtTokenConfig _jwtTokenConfig;
         private readonly byte[] _secret;
+        private static JwtSecurityToken _currentJwtSecurityToken;
 
         public JwtAuthManager(JwtTokenConfig jwtTokenConfig)
         {
@@ -113,6 +114,11 @@ public class JwtAuthManager : IJwtAuthManager
                     },
                     out var validatedToken);
             return (principal, validatedToken as JwtSecurityToken);
+        }
+
+        public string GetJwtClaims(string token,string claimType)
+        {
+            return this.DecodeJwtToken(token).Item2.Claims.FirstOrDefault(x => x.Type == claimType)?.Value;
         }
 
         private static string GenerateRefreshTokenString()

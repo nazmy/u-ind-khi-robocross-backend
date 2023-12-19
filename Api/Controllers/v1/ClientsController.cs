@@ -12,7 +12,7 @@ namespace khi_robocross_api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    // [Authorize]
+    [Authorize]
     public class ClientsController : ControllerBase
 	{
 		private readonly IClientService _clientService;

@@ -10,6 +10,7 @@ namespace khi_robocross_api.Services
 		 ValueTask<IEnumerable<BuildingResponse>> GetAllBuildings(DateTimeOffset? lastUpdatedAt, bool? isDeleted);
 		 ValueTask<BuildingResponse> GetBuildingById(String id);
          ValueTask<IEnumerable<BuildingResponse>> GetBuildingByCompoundId(String compoundId,DateTimeOffset? lastUpdatedAt, bool? isDeleted);
+         ValueTask<IEnumerable<BuildingResponse>> Query(string search);
          Task AddBuilding(Building building);
          Task UpdateBuilding(string id, UpdateBuildingInput updatedBuilding);
          Task RemoveBuilding(string id);

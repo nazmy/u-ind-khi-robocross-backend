@@ -3,7 +3,9 @@ using AutoMapper;
 using domain.Dto;
 using Domain.Dto;
 using Domain.Entities;
+using domain.Identity;
 using domain.Repositories;
+using khi_robocross_api.Helper;
 using MongoDB.Bson;
 
 namespace khi_robocross_api.Services
@@ -14,24 +16,29 @@ namespace khi_robocross_api.Services
         private readonly IBuildingRepository _buildingRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILoggedInUser _loggedInUser;
 
 		public LineService(ILineRepository lineRepository,
             IBuildingRepository buildingRepository,
             IMapper mapper, 
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            ILoggedInUser loggedInUser)
 		{
             _lineRepository = lineRepository;
             _buildingRepository = buildingRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _loggedInUser = loggedInUser;
         }
 
         public async Task AddLine(Line line)
         {
             if (line == null)
                 throw new ArgumentException("Line input is invalid");
-
-            var building = await _buildingRepository.GetAsync(line.BuildingId);
+            
+            LoggedInUser loggedInUser = await _loggedInUser.GetLoggedInUser();
+            
+            var building = await _buildingRepository.GetAsync(loggedInUser,line.BuildingId);
             line.ClientId = building?.ClientId;
             
             List<Unit> unitList = line.Units;
@@ -45,7 +52,8 @@ namespace khi_robocross_api.Services
                 }
             }
 
-            line.CreateChangesTime(line, _httpContextAccessor.HttpContext.User.Identity.Name);
+            //TEMP: for create line, use the createdBy supply at the body payload
+            line.CreateChangesTime(line, line.CreatedBy);
             
             //validation goes here
             await _lineRepository.CreateAsync(line);
@@ -53,19 +61,22 @@ namespace khi_robocross_api.Services
 
         public async ValueTask<IEnumerable<LineResponse>> GetAllLines(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var lineTask = await _lineRepository.GetAsync(lastUpdatedAt, isDeleted);
+            LoggedInUser loggedInUser = await _loggedInUser.GetLoggedInUser();
+            var lineTask = await _lineRepository.GetAsync(loggedInUser,lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
 
         public async ValueTask<IEnumerable<LineResponse>> GetLineByBuildingId(string buildingId,DateTimeOffset? lastUpdatedAt, bool? isDeleted)
         {
-            var lineTask = await _lineRepository.GetAsyncByBuildingId(buildingId,lastUpdatedAt, isDeleted);
+            LoggedInUser loggedInUser = await _loggedInUser.GetLoggedInUser();
+            var lineTask = await _lineRepository.GetAsyncByBuildingId(loggedInUser, buildingId, lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
         
         public async ValueTask<IEnumerable<LineResponse>> GetLineByIntegratorId(string integratorId,DateTimeOffset? lastUpdatedAt,  bool? isDeleted)
         {
-            var lineTask = await _lineRepository.GetAsyncByIntegratorId(integratorId,lastUpdatedAt, isDeleted);
+            LoggedInUser loggedInUser = await _loggedInUser.GetLoggedInUser();
+            var lineTask = await _lineRepository.GetAsyncByIntegratorId(loggedInUser,integratorId,lastUpdatedAt, isDeleted);
             return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
 
@@ -73,9 +84,18 @@ namespace khi_robocross_api.Services
         {
             if (id == null)
                 throw new ArgumentException("Line Id is Invalid");
-
-            var lineTask = await _lineRepository.GetAsync(id);
+            
+            LoggedInUser loggedInUser = await _loggedInUser.GetLoggedInUser();
+            
+            var lineTask = await _lineRepository.GetAsync(loggedInUser,id);
             return _mapper.Map<LineResponse>(lineTask);
+        }
+        
+        public async ValueTask<IEnumerable<LineResponse>> Query(string search)
+        {
+            LoggedInUser loggedInUser = await _loggedInUser.GetLoggedInUser();
+            var lineTask = await _lineRepository.SearchAsync(loggedInUser,search);
+            return _mapper.Map<IEnumerable<LineResponse>>(lineTask.ToList());
         }
 
         public async Task RemoveLine(string id)
@@ -83,7 +103,7 @@ namespace khi_robocross_api.Services
             if (id == null)
                 throw new ArgumentException("Line Id is Invalid");
 
-            await _lineRepository.RemoveAsync(id,_httpContextAccessor.HttpContext.User.Identity.Name);
+            await _lineRepository.RemoveAsync(id,IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
         }
 
         public async Task UpdateLine(string id, UpdateLineInput updatedLine)
@@ -94,7 +114,8 @@ namespace khi_robocross_api.Services
             if (updatedLine == null)
                 throw new ArgumentException("Line Input is invalid");
             
-            var line = await _lineRepository.GetAsync(id);
+            LoggedInUser loggedInUser = await _loggedInUser.GetLoggedInUser();
+            var line = await _lineRepository.GetAsync(loggedInUser,id);
 
             if (line == null)
                 throw new KeyNotFoundException($"Line with Id = {id} not found");
@@ -112,7 +133,7 @@ namespace khi_robocross_api.Services
                         sceneObjectItem.Id = ObjectId.GenerateNewId().ToString();
                 }
             }
-            line.UpdateChangesTime(line, _httpContextAccessor.HttpContext.User.Identity.Name);
+            line.UpdateChangesTime(line, IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
             await _lineRepository.UpdateAsync(id, line);
         }
     }

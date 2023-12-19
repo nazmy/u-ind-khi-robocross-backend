@@ -15,6 +15,7 @@ using Casbin.AspNetCore.Authorization.Transformers;
 using Casbin.Persist.Adapter.EFCore;
 using Casbin;
 using Domain.Entities;
+using domain.Identity;
 using domain.Identity.Manager;
 using domain.Repositories;
 using domain.Repositories.Config;
@@ -146,6 +147,7 @@ builder.Services.AddScoped<ILineRepository, LineRepository>();
 builder.Services.AddScoped<IMessageRepository,  MessageRepository>();
 builder.Services.AddScoped<ITimelineRepository,  TimelineRepository>();
 builder.Services.AddScoped<ITimelineDetailsRepository,  TimelineDetailsRepository>();
+builder.Services.AddScoped<ILoggedInUser, LoggedInUser>();
 
 builder.Services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
 

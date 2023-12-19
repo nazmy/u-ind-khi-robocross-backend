@@ -13,20 +13,23 @@ namespace khi_robocross_api.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    // [Authorize]
+    [Authorize]
     public class BuildingsController : ControllerBase
 	{
         private readonly IBuildingService _buildingService;
         private readonly ILineService _lineService;
         private readonly IMapper _mapper;
+        private readonly ILogger<BuildingsController> _logger;
 
         public BuildingsController(IBuildingService buildingService,
             ILineService lineService,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<BuildingsController> logger)
         {
             _buildingService = buildingService;
             _lineService = lineService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -55,6 +58,22 @@ namespace khi_robocross_api.Controllers.v1
             catch (ArgumentException aex)
             {
                 return BadRequest("Invalid Building ID");
+            }
+        }
+        
+        [HttpGet("Search")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<BuildingResponse>))]
+        public async Task<ActionResult<BuildingResponse>> Search([FromQuery(Name = "Name")] string search)
+        {
+            try
+            {
+                var buildingList = await _buildingService.Query(search);
+                return Ok(buildingList);
+            }
+            catch (Exception e)
+            { 
+                _logger.LogError($"Error on V1 SearchBuilding API :{e.StackTrace.ToString()}");
+                throw;
             }
         }
 

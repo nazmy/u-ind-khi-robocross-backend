@@ -5,6 +5,7 @@ using Domain.Dto;
 using Domain.Entities;
 using Domain.Helper;
 using domain.Repositories;
+using khi_robocross_api.Helper;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
@@ -29,7 +30,7 @@ namespace khi_robocross_api.Services
             if (inputMessage == null)
                 throw new ArgumentException("Message input is invalid");
 
-            inputMessage.CreateChangesTime(inputMessage,  _httpContextAccessor.HttpContext.User.Identity.Name);
+            inputMessage.CreateChangesTime(inputMessage,  IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
             
             //validation goes here
             await _messageRepository.CreateAsync(inputMessage);
@@ -50,7 +51,7 @@ namespace khi_robocross_api.Services
                 newMessage.OwnerId = userId;
                 newMessage.Title = createBulkUserMessageInput.Title;
                 newMessage.Body = createBulkUserMessageInput.Body;
-                newMessage.CreateChangesTime(newMessage, _httpContextAccessor.HttpContext.User.Identity.Name);
+                newMessage.CreateChangesTime(newMessage, IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
                 messageList.Add(new InsertOneModel<Message>(newMessage));
             }
             
@@ -133,7 +134,7 @@ namespace khi_robocross_api.Services
             if (id == null)
                 throw new ArgumentException("Message Id is Invalid");
 
-            await _messageRepository.RemoveAsync(id,_httpContextAccessor.HttpContext.User.Identity.Name);
+            await _messageRepository.RemoveAsync(id,IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
         }
 
         public async Task UpdateMessage(string id, UpdateMessageInput updateMessageInput)
@@ -150,7 +151,7 @@ namespace khi_robocross_api.Services
                 throw new KeyNotFoundException($"Message with Id = {id} not found");
 
             _mapper.Map<UpdateMessageInput,Message>(updateMessageInput,message);
-            message.UpdateChangesTime(message, _httpContextAccessor.HttpContext.User.Identity.Name);
+            message.UpdateChangesTime(message, IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
             await _messageRepository.UpdateAsync(id, message);
         }
     }

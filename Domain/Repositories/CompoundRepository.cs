@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Helper;
+using domain.Identity;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -21,12 +22,25 @@ namespace domain.Repositories
 
 		public async Task CreateAsync(Compound compound) =>
 			await _compound.InsertOneAsync(compound);
-
-		public async Task<IEnumerable<Compound>> GetAsync(DateTimeOffset? lastUpdatedAt, bool? isDeleted)
+		
+		private FilterDefinition<Compound> GetFilterByLoggedInUser(LoggedInUser loggedInUser)
 		{
+			FilterDefinition<Compound> filter = FilterDefinition<Compound>.Empty;
+			if (loggedInUser.Role == "Customer")
+			{
+				filter = Builders<Compound>.Filter.Eq(x => x.ClientId, loggedInUser.ClientId);	
+			}
+
+			return filter;
+		} 
+
+		public async Task<IEnumerable<Compound>> GetAsync(LoggedInUser loggedInUser, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
+		{
+			var filter = GetFilterByLoggedInUser(loggedInUser);
+			
 			if (lastUpdatedAt != null)
 			{
-				var filter = Builders<Compound>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+				filter &= Builders<Compound>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
 				if (isDeleted == false)
 				{
 					filter &= Builders<Compound>.Filter.Eq(x => x.IsDeleted , false);
@@ -37,33 +51,40 @@ namespace domain.Repositories
 			{
 				if (isDeleted == null || isDeleted == true)
 				{
-					return await _compound.Find(_ => true).SortByDescending(c => c.LastUpdatedAt).ToListAsync();	
+					return await _compound.Find(filter).SortByDescending(c => c.LastUpdatedAt).ToListAsync();	
 				}
 				else
 				{
-					return await _compound.Find(x => x.IsDeleted == false).SortByDescending(c => c.LastUpdatedAt).ToListAsync();
+					filter &= Builders<Compound>.Filter.Eq(x => x.IsDeleted , false);
+					return await _compound.Find(filter).SortByDescending(c => c.LastUpdatedAt).ToListAsync();
 				}	
 			}
 		}
 
-		public async Task<Compound?> GetAsync(string id) =>
-			await _compound.Find(x => x.Id == id).FirstOrDefaultAsync();
-
-		public async Task<IEnumerable<Compound>> SearchAsync(string search)
+		public async Task<Compound?> GetAsync(LoggedInUser loggedInUser, string id)
 		{
-			var filter = Builders<Compound>.Filter.Empty;
+			var filter = GetFilterByLoggedInUser(loggedInUser);
+			filter &= Builders<Compound>.Filter.Eq(x => x.Id, id);
+			return await _compound.Find(filter).FirstOrDefaultAsync();
+		}
+
+		public async Task<IEnumerable<Compound>> SearchAsync(LoggedInUser loggedInUser, string search)
+		{
+			var filter = GetFilterByLoggedInUser(loggedInUser);
+			
 			if (!string.IsNullOrEmpty((search)))
 			{
-				filter = Builders<Compound>.Filter.Regex("Name", new BsonRegularExpression(search, "i"));
+				filter &= Builders<Compound>.Filter.Regex("Name", new BsonRegularExpression(search, "i"));
 			}
 			return await _compound.Find(filter).SortByDescending(c => c.LastUpdatedAt).ToListAsync();
 		}
 
-		public async Task<IEnumerable<Compound>> GetAsyncByClientId(string clientId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
+		public async Task<IEnumerable<Compound>> GetAsyncByClientId(LoggedInUser loggedInUser, string clientId, DateTimeOffset? lastUpdatedAt, bool? isDeleted)
 		{
+			var filter = GetFilterByLoggedInUser(loggedInUser);
 			if (lastUpdatedAt != null)
 			{
-				var filter = Builders<Compound>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
+				filter &= Builders<Compound>.Filter.Gte("LastUpdatedAt.0", lastUpdatedAt.Value.Ticks);
 				filter &= Builders<Compound>.Filter.Eq(x => x.ClientId, clientId);
 				if (isDeleted == false)
 				{
@@ -73,7 +94,7 @@ namespace domain.Repositories
 			}
 			else
 			{
-				var filter = Builders<Compound>.Filter.Eq(x => x.ClientId,clientId);
+				filter &= Builders<Compound>.Filter.Eq(x => x.ClientId,clientId);
 				if (isDeleted == null || isDeleted == true)
 				{
 					filter &= Builders<Compound>.Filter.Eq(x => x.IsDeleted , false);

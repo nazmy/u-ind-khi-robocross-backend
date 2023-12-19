@@ -9,17 +9,20 @@ namespace khi_robocross_api.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    // [Authorize]
+    [Authorize]
     public class LinesController : ControllerBase
 	{
         private readonly ILineService _lineService;
         private readonly IMapper _mapper;
+        private readonly ILogger<LinesController> _logger;
 
         public LinesController(ILineService lineService,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<LinesController> logger)
         {
             _lineService = lineService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -48,6 +51,22 @@ namespace khi_robocross_api.Controllers.v1
             catch (ArgumentException aex)
             {
                 return BadRequest("Invalid Line ID");
+            }
+        }
+        
+        [HttpGet("Search")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<LineResponse>))]
+        public async Task<ActionResult<LineResponse>> Search([FromQuery(Name = "Name")] string search)
+        {
+            try
+            {
+                var lineList = await _lineService.Query(search);
+                return Ok(lineList);
+            }
+            catch (Exception e)
+            { 
+                _logger.LogError($"Error on V1 Search Line API :{e.StackTrace.ToString()}");
+                throw;
             }
         }
 

@@ -3,12 +3,14 @@ using Domain.Dto;
 using Domain.Entities;
 using Domain.Helper;
 using khi_robocross_api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace khi_robocross_api.Controllers.v1;
 
 [Route("api/v1/[controller]")]
 [ApiController]
+[Authorize]
 public class MessageController : ControllerBase
 {
     private readonly IMessageService _messageService;

@@ -26,6 +26,8 @@ namespace Domain.Dto
         public string? IntegratorId { get; set; }
 
         public string BuildingId { get; set; }
+        
+        public string CreatedBy { get; set; }
     }
 }
 

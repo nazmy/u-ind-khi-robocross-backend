@@ -1,26 +1,17 @@
-﻿using System;
-using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using domain.Dto;
-using Domain.Dto;
-using Domain.Entities;
 using domain.Repositories;
 using domain.Repositories.Extensions;
-using GeoJSON.Net.Geometry;
-using khi_robocross_api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
-using MongoDB.Driver.Linq;
-using Newtonsoft.Json;
+
 
 namespace khi_robocross_api.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    // [Authorize]
     public class UsersController : ControllerBase
 	{
         private readonly IMapper _mapper;

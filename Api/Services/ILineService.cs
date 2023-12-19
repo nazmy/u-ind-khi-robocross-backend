@@ -11,6 +11,7 @@ namespace khi_robocross_api.Services
 		 ValueTask<LineResponse> GetLineById(String id);
          ValueTask<IEnumerable<LineResponse>> GetLineByBuildingId(String buildingId, DateTimeOffset? lastUpdatedAt, bool? isDeleted);
          ValueTask<IEnumerable<LineResponse>> GetLineByIntegratorId(String integratorId, DateTimeOffset? lastUpdatedAt, bool? isDeleted);
+         ValueTask<IEnumerable<LineResponse>> Query(string search);
          Task AddLine(Line line);
          Task UpdateLine(string id, UpdateLineInput updatedLine);
          Task RemoveLine(string id);

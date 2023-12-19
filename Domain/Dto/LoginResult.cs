@@ -4,11 +4,18 @@ namespace domain.Dto;
 
 public class LoginResult
 {
+    
+    [JsonPropertyName("userId")]
+    public string UserId { get; set; }
+    
     [JsonPropertyName("username")]
     public string UserName { get; set; }
 
     [JsonPropertyName("role")]
     public string Role { get; set; }
+    
+    [JsonPropertyName("clientId")]
+    public string ClientId { get; set; }
 
     [JsonPropertyName("originalUserName")]
     public string OriginalUserName { get; set; }

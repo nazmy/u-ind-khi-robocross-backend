@@ -13,20 +13,23 @@ namespace khi_robocross_api.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    // [Authorize]
+    [Authorize]
     public class CompoundsController : ControllerBase
 	{
         private readonly ICompoundService _compoundService;
         private readonly IBuildingService _buildingService;
         private readonly IMapper _mapper;
+        private readonly ILogger<CompoundsController> _logger;
 
         public CompoundsController(ICompoundService compoundService,
             IBuildingService buildingService,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<CompoundsController> logger)
         {
-            this._compoundService = compoundService;
-            this._buildingService = buildingService;
-            this._mapper = mapper;
+            _compoundService = compoundService;
+            _buildingService = buildingService;
+            _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -55,6 +58,22 @@ namespace khi_robocross_api.Controllers.v1
             catch (ArgumentException aex)
             {
                 return BadRequest("Invalid Compound ID");
+            }
+        }
+        
+        [HttpGet("Search")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<CompoundResponse>))]
+        public async Task<ActionResult<CompoundResponse>> Search([FromQuery(Name = "Name")] string search)
+        {
+            try
+            {
+                var compoundList = await _compoundService.Query(search);
+                return Ok(compoundList);
+            }
+            catch (Exception e)
+            { 
+                _logger.LogError($"Error on V1 Search compound API :{e.StackTrace.ToString()}");
+                throw;
             }
         }
 

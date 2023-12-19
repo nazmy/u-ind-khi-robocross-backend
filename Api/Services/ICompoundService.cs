@@ -9,6 +9,7 @@ namespace khi_robocross_api.Services
 		 ValueTask<IEnumerable<CompoundResponse>> GetAllCompounds(DateTimeOffset? lastUpdatedAt, bool? isDeleted);
 		 ValueTask<CompoundResponse> GetCompoundById(String id);
          ValueTask<IEnumerable<CompoundResponse>> GetCompoundByClientId(String clientId, DateTimeOffset? lastUpdatedAt, bool? isDeleted);
+         ValueTask<IEnumerable<CompoundResponse>> Query(string search);
          Task AddCompound(Compound inputCompound);
          Task UpdateCompound(string id, UpdateCompoundInput updateCompoundInput);
          Task RemoveCompound(string id);

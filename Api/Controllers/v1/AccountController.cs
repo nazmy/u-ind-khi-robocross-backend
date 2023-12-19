@@ -18,7 +18,6 @@ namespace khi_robocross_api.Controllers.v1;
 
 [Route("api/v1/[controller]")]
 [ApiController]
-[Authorize]
 public class AccountController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
@@ -65,15 +64,18 @@ public class AccountController : ControllerBase
 
                     new Claim(ClaimTypes.Name,loginRequest.UserName),
                     new Claim(ClaimTypes.NameIdentifier,appUser.Id.ToString()),
-                    new Claim(ClaimTypes.Role, role.Name)
+                    new Claim(ClaimTypes.Role, role.Name),
+                    new Claim("ClientId", appUser.ClientId != null ? appUser.ClientId : "" )
                 };
                 
                 var jwtResult = _jwtAuthManager.GenerateTokens(loginRequest.UserName, claims, DateTime.Now);
                 
                 return Ok(new LoginResult()
                 {
+                    UserId = appUser.Id.ToString(),
                     UserName = loginRequest.UserName,
                     Role = role.Name,
+                    ClientId = appUser.ClientId,
                     AccessToken = jwtResult.AccessToken,
                     RefreshToken = jwtResult.RefreshToken.TokenString
                 });

@@ -6,6 +6,7 @@ using Domain.Dto;
 using Domain.Entities;
 using Domain.Helper;
 using domain.Repositories;
+using khi_robocross_api.Helper;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 
@@ -34,7 +35,7 @@ namespace khi_robocross_api.Services
                 throw new ArgumentException("Timeline input is invalid");
             
             var timeline = _mapper.Map<Timeline>(createTimelineInput);
-            timeline.CreateChangesTime(createTimelineInput, _httpContextAccessor.HttpContext.User.Identity.Name);
+            timeline.CreateChangesTime(createTimelineInput, IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
             
             //validation goes here
             if (createTimelineInput.TimelineDetailsIds != null && 
@@ -53,7 +54,7 @@ namespace khi_robocross_api.Services
                     newTimelineDetails = new TimelineDetails();
                     newTimelineDetails.Name = createTimelineDetailsInput.Name;
                     newTimelineDetails.Tracks = _mapper.Map<TimelineTrack[]>(createTimelineDetailsInput.Tracks);
-                    newTimelineDetails.CreateChangesTime(newTimelineDetails,_httpContextAccessor.HttpContext.User.Identity.Name);
+                    newTimelineDetails.CreateChangesTime(newTimelineDetails,IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
                     timelineDetailsList.Add(new InsertOneModel<TimelineDetails>(newTimelineDetails));
                 }
 
@@ -177,7 +178,7 @@ namespace khi_robocross_api.Services
             if (id == null)
                 throw new ArgumentException("Timeline Id is Invalid");
 
-            await _timelineRepository.RemoveAsync(id,_httpContextAccessor.HttpContext.User.Identity.Name);
+            await _timelineRepository.RemoveAsync(id,IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
         }
 
         public async Task UpdateTimeline(string id, UpdateTimelineInput updatedTimeline)
@@ -194,7 +195,7 @@ namespace khi_robocross_api.Services
                 throw new KeyNotFoundException($"Timeline with Id = {id} not found");
 
             _mapper.Map<UpdateTimelineInput, Timeline>(updatedTimeline,timeline);
-            timeline.UpdateChangesTime(timeline, _httpContextAccessor.HttpContext.User.Identity.Name);
+            timeline.UpdateChangesTime(timeline, IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
             
             //validation goes here
             if (updatedTimeline.TimelineDetailsIds != null && 
@@ -212,7 +213,7 @@ namespace khi_robocross_api.Services
                     newTimelineDetails = new TimelineDetails();
                     newTimelineDetails.Name = updateTimelineDetailsInput.Name;
                     newTimelineDetails.Tracks = _mapper.Map<TimelineTrack[]>(updateTimelineDetailsInput.Tracks);
-                    newTimelineDetails.CreateChangesTime(newTimelineDetails,_httpContextAccessor.HttpContext.User.Identity.Name);
+                    newTimelineDetails.CreateChangesTime(newTimelineDetails,IdentitiesHelper.GetUserIdFromClaimPrincipal(_httpContextAccessor.HttpContext.User));
                     timelineDetailsList.Add(new InsertOneModel<TimelineDetails>(newTimelineDetails));
                 }
 
