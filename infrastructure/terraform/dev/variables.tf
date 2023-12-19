@@ -53,6 +53,17 @@ variable "cosmo_db_connection_string" {
   description = "Azure cosmo DB connection string"
 }
 
+//temp for Prod in dev subscription
+variable "azure_devprod_mongodb_databasename" {
+  description = "database name of azure cosmo mongo database for prod env in dev subscription"
+  default     = "khirobocross-dev-prod"
+}
+
+variable "cosmo_devprod_db_connection_string" {
+  description = "Azure cosmo DB connection string for prod env in dev subscription"
+}
+//end temp for Prod in dev subscription
+
 //temp for irex
 variable "azure_irex_mongodb_databasename" {
   description = "database name of azure cosmo mongo database for Irex"
